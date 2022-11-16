@@ -12,9 +12,9 @@ const Footer = forwardRef(({ onBackClick }, ref) => {
     { name: "Sign Up", ref: ref[0] },
   ];
   return (
-    <div className="bg-[#DEF2E6] flex flex-col items-center justify-evenly min-h-[350px] relative">
-      <div className="flex flex-row justify-evenly">
-        <div className="w-[25%] flex flex-col justify-start items-start">
+    <div className="bg-[#DEF2E6] flex flex-col items-center justify-evenly min-h-[300px] py-[20px] relative">
+      <div className="flex flex-col md:flex-row justify-evenly">
+        <div className="w-full md:w-[25%] flex flex-col justify-start items-start">
           <p className="text-[green] font-semibold">ECX eTrading</p>
           <p className="w-[100%] text-left">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus
@@ -27,7 +27,7 @@ const Footer = forwardRef(({ onBackClick }, ref) => {
             <p className="mx-[5px]">Ethiopia, Addis Ababa</p>
           </div>
         </div>
-        <div className=" w-[25%] flex flex-col justify-center items-center">
+        <div className="w-full md:w-[25%] flex flex-col justify-center items-center">
           <p className="text-[green] font-semibold">Pages</p>
           <div className={`flex flex-col w-full items-center`}>
             <div
@@ -50,7 +50,7 @@ const Footer = forwardRef(({ onBackClick }, ref) => {
             </div>
           </div>
         </div>
-        <div className="w-[25%]">
+        <div className="w-full md:w-[25%]">
           <p className="text-[green] font-semibold">Commodities</p>
           <p className="w-[100%]">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus

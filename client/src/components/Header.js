@@ -19,17 +19,18 @@ const Header = forwardRef(({ onBackClick }, ref) => {
   const navBar = [
     { name: "Home", ref: ref[0] },
     { name: "About", ref: ref[1] },
-    { name: "What We Do", ref: ref[2] },
+    { name: "Procedures", ref: ref[2] },
     { name: "Contact Us", ref: ref[0] },
     { name: "Sign Up", ref: ref[0] },
   ];
   useEffect(() => {
     window.innerWidth < 768 ? setShowNavBar(true) : setShowNavBar(false);
   }, [width]);
+
   return (
     <div
-      className={`flex bg-[#DEF2E6] items-center p-[20px] drop-shadow-md
-      ${height > 50 ? "sticky top-0 z-[1] bg-[#ffffff]" : ""}
+      className={`flex bg-[#ffffff] min-h[400px] items-center p-[20px] drop-shadow-md
+      ${height > 50 ? "sticky top-0 z-[1] bg-[#d4f6e2]" : ""}
       ${width > 768 ? "flex-row justify-between items-center" : "flex-col"}
       `}
     >
@@ -56,23 +57,29 @@ const Header = forwardRef(({ onBackClick }, ref) => {
       </div>
 
       <div
-        className={`flex  ${
+        className={`flex ${
           showNavBar && width < 768 ? "hidden " : "flex-col w-full "
         } 
       `}
       >
         <div
           className={`flex hover:cursor-pointer ${
-            width < 768 ? "flex-col justify-center items-center" : "flex-row"
+            width < 768
+              ? "flex-col justify-center items-center"
+              : "flex-row justify-center"
           }`}
         >
           {navBar.map((nav, index) => (
             <p
               onClick={() => {
-                onBackClick(nav.ref);
+                if (index == 4) {
+                  window.location = "/signup";
+                } else {
+                  onBackClick(nav.ref);
+                }
                 setShowNavBar(!showNavBar);
               }}
-              className={`flex justify-center items-center text-[14px] md:text-[16px] p-2 rounded-lg hover:bg-[#60c4b0] hover:text-white text-[#074E40]  font-semibold mx-2 ${
+              className={`text-[14px] md:text-[15px] lg:text-[16px] p-2 rounded-lg hover:bg-[#60c4b0] hover:text-white text-[#074E40]  font-semibold lg:mx-2 ${
                 index == 4 ? "bg-green-600 text-white p-2 rounded-lg" : ""
               } 
               ${
