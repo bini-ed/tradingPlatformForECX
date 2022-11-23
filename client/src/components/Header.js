@@ -26,7 +26,6 @@ const Header = forwardRef(({ onBackClick }, ref) => {
   useEffect(() => {
     window.innerWidth < 768 ? setShowNavBar(true) : setShowNavBar(false);
   }, [width]);
-
   return (
     <div
       className={`flex bg-[#ffffff] min-h[400px] items-center p-[20px] drop-shadow-md
@@ -97,5 +96,4 @@ const Header = forwardRef(({ onBackClick }, ref) => {
     </div>
   );
 });
-
 export default Header;

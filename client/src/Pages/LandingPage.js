@@ -72,7 +72,7 @@ function LandingPage() {
     },
   ];
   return (
-    <div className="min-h-screen relative ">
+    <div className="min-h-screen relative overflow-x-hidden">
       <Header
         ref={[homeRef, aboutRef, whatRef]}
         onBackClick={executeScroll}
@@ -99,21 +99,24 @@ function LandingPage() {
             style={{ width: "50%" }}
           ></img>
         </div>
-        <div className="flex items-center flex-row justify-center bg-[#cce2d4]">
-          {products.map((product, index) => (
-            <div
-              className={`flex flex-col justify-center items-center rounded-lg w-[90%] my-2 md:w-[15%]                 // index % 2 == 0 ? "bg-[#EBFED3]" : "bg-[#E5FEEF]"
-              `}
-            >
-              <img
-                src={product.pic}
-                className="w-[25px] h-[25px] sm:w-[30px] sm:h-[30px] md:w-[40px] md:h-[40px]"
-              ></img>
-              <p className="text-[#074E40] text-[12px] sm:text-[14px] md:text-[16px] lg:text-[20px] font-semibold">
-                {product.name}
-              </p>
-            </div>
-          ))}
+
+        <div className="bg-[#cce2d4]">
+          <div className="flex animate-marquee whitespace-nowrap items-center flex-row justify-center ">
+            {products.map((product, index) => (
+              <div
+                className={`flex flex-col justify-center items-center rounded-lg w-[90%] my-2 md:w-[15%]                 // index % 2 == 0 ? "bg-[#EBFED3]" : "bg-[#E5FEEF]"
+            `}
+              >
+                <img
+                  src={product.pic}
+                  className="w-[25px] h-[25px] sm:w-[30px] sm:h-[30px] md:w-[40px] md:h-[40px]"
+                ></img>
+                <p className="text-[#074E40] text-[12px] sm:text-[14px] md:text-[16px] lg:text-[20px] font-semibold">
+                  {product.name}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col justify-between  min-h-[40vh] px-24 bg-[#ffffff] ">
