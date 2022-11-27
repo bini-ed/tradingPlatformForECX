@@ -50,32 +50,23 @@ function SignUpPage() {
                           label="First Name"
                           name="firstName"
                           type="text"
-                          placeholder="First Name"
                         />
                         <FormField
                           label="Last Name"
                           name="lastName"
                           type="text"
-                          placeholder="Last Name"
                         />
 
-                        <FormField
-                          label="Email"
-                          name="email"
-                          type="email"
-                          placeholder="Email"
-                        />
+                        <FormField label="Email" name="email" type="email" />
                         <FormField
                           label="Phone Number"
                           name="phoneNumber"
                           type="text"
-                          placeholder="Phone Number"
                         />
                         <FormField
                           label="Password"
                           name="password"
                           type="password"
-                          placeholder="Password"
                         />
                         <div className="flex flex-col justify-center my-5 items-center w-full">
                           <button
