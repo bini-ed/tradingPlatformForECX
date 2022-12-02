@@ -5,7 +5,7 @@ function FormField({ type, name, label, error }) {
   return (
     <div className={`w-[90%] px-5 my-2`}>
       <label
-        class="block text-gray-500 font-semibold text-left my-1 pr-4"
+        className="block text-gray-500 font-semibold text-left my-1 pr-4"
         htmlFor={name}
       >
         {label}

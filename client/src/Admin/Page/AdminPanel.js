@@ -1,18 +1,17 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import AdminNavigation from "../components/AdminNavigation";
+import React, { useContext } from "react";
+
+import AuthContext from "../../context/AuthContext";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
-import RegisterProduct from "./RegisterProduct";
 
 function AdminPanel({ children }) {
+  const authContext = useContext(AuthContext);
+  const { user } = authContext;
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header user={user} />
 
       <SideBar>{children}</SideBar>
-
-      {/* <section>{children}</section> */}
     </div>
   );
 }

@@ -1,23 +1,42 @@
-import { Form, Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 
+import { Form, Formik } from "formik";
 import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 
 import Background from "../asset/bgm.png";
 import FormField from "../components/FormField";
 
+import CustomToast from "../components/CustomToast";
+import Loader from "../components/Loader";
+import { loginService } from "../service/userService";
+
 function LoginPage() {
+  const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required().label("Email"),
     password: Yup.string().required().label("Password"),
   });
 
   const handleLogin = async (values) => {
-    console.log(values);
+    setLoading(true);
+    try {
+      const { data } = await loginService(values);
+      if (data) {
+        // console.log(data);
+        localStorage.setItem("userInfo", data);
+        window.location = "/";
+      }
+    } catch (error) {
+      CustomToast("error", error.response.data);
+
+      console.log(error.response.data);
+    }
+    setLoading(false);
   };
   return (
-    <div className="flex items-center justify-center w-full min-h-screen  h-full">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen  h-full">
+      {loading && <Loader />}
       <div className="flex justify-center items-center flex-wrap h-full w-[90%] sm:w-[80%] md:w-[90%] text-gray-800">
         <div className="w-[100%] xl:w-10/12">
           <div className="block border-[1px] border-slate-200 shadow-lg rounded-lg">

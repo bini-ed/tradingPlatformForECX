@@ -1,20 +1,41 @@
-import { Form, Formik } from "formik";
-import React from "react";
+import { ErrorMessage, Form, Formik } from "formik";
+import React, { useState } from "react";
 import * as Yup from "yup";
+import "react-datepicker/dist/react-datepicker.css";
+import ReactDatePicker from "react-datepicker";
 
 import FormField from "../../components/FormField";
+import CustomToast from "../../components/CustomToast";
+import { addProductService } from "../../service/productService";
+import Loader from "../../components/Loader";
 
 const RegisterProduct = () => {
   const validationSchema = Yup.object().shape({
     productName: Yup.string().required().label("Product Name"),
-    quantity: Yup.string().required().label("Quantity"),
+    productQuantity: Yup.string().required().label("Quantity"),
     location: Yup.string().required().label("Location"),
     productType: Yup.string().required().label("Product Type"),
     productDate: Yup.string().required().label("Product Date"),
+    seller: Yup.string().required().label("Seller"),
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const handleAddProduct = async (values) => {
+    console.log(values);
+    setLoading(true);
+    try {
+      const { data } = await addProductService(values);
+      if (data) CustomToast("success", data);
+    } catch (error) {
+      console.log(error);
+      CustomToast("Error", error?.response?.data || error?.message);
+    }
+    setLoading(false);
+  };
   return (
     <div className="w-full flex flex-col justify-center min-h-[calc(100vh-66px)]">
+      {loading && <Loader />}
       <div className="p-15 md:mx-6">
         <div className="text-center">
           <h4 className="text-xl font-semibold block text-gray-500 my-1 ">
@@ -24,17 +45,18 @@ const RegisterProduct = () => {
         <Formik
           initialValues={{
             productName: "",
-            quantity: "",
+            productQuantity: "",
             location: "",
             productType: "",
             productDate: "",
+            seller: "",
           }}
           onSubmit={(values) => {
-            // handleSignup(values);
+            handleAddProduct(values);
           }}
           validationSchema={validationSchema}
         >
-          {({ isSubmitting, errors }) => (
+          {({ isSubmitting, values, setFieldValue, errors }) => (
             <div className="w-full flex justify-center">
               <Form className="flex flex-col flex-wrap w-[90%] md:w-[70%] lg:w-[60%] lg:max-w-[500px]  rounded-lg bg-slate-200 items-center">
                 <FormField
@@ -44,10 +66,10 @@ const RegisterProduct = () => {
                   error={errors.productName}
                 />
                 <FormField
-                  label="Product Quantity"
-                  name="quantity"
+                  label="Product Quantity per KG"
+                  name="productQuantity"
                   type="text"
-                  error={errors.quantity}
+                  error={errors.productQuantity}
                 />
                 <FormField
                   label="Location"
@@ -56,17 +78,63 @@ const RegisterProduct = () => {
                   error={errors.location}
                 />
                 <FormField
-                  label="Product Type"
-                  name="productType"
+                  label="Seller"
+                  name="seller"
                   type="text"
-                  error={errors.productType}
+                  error={errors.seller}
                 />
-                <FormField
-                  label="Product Date"
-                  name="productDate"
-                  type="text"
-                  error={errors.productDate}
-                />
+
+                <div className="w-[90%] px-5 my-2">
+                  <label
+                    htmlFor="field"
+                    className="block mb-2 text-left text-[#4D5959]"
+                  >
+                    Product Type
+                  </label>
+                  <select
+                    onChange={(e) => {
+                      setFieldValue("productType", e.currentTarget.value);
+                    }}
+                    id="field"
+                    className="bg-gray-50 outline-[#99d5e9] text-gray-900 rounded-lg w-full p-2.5 "
+                  >
+                    <option value="">Select</option>
+                    <option value="Washed" className="">
+                      Washed
+                    </option>
+                    <option value="Unwashed" className="">
+                      Unwashed
+                    </option>
+                  </select>
+                  <ErrorMessage
+                    className="text-[red] text-left"
+                    name="productType"
+                    component="p"
+                  />
+                </div>
+
+                <div className={`w-[90%] px-5 my-2`}>
+                  <p className="text-[#4D5959] text-left">Payment Date</p>
+                  <ReactDatePicker
+                    autoComplete="off"
+                    className={`w-full outline-[#99d5e9] ${
+                      errors.productDate ? "outline-[red] border-red-300" : ""
+                    } rounded-md p-2 my-2 bg-[#ffffff] border-[0.5px] border-slate-300`}
+                    selected={values.productDate}
+                    onChange={(date) => {
+                      setFieldValue("productDate", date);
+                    }}
+                    placeholderText="Date of payment"
+                    name="startDate"
+                    dateFormat="dd/MM/yyyy"
+                  />
+
+                  <ErrorMessage
+                    className="text-[red] text-left"
+                    name="productDate"
+                    component="p"
+                  />
+                </div>
                 <div className="flex flex-col justify-center my-5 items-center w-full">
                   <button
                     type="submit"

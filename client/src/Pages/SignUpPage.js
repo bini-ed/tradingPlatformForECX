@@ -1,27 +1,67 @@
-import { Form, Formik } from "formik";
-import React from "react";
+import { ErrorMessage, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 
 import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 
 import Background from "../asset/bg.png";
 import FormField from "../components/FormField";
+import CustomToast from "../components/CustomToast";
+import Loader from "../components/Loader";
+import { getRoleService } from "../service/roleService";
+import { signupService } from "../service/userService";
 
 function SignUpPage() {
+  const [role, setRole] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required().label("First Name"),
     lastName: Yup.string().required().label("Last Name"),
     phoneNumber: Yup.string().required().label("Phone Number"),
     email: Yup.string().email().required().label("Email"),
+    role: Yup.string().required().label("Role"),
     password: Yup.string().required().label("Password"),
   });
 
+  const getRole = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getRoleService();
+      if (data.length) {
+        setRole(data);
+      }
+    } catch (error) {
+      console.log(error.response.data);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getRole();
+    return () => {
+      setRole([]);
+    };
+  }, []);
+
   const handleSignup = async (values) => {
-    console.log(values);
+    setLoading(true);
+    try {
+      const { data } = await signupService(values);
+      if (data) {
+        CustomToast("success", data);
+        window.location = "/login";
+      }
+    } catch (error) {
+      CustomToast("error", error?.response?.data);
+      console.log(error.response.data);
+    }
+    setLoading(false);
   };
 
   return (
-    <div className="flex min-h-screen py-5 items-center justify-center w-full">
+    <div className="flex flex-col min-h-screen py-5 items-center justify-center w-full">
+      {loading && <Loader />}
       <div className="flex justify-center items-center flex-wrap h-[90%] w-[90%] sm:w-[80%] md:w-[90%] text-gray-800">
         <div className=" w-[100%] xl:w-10/12">
           <div className="block border-[1px] border-slate-200 shadow-xl rounded-lg">
@@ -38,6 +78,7 @@ function SignUpPage() {
                       phoneNumber: "",
                       email: "",
                       password: "",
+                      role: "",
                     }}
                     onSubmit={(values) => {
                       handleSignup(values);
@@ -68,6 +109,36 @@ function SignUpPage() {
                           name="password"
                           type="password"
                         />
+
+                        <div className="w-[90%] px-5 my-2">
+                          <label
+                            htmlFor="field"
+                            className="block mb-2 text-left text-[#4D5959]"
+                          >
+                            Select Role
+                          </label>
+                          <select
+                            onChange={(e) => {
+                              setFieldValue("role", e.currentTarget.value);
+                            }}
+                            id="field"
+                            className="bg-gray-50 outline-[#99d5e9] text-gray-900 rounded-lg w-full p-2.5 "
+                          >
+                            <option value="">Select</option>
+                            <option value={role[0]?._id} className="">
+                              {role[0]?.roleName}
+                            </option>
+                            <option value={role[1]?._id} className="">
+                              {role[1]?.roleName}
+                            </option>
+                          </select>
+                          <ErrorMessage
+                            className="text-[red] text-left"
+                            name="role"
+                            component="p"
+                          />
+                        </div>
+
                         <div className="flex flex-col justify-center my-5 items-center w-full">
                           <button
                             type="submit"

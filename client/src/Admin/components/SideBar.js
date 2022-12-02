@@ -13,6 +13,7 @@ const SideBar = ({ children }) => {
     { name: "Deactivated", path: "/admin/deactivated", icon: Deactivated },
     { name: "Completed", path: "/admin/completed", icon: Completed },
     { name: "register", path: "/admin/register", icon: Add },
+    { name: "Products", path: "/admin/product", icon: Completed },
   ];
   return (
     <div className="min-h-[calc(100vh-70px)] flex border-t-2 border-y-slate-600">

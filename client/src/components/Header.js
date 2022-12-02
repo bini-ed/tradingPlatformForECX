@@ -1,6 +1,11 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const Header = forwardRef(({ onBackClick }, ref) => {
+  const authContext = useContext(AuthContext);
+  const { user, setUser } = authContext;
+
   const [height, setHeight] = useState(window.scrollY);
   const [width, setWidth] = useState(window.innerWidth);
   const [showNavBar, setShowNavBar] = useState(false);
@@ -15,84 +20,129 @@ const Header = forwardRef(({ onBackClick }, ref) => {
       window.removeEventListener("resize", () => setWidth());
     };
   }, []);
-
+  console.log("user", user);
   const navBar = [
-    { name: "Home", ref: ref[0] },
-    { name: "About", ref: ref[1] },
-    { name: "Procedures", ref: ref[2] },
-    { name: "Contact Us", ref: ref[0] },
-    { name: "Sign Up", ref: ref[0] },
+    { name: "Home", ref: ref[0] ?? "" },
+    { name: "About", ref: ref[1] ?? "" },
+    { name: "Procedures", ref: ref[2] ?? "" },
+    { name: "Contact Us", ref: ref[0] ?? "" },
   ];
   useEffect(() => {
     window.innerWidth < 768 ? setShowNavBar(true) : setShowNavBar(false);
   }, [width]);
+
   return (
     <div
-      className={`flex bg-[#ffffff] min-h[400px] items-center p-[20px] drop-shadow-md
-      ${height > 50 ? "sticky top-0 z-[1] bg-[#d4f6e2]" : ""}
+      className={`flex bg-[#ffffff]  items-center p-[20px] drop-shadow-md
       ${width > 768 ? "flex-row justify-between items-center" : "flex-col"}
+      ${height > 50 && "sticky w-full top-0 z-10 bg-[#d4f6e2]"}
       `}
     >
-      <div className="w-full md:w-[60%] lg:w-[100%]">
+      <div className="w-full md:w-[50%] px-20 flex">
         {width < 768 && showNavBar ? (
-          <p
+          <Link
+            to="/"
             // src={Menu}
             onClick={() => setShowNavBar(!showNavBar)}
-            // style={{ width: 50, height: 50 }}
-            className="text-[#074E40] hover:cursor-pointer text-[20px] font-bold"
+            className="text-[#074E40] text-left hover:cursor-pointer text-[20px] font-bold"
           >
             ECX eTrading
-          </p>
+          </Link>
         ) : (
-          <h2
+          <Link
+            to={"/"}
             onClick={() => {
               setShowNavBar(!showNavBar);
             }}
             className="text-[#074E40] hover:cursor-pointer text-[20px] font-bold"
           >
             ECX eTrading
-          </h2>
+          </Link>
         )}
       </div>
-
-      <div
-        className={`flex ${
-          showNavBar && width < 768 ? "hidden " : "flex-col w-full "
-        } 
-      `}
-      >
+      {ref.length ? (
         <div
-          className={`flex hover:cursor-pointer ${
-            width < 768
-              ? "flex-col justify-center items-center"
-              : "flex-row justify-center"
-          }`}
+          className={`flex ${
+            showNavBar && width < 768 ? "hidden " : "flex-col w-full "
+          } 
+      `}
         >
-          {navBar.map((nav, index) => (
-            <p
-              onClick={() => {
-                if (index == 4) {
+          <div
+            className={`flex hover:cursor-pointer ${
+              width < 768
+                ? "flex-col justify-center items-center"
+                : "flex-row justify-end "
+            }`}
+          >
+            {navBar.map((nav, index) => (
+              <p
+                onClick={() => {
+                  if (index == 4) {
+                    window.location = "/signup";
+                  } else {
+                    onBackClick(nav.ref);
+                  }
+                  setShowNavBar(!showNavBar);
+                }}
+                className={`text-[14px] md:text-[15px] lg:text-[16px] p-2 rounded-lg hover:bg-[#60c4b0] hover:text-white text-[#074E40] font-semibold lg:mx-2 ${
+                  index == 4 ? "bg-green-600 text-[#ffffff] p-2 rounded-lg" : ""
+                } 
+            ${
+              width < 768
+                ? "my-2 w-[100%] bg-[#38ab94] hover:bg-[#074E40] p-2 rounded-md text-white"
+                : ""
+            }
+            `}
+              >
+                {nav.name}
+              </p>
+            ))}
+
+            {user?.firstName ? (
+              <p
+                onClick={() => {
+                  window.location = `/${user.role.toLowerCase()}`;
+                }}
+                className={`text-[14px] md:text-[15px] lg:text-[16px]   hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-[#42ad59] p-2 rounded-lg  ${
+                  width < 768
+                    ? "my-2 w-[100%]  hover:bg-[#074E40] p-2 rounded-md text-white"
+                    : ""
+                }`}
+              >
+                Welcome {user?.firstName}
+              </p>
+            ) : (
+              <p
+                onClick={() => {
                   window.location = "/signup";
-                } else {
-                  onBackClick(nav.ref);
-                }
-                setShowNavBar(!showNavBar);
-              }}
-              className={`text-[14px] md:text-[15px] lg:text-[16px] p-2 rounded-lg hover:bg-[#60c4b0] hover:text-white text-[#074E40]  font-semibold lg:mx-2 ${
-                index == 4 ? "bg-green-600 text-white p-2 rounded-lg" : ""
-              } 
-              ${
-                width < 768
-                  ? "my-2 w-[100%] bg-[#38ab94] hover:bg-[#074E40] p-2 rounded-md text-white"
-                  : ""
-              }
-              `}
-            >
-              {nav.name}
-            </p>
-          ))}
+                }}
+                className={`text-[14px] md:text-[15px] lg:text-[16px]   hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 bg-green-600 text-[#ffffff] p-2 rounded-lg  ${
+                  width < 768
+                    ? "my-2 w-[100%] bg-[#38ab94] hover:bg-[#074E40] p-2 rounded-md text-white"
+                    : ""
+                }`}
+              >
+                Sign up
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className=" w-[50%] flex px-20 justify-end">
+          {/* <p className="text-slate-600 font-semibold text-[18px]">
+            Welcome {user?.firstName}
+          </p> */}
+          <p
+            onClick={() => {
+              localStorage.removeItem("userInfo");
+              window.location = "/";
+            }}
+            className="text-slate-600 cursor-pointer hover:animate-pulse p-2 font-semibold text-[18px] mx-2"
+          >
+            Log out
+          </p>
+        </div>
+      )}
     </div>
   );
 });
