@@ -18,6 +18,8 @@ import SignUpPage from "./Pages/SignUpPage";
 import AuthContext from "./context/AuthContext";
 import Products from "./Admin/Page/Products";
 import SellerPage from "./Pages/Seller/SellerPage";
+import AuctionPage from "./Pages/Auction/AuctionPage";
+import JoinAuction from "./Pages/Auction/JoinAuction";
 
 function App() {
   const [user, setUser] = useState({});
@@ -99,6 +101,11 @@ function App() {
           ></Route>
 
           <Route path="/buyer" element={<BuyerPage />}></Route>
+          <Route path="/auction" element={<AuctionPage />}></Route>
+          <Route
+            path="/joinAuction/:productId"
+            element={<JoinAuction />}
+          ></Route>
           <Route path="/seller" element={<SellerPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/signup" element={<SignUpPage />}></Route>

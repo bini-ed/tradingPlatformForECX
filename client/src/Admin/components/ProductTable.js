@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { paginate } from "../../components/paginate";
 import Paginations from "../../components/pagination";
 
-const ProductTable = ({ product, count }) => {
+const ProductTable = ({ product, handleAdd }) => {
   const [filter, setFilter] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,11 +12,13 @@ const ProductTable = ({ product, count }) => {
     setCurrentPage(page);
   };
 
-  if (count === 0)
+  if (product?.length == 0)
     return <p className="text-red-400 text-[30px]">There is no product </p>;
 
-  let filteredProduct = product?.filter((field) =>
-    field?.productName?.match(new RegExp(filter, "i"))
+  let filteredProduct = product?.filter(
+    (field) =>
+      field?.product?.productName?.match(new RegExp(filter, "i")) ||
+      field?.productName?.match(new RegExp(filter, "i"))
   );
   const products = paginate(filteredProduct, currentPage, pageSize);
 
@@ -60,8 +62,9 @@ const ProductTable = ({ product, count }) => {
                       <th className="border text-[18px] text-white p-5 border-slate-100">
                         Type
                       </th>
+
                       <th className="border text-[18px] text-white p-5 border-slate-100">
-                        Seller
+                        Add to Auction
                       </th>
                     </tr>
                   </thead>
@@ -71,14 +74,16 @@ const ProductTable = ({ product, count }) => {
                       <tr
                         className={`cursor-pointer ${
                           index % 2 == 0 ? "bg-[#d7f8ee]" : "bg-[#f6f7f6]"
-                        } hover:bg-[#b8e6cf]`}
+                        } `}
                         key={index}
                       >
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.productName}
+                          {product?.productName ||
+                            product?.product?.productName}
                         </td>
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.productQuantity}
+                          {product?.productQuantity ||
+                            product?.product?.productQuantity}
                         </td>
                         <td
                           className={
@@ -87,22 +92,38 @@ const ProductTable = ({ product, count }) => {
                         >
                           <p
                             className={`text-center rounded-md ${
-                              product.grade
-                                ? "bg-green-500"
+                              product?.grade || product?.product?.grade
+                                ? "bg-green-500 text-white"
                                 : "bg-red-500 text-white "
                             }`}
                           >
-                            {product.grade ?? "Not graded yet"}
+                            {(product?.grade || product?.product?.grade) ??
+                              "Not graded"}
                           </p>
                         </td>
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.location}
+                          {product?.location || product?.product?.location}
                         </td>
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.productType}
+                          {product?.productType ||
+                            product?.product?.productType}
                         </td>
-                        <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product.seller.firstName}
+
+                        <td
+                          className={`border border-slate-300 text-slate-800 p-2 text-lg text-left`}
+                        >
+                          <p
+                            onClick={() => handleAdd(product._id)}
+                            className={`bg-slate-700 rounded-md text-white text-center ${
+                              product?.product?.productName
+                                ? "bg-transparent text-black"
+                                : " hover:bg-slate-600"
+                            }`}
+                          >
+                            {product?.product?.productName
+                              ? "In Auction"
+                              : "Add to auction"}
+                          </p>
                         </td>
                       </tr>
                     ))}
@@ -114,7 +135,7 @@ const ProductTable = ({ product, count }) => {
         </div>
         <div className="m-5">
           <Paginations
-            itemsCount={count}
+            itemsCount={product?.length}
             pageSize={pageSize}
             currentPage={currentPage}
             onPageChange={handlePageChange}

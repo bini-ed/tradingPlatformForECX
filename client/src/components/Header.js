@@ -5,6 +5,12 @@ import AuthContext from "../context/AuthContext";
 const Header = forwardRef(({ onBackClick }, ref) => {
   const authContext = useContext(AuthContext);
   const { user, setUser } = authContext;
+  const navBar = [
+    { name: "Home", ref: ref[0] ?? "" },
+    { name: "About", ref: ref[1] ?? "" },
+    { name: "Procedures", ref: ref[2] ?? "" },
+    { name: "Contact Us", ref: ref[0] ?? "" },
+  ];
 
   const [height, setHeight] = useState(window.scrollY);
   const [width, setWidth] = useState(window.innerWidth);
@@ -14,21 +20,13 @@ const Header = forwardRef(({ onBackClick }, ref) => {
     window.addEventListener("scroll", () => setHeight(window.scrollY));
     window.addEventListener("resize", () => {
       setWidth(window.innerWidth);
+      window.innerWidth < 768 ? setShowNavBar(true) : setShowNavBar(false);
     });
+
     return () => {
       window.removeEventListener("scroll", () => setHeight());
       window.removeEventListener("resize", () => setWidth());
     };
-  }, []);
-  console.log("user", user);
-  const navBar = [
-    { name: "Home", ref: ref[0] ?? "" },
-    { name: "About", ref: ref[1] ?? "" },
-    { name: "Procedures", ref: ref[2] ?? "" },
-    { name: "Contact Us", ref: ref[0] ?? "" },
-  ];
-  useEffect(() => {
-    window.innerWidth < 768 ? setShowNavBar(true) : setShowNavBar(false);
   }, [width]);
 
   return (
@@ -129,9 +127,6 @@ const Header = forwardRef(({ onBackClick }, ref) => {
         </div>
       ) : (
         <div className=" w-[50%] flex px-20 justify-end">
-          {/* <p className="text-slate-600 font-semibold text-[18px]">
-            Welcome {user?.firstName}
-          </p> */}
           <p
             onClick={() => {
               localStorage.removeItem("userInfo");

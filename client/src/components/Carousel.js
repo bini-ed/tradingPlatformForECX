@@ -1,10 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
-import Left from "../asset/svg/left.svg";
-import Rigth from "../asset/svg/right.svg";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import moment from "moment";
 
-const Carousel = ({ auction }) => {
+import AuthContext from "../context/AuthContext";
+import CustomModal from "../utils/CustomModal";
+import Loader from "./Loader";
+
+const Carousel = ({
+  auction,
+  message,
+  loading,
+  handleAddUser,
+  open,
+  setOpen,
+}) => {
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleClose = () => setOpen(false);
+  const { user } = useContext(AuthContext);
   const carousel = useRef(null);
 
   const movePrev = () => {
@@ -51,6 +64,15 @@ const Carousel = ({ auction }) => {
   return (
     <div>
       <div className="relative overflow-hidden">
+        {loading ? (
+          <Loader />
+        ) : (
+          <CustomModal
+            handleClose={handleClose}
+            open={open}
+            description={message}
+          />
+        )}
         <div className="flex justify-between absolute top left w-full h-full">
           <button
             onClick={movePrev}
@@ -108,28 +130,60 @@ const Carousel = ({ auction }) => {
               >
                 <div className="p-5 flex flex-col bg-[#DEEFE3] w-72 h-48 rounded-t-[10px]">
                   <h3 className="text-xl font-semibold text-left text-[#074E40]">
-                    {resource.name}
+                    {resource?.product?.productName}
                   </h3>
                   <div className="h-full w-full flex flex-col items-start my-5">
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Type: {resource.type}
+                      Type: {resource?.product?.productType}
+                    </p>
+
+                    {resource?.product?.grade && (
+                      <p className="text-[16px] font-mono text-[#3D5833]">
+                        Grade: {resource?.product?.grade}
+                      </p>
+                    )}
+                    <p className="text-[16px] font-mono text-[#3D5833]">
+                      Quantity: {resource?.product?.productQuantity}
                     </p>
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Grade: {resource.grade}
-                    </p>
-                    <p className="text-[16px] font-mono text-[#3D5833]">
-                      Base Price: {resource.basePrice}
+                      Location: {resource?.product?.location}
                     </p>
                   </div>
                 </div>
 
                 <div className="z-[10] w-full h-24 px-5 flex flex-col bg-[#3E363F] rounded-b-[10px]">
                   <p className="text-white text-left font-mono">
-                    Starts at Nov 27:3:00PM
+                    Starts at {moment(resource?.date).format("D-MMM-YYYY")}
                   </p>
-                  <p className="font-semibold bg-[#ffffff] text-[#074E40] my-5 self-end rounded-md py-2 w-[50%]">
-                    Join Auction
-                  </p>
+
+                  {(() => {
+                    const checkuser = resource?.users?.find(
+                      (users) => users._id == user.id
+                    );
+
+                    if (checkuser)
+                      return (
+                        <p
+                          onClick={() =>
+                            handleAddUser(resource._id, resource?.product?._id)
+                          }
+                          className="font-semibold bg-[#509666] cursor-pointer text-[#ffffff] my-5 self-end rounded-md py-2 w-[70%]"
+                        >
+                          Registerd
+                        </p>
+                      );
+                    else
+                      return (
+                        <p
+                          onClick={() =>
+                            handleAddUser(resource._id, resource?.product?._id)
+                          }
+                          className="font-semibold bg-[#ffffff] cursor-pointer text-[#074E40] my-5 self-end rounded-md py-2 w-[70%]"
+                        >
+                          Register for Auction
+                        </p>
+                      );
+                  })()}
                 </div>
               </div>
             );

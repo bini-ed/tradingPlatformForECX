@@ -22,10 +22,10 @@ const RegisterProduct = () => {
   const [loading, setLoading] = useState(false);
 
   const handleAddProduct = async (values) => {
-    console.log(values);
+    const token = localStorage.getItem("userInfo");
     setLoading(true);
     try {
-      const { data } = await addProductService(values);
+      const { data } = await addProductService(values, token);
       if (data) CustomToast("success", data);
     } catch (error) {
       console.log(error);

@@ -7,7 +7,11 @@ const {
 const protectUrl = require("../middleware/authMiddleware.js");
 const router = experess.Router();
 
-router.get("/getAllProduct", adminMiddleware, productController.getAllProduct);
+router.get(
+  "/getAllProduct",
+  //  adminMiddleware
+  productController.getAllProduct
+);
 router.get("/getMyProduct", protectUrl, productController.getMyProduct);
 router.post("/addProduct", adminMiddleware, productController.addProduct);
 module.exports = router;

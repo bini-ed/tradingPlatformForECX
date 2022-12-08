@@ -34,20 +34,18 @@ const addProduct = async (req, res) => {
 };
 
 const getAllProduct = async (req, res) => {
-  const product = await Product.find().populate(
-    "seller",
-    "-password -__v -date"
-  );
+  const product = await Product.find()
+    .populate("seller", "-__v -date -password")
+    .select("-__v -date");
   if (!product.length) return res.status(400).send("No product found");
   return res.send(product);
 };
 
 const getMyProduct = async (req, res) => {
   const { id } = req.user;
-  const product = await Product.find({ seller: id }).populate(
-    "seller",
-    "-password -__v -date"
-  );
+  const product = await Product.find({ seller: id })
+    .populate("seller", "-password -__v -date")
+    .select("-__v -date");
   if (!product.length) return res.status(400).send("No product found");
   return res.send(product);
 };

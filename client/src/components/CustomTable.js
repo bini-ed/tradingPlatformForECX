@@ -16,7 +16,7 @@ const CustomTable = ({ auction, count }) => {
     return <p className="text-red-400 text-[30px]">There is no product </p>;
 
   let filteredAuction = auction?.filter((field) =>
-    field?.name?.match(new RegExp(filter, "i"))
+    field?.productName?.match(new RegExp(filter, "i"))
   );
   const auctions = paginate(filteredAuction, currentPage, pageSize);
 
@@ -39,11 +39,11 @@ const CustomTable = ({ auction, count }) => {
           ></input>
         </div>
 
-        <div class="flex flex-col">
-          <div class="overflow-x-auto">
-            <div class="min-w-full inline-block align-middle">
-              <div class="border rounded-[20px] overflow-hidden dark:border-[#69dc9e]">
-                <table class="min-w-full  divide-y divide-[#69dc9e] dark:divide-[#69dc9e]">
+        <div className="flex flex-col">
+          <div className="overflow-x-auto">
+            <div className="min-w-full inline-block align-middle">
+              <div className="border rounded-[20px] overflow-hidden dark:border-[#69dc9e]">
+                <table className="min-w-full  divide-y divide-[#69dc9e] dark:divide-[#69dc9e]">
                   <thead className="bg-[#48a9a6]  w-[100%]">
                     <tr>
                       <th className="border text-[18px] w-[20%] text-white p-5 border-slate-100">
@@ -66,13 +66,13 @@ const CustomTable = ({ auction, count }) => {
                         key={index}
                       >
                         <td className="border border-slate-100 text-slate-800 p-2 text-lg text-left ">
-                          {auction.name}
+                          {auction.productName}
                         </td>
                         <td className="border border-slate-100 text-slate-800 p-2 text-lg text-left ">
-                          {auction.type}
+                          {auction.productType}
                         </td>
                         <td className="border border-slate-100 text-slate-800 p-2 text-lg text-left ">
-                          {auction.grade}
+                          {auction.location}
                         </td>
                       </tr>
                     ))}

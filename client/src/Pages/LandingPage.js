@@ -26,7 +26,6 @@ function LandingPage() {
   const homeRef = useRef(null);
 
   const executeScroll = (ref) => {
-    console.log(ref);
     ref.current.scrollIntoView({
       behavior: "smooth",
       block: "center",

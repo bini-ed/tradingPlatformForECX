@@ -1,6 +1,6 @@
-const experess = require("express");
+const express = require("express");
+const router = express.Router();
 const roleController = require("../controller/roleController");
-const router = experess.Router();
 
 router.get("/getRole", roleController.getAllRole);
 router.post("/addRole", roleController.addRole);
