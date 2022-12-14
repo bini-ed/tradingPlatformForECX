@@ -18,9 +18,14 @@ router.get(
   auctionRoomController.addUserToAuctionRoom
 );
 router.get(
-  "/getSpecificProdcutInAuction",
+  "/getSellersProductInAuctionRoom",
   protectUrl,
-  auctionRoomController.getMyProductInAuctionRoom
+  auctionRoomController.getSellersProductInAuctionRoom
+);
+router.get(
+  "/getSpecificProductInAuctionRoom/:productId",
+
+  auctionRoomController.getSpecificProductInAuctionRoom
 );
 router.get(
   "/getEnrolledInAuctionRoom",

@@ -60,6 +60,7 @@ const authUser = async (req, res) => {
     return res.send("No Token Found");
   }
 };
+
 const getUserInformation = async (req, res) => {
   const { id } = req.user;
 

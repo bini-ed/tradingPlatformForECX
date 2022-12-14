@@ -75,8 +75,9 @@ const AuctionPage = () => {
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
                     {items?.users?.length}
                   </p>
+
                   <Link
-                    to={`/joinAuction/${items._id}`}
+                    to={`/joinAuction/${items._id}/${items?.product?._id}`}
                     className="mx-1 text-white p-2 bg-[#61ce61] w-[25%]"
                   >
                     Join Auction

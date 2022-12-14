@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const { AuctionRoom } = require("../model/auctionRoomModel");
 const { Product } = require("../model/productModel");
 
@@ -84,8 +85,19 @@ const getAllProductInAuctionRoom = async (req, res) => {
 
   return res.send(findProduct);
 };
+const getSpecificProductInAuctionRoom = async (req, res) => {
+  const { productId } = req.params;
+  const findProduct = await AuctionRoom.find({ product: productId }).populate({
+    path: "product",
+    populate: { path: "seller" },
+  });
 
-const getMyProductInAuctionRoom = async (req, res) => {
+  if (!findProduct) return res.status(404).send("No product found");
+
+  return res.send(findProduct);
+};
+
+const getSellersProductInAuctionRoom = async (req, res) => {
   const { id } = req.user;
   const findProduct = await AuctionRoom.find()
     .populate({
@@ -101,15 +113,20 @@ const getMyProductInAuctionRoom = async (req, res) => {
 };
 const getEnrolledInAuctionRoom = async (req, res) => {
   const { id } = req.user;
-  const findUser = await AuctionRoom.find()
-    .populate({
-      path: "users",
-      match: { _id: id },
-      select: "-__v -password",
-    })
-    .populate("product", "-__v")
-    .select("-__v ")
-    .exec();
+
+  const findUser = await AuctionRoom.find({
+    users: mongoose.Types.ObjectId(id),
+  }).populate("product", "-__v");
+
+  // const findUser = await AuctionRoom.find()
+  //   .populate({
+  //     path: "users",
+  //     match: { _id: id },
+  //     select: "-__v -password",
+  //   })
+  //   .populate("product", "-__v")
+  //   .select("-__v ")
+  //   .exec();
 
   if (!findUser) return res.status(404).send("Not product found");
   return res.send(findUser);
@@ -119,6 +136,7 @@ module.exports = {
   addProductToAuctionRoom,
   getAllProductInAuctionRoom,
   addUserToAuctionRoom,
-  getMyProductInAuctionRoom,
+  getSellersProductInAuctionRoom,
   getEnrolledInAuctionRoom,
+  getSpecificProductInAuctionRoom,
 };

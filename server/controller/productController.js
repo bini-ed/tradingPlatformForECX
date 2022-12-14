@@ -50,4 +50,18 @@ const getMyProduct = async (req, res) => {
   return res.send(product);
 };
 
-module.exports = { addProduct, getAllProduct, getMyProduct };
+const getSpecificProduct = async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findById(id)
+    .populate("seller", "-password -__v -date")
+    .select("-__v -date");
+  if (!product) return res.status(400).send("No product found");
+  return res.send(product);
+};
+
+module.exports = {
+  addProduct,
+  getAllProduct,
+  getMyProduct,
+  getSpecificProduct,
+};

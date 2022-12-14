@@ -22,3 +22,6 @@ export const getMyProductService = (token) => {
     },
   });
 };
+export const getSpecificProductService = (id) => {
+  return axios.get(`${URL}getSpecificProduct/${id}`);
+};

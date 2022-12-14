@@ -20,17 +20,22 @@ import Products from "./Admin/Page/Products";
 import SellerPage from "./Pages/Seller/SellerPage";
 import AuctionPage from "./Pages/Auction/AuctionPage";
 import JoinAuction from "./Pages/Auction/JoinAuction";
+import { getLocalStorageData } from "./components/localStorage";
+import { io } from "socket.io-client";
+import { URL } from "./config";
 
+const newSocket = io(URL);
+const token = localStorage.getItem("userInfo");
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(token ? jwtDecode(token) : "");
 
   useEffect(() => {
     getUser();
-  }, [user.id]);
+  }, [user?.id]);
 
   const getUser = async () => {
     try {
-      const token = localStorage.getItem("userInfo");
+      const token = getLocalStorageData();
       if (token) {
         const user = await jwtDecode(token);
         setUser(user);
@@ -38,9 +43,10 @@ function App() {
         setUser({});
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
+
   return (
     <div className="App">
       <AuthContext.Provider value={{ user, setUser }}>
@@ -103,8 +109,8 @@ function App() {
           <Route path="/buyer" element={<BuyerPage />}></Route>
           <Route path="/auction" element={<AuctionPage />}></Route>
           <Route
-            path="/joinAuction/:productId"
-            element={<JoinAuction />}
+            path="/joinAuction/:auctionRoomId/:productId"
+            element={<JoinAuction socket={newSocket} />}
           ></Route>
           <Route path="/seller" element={<SellerPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>

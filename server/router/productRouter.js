@@ -13,5 +13,6 @@ router.get(
   productController.getAllProduct
 );
 router.get("/getMyProduct", protectUrl, productController.getMyProduct);
+router.get("/getSpecificProduct/:id", productController.getSpecificProduct);
 router.post("/addProduct", adminMiddleware, productController.addProduct);
 module.exports = router;
