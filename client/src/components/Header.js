@@ -31,7 +31,7 @@ const Header = forwardRef(({ onBackClick }, ref) => {
 
   return (
     <div
-      className={`flex bg-[#ffffff]  items-center p-[20px] drop-shadow-md
+      className={`flex bg-[#ffffff] items-center p-[20px] drop-shadow-md
       ${width > 768 ? "flex-row justify-between items-center" : "flex-col"}
       ${height > 50 && "sticky w-full top-0 z-10 bg-[#d4f6e2]"}
       `}
@@ -97,18 +97,36 @@ const Header = forwardRef(({ onBackClick }, ref) => {
             ))}
 
             {user?.firstName ? (
-              <p
-                onClick={() => {
-                  window.location = `/${user.role.toLowerCase()}`;
-                }}
-                className={`text-[14px] md:text-[15px] lg:text-[16px]   hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-[#42ad59] p-2 rounded-lg  ${
-                  width < 768
-                    ? "my-2 w-[100%]  hover:bg-[#074E40] p-2 rounded-md text-white"
-                    : ""
-                }`}
-              >
-                Welcome {user?.firstName}
-              </p>
+              <div className="flex">
+                <p
+                  onClick={() => {
+                    window.location = "/seller";
+                  }}
+                  className={`text-[14px] md:text-[15px] lg:text-[16px] bg-orange-300 hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-white p-2 rounded-lg  ${
+                    width < 768
+                      ? "my-2 w-[100%]  hover:bg-[#074E40] p-2 rounded-md text-white"
+                      : ""
+                  }`}
+                >
+                  Sell Product
+                </p>
+                <p
+                  onClick={() => {
+                    window.location =
+                      user.role.toLowerCase() == "admin" ||
+                      user.role.toLowerCase() == "warehouse"
+                        ? `/${user.role.toLowerCase()}`
+                        : "/buyer";
+                  }}
+                  className={`text-[14px] md:text-[15px] lg:text-[16px]   hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-[#42ad59] p-2 rounded-lg  ${
+                    width < 768
+                      ? "my-2 w-[100%]  hover:bg-[#074E40] p-2 rounded-md text-white"
+                      : ""
+                  }`}
+                >
+                  Welcome {user?.firstName}
+                </p>
+              </div>
             ) : (
               <p
                 onClick={() => {

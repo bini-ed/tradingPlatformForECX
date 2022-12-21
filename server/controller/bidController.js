@@ -2,7 +2,6 @@ const { Bid } = require("../model/bidModel");
 
 const placeBid = async (req, res) => {
   const { amount, auctionId } = req.body;
-  var io = req.app.get("socketio");
   const { id } = req.user;
 
   const findAuction = await Bid.findOne({ auctionId });
@@ -38,4 +37,44 @@ const getBidsForSpecificAuction = async (req, res) => {
   }
 };
 
-module.exports = { placeBid, getBidsForSpecificAuction };
+const getBidsForSpecificUserAuction = async (req, res) => {
+  const { auctionId, buyerId } = req.params;
+  const findLastBid = await Bid.find(
+    { auctionId },
+    { bids: { $slice: -1 } }
+  ).populate({
+    path: "bids.buyerId",
+    model: "User",
+    select: "-__v -password  -email -date",
+  });
+
+  if (!findLastBid) {
+    return res.status(404).send("Operation failed, Please try again");
+  } else {
+    res.send(findLastBid);
+  }
+};
+const getWinnerForSpecificAuction = async (req, res) => {
+  const { auctionId } = req.params;
+
+  const findAuction = await Bid.findOne(
+    { auctionId },
+    { bids: { $slice: -1 } }
+  ).populate({
+    path: "bids.buyerId",
+    model: "User",
+    select: "-__v -password  -email -date",
+  });
+  if (!findAuction) {
+    return res.status(404).send("Operation failed, Please try again");
+  } else {
+    res.send(findAuction);
+  }
+};
+
+module.exports = {
+  placeBid,
+  getBidsForSpecificAuction,
+  getWinnerForSpecificAuction,
+  getBidsForSpecificUserAuction,
+};

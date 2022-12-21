@@ -128,25 +128,26 @@ const Carousel = ({
                 key={index}
                 className="carousel-item flex flex-col rounded-[20px] w-72 mx-5 snap-start"
               >
+                {console.log(resource)}
                 <div className="p-5 flex flex-col bg-[#DEEFE3] w-72 h-48 rounded-t-[10px]">
                   <h3 className="text-xl font-semibold text-left text-[#074E40]">
-                    {resource?.product?.productName}
+                    {resource?.product?.product?.productName}
                   </h3>
                   <div className="h-full w-full flex flex-col items-start my-5">
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Type: {resource?.product?.productType}
+                      Type: {resource?.product?.product?.productType}
                     </p>
 
                     {resource?.product?.grade && (
                       <p className="text-[16px] font-mono text-[#3D5833]">
-                        Grade: {resource?.product?.grade}
+                        Grade: {resource?.product?.product?.grade}
                       </p>
                     )}
                     <p className="text-[16px] font-mono text-[#3D5833]">
                       Quantity: {resource?.product?.productQuantity}
                     </p>
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Location: {resource?.product?.location}
+                      Location: {resource?.product?.product?.location}
                     </p>
                   </div>
                 </div>

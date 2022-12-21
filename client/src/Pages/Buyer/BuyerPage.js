@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
+import CustomAppTable from "../../components/CustomAppTable";
 import CustomTable from "../../components/CustomTable";
 import CustomToast from "../../components/CustomToast";
 import Header from "../../components/Header";
@@ -12,6 +13,7 @@ import {
 const BuyerPage = () => {
   const [auction, setAuction] = useState([]);
   const [message, setMessage] = useState("");
+  const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -51,6 +53,10 @@ const BuyerPage = () => {
     getAllProduct();
   }, []);
 
+  let filteredAuction = auction?.filter((role) =>
+    role?.productName?.match(new RegExp(filter, "i"))
+  );
+
   return (
     <div>
       <Header ref={[]} />
@@ -75,7 +81,21 @@ const BuyerPage = () => {
         <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
           My Products
         </h2>
-        <CustomTable auction={auction} count={auction.length} />
+        {/* <CustomTable auction={auction} count={auction.length} /> */}
+
+        <CustomAppTable
+          column={[
+            {
+              productName: "Product Name",
+              scoreValue: "Score Value",
+              fee: "Fee to join",
+            },
+          ]}
+          field={filteredAuction}
+          count={filteredAuction.length}
+          filter={filter}
+          setFilter={setFilter}
+        />
       </div>
     </div>
   );

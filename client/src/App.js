@@ -23,6 +23,10 @@ import JoinAuction from "./Pages/Auction/JoinAuction";
 import { getLocalStorageData } from "./components/localStorage";
 import { io } from "socket.io-client";
 import { URL } from "./config";
+import WinnerPage from "./Pages/Auction/WinnerPage";
+import ProductDetail from "./Pages/Seller/ProductDetail";
+import TrasnactionDetail from "./Admin/Page/TrasnactionDetail";
+import AddTransaction from "./Pages/Buyer/AddTransaction";
 
 const newSocket = io(URL);
 const token = localStorage.getItem("userInfo");
@@ -70,6 +74,14 @@ function App() {
               </AdminPanel>
             }
           ></Route>
+          <Route
+            path="/admin/ongoing/detail/:transactionId/:warehouseId"
+            element={
+              <AdminPanel>
+                <TrasnactionDetail />
+              </AdminPanel>
+            }
+          ></Route>
 
           <Route
             path="/admin/deactivated"
@@ -113,8 +125,17 @@ function App() {
             element={<JoinAuction socket={newSocket} />}
           ></Route>
           <Route path="/seller" element={<SellerPage />}></Route>
+          <Route
+            path="/productDetail/:productId"
+            element={<ProductDetail />}
+          ></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/signup" element={<SignUpPage />}></Route>
+          <Route
+            path="/winner/:productId/:amount"
+            element={<WinnerPage />}
+          ></Route>
+          <Route path="/pay/:warehouseId" element={<AddTransaction />}></Route>
         </Routes>
       </AuthContext.Provider>
     </div>

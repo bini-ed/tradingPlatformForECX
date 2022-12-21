@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import AuthContext from "../../context/AuthContext";
@@ -61,27 +60,41 @@ const AuctionPage = () => {
                   className="flex mt-5 rounded-md items-center justify-between bg-slate-200"
                 >
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
-                    {items?.product?.productName}
+                    {items?.product?.product?.productName}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
-                    {items?.product?.location}
+                    {items?.product?.product?.location}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
-                    {items?.product?.productType}
+                    {items?.product?.product?.productType}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
-                    {items?.product?.grade}
+                    {items?.product?.product?.grade}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
                     {items?.users?.length}
                   </p>
 
-                  <Link
-                    to={`/joinAuction/${items._id}/${items?.product?._id}`}
-                    className="mx-1 text-white p-2 bg-[#61ce61] w-[25%]"
-                  >
-                    Join Auction
-                  </Link>
+                  {console.log(items.product._id)}
+
+                  {!items?.isStarted ? (
+                    !items?.isCompleted ? (
+                      <p className="text-white p-2 bg-[#ce8961] w-[25%]">
+                        Not started
+                      </p>
+                    ) : (
+                      <p className="text-white p-2 bg-[#ce8961] w-[25%]">
+                        Completed
+                      </p>
+                    )
+                  ) : (
+                    <Link
+                      to={`/joinAuction/${items._id}/${items?.product?._id}`}
+                      className="cursor-pointer hover:bg-[#59e959] text-white p-2 bg-[#61ce61] w-[25%]"
+                    >
+                      Join Auction
+                    </Link>
+                  )}
                 </div>
               );
             })}

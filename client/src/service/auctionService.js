@@ -5,8 +5,18 @@ export const getAllProductInAuctionRoomService = () => {
   return axios.get(`${URL}getAllProductInAuctionRoom`);
 };
 
-export const addProductToAuctionService = (productId) => {
-  return axios.post(`${URL}addProductToAuction/${productId}`);
+export const addProductToAuctionService = (
+  productId,
+  productQuantity,
+  owner,
+  token
+) => {
+  return axios.get(
+    `${URL}addProductToAuction/${productId}/${productQuantity}/${owner}`,
+    {
+      headers: { "x-auth-token": token },
+    }
+  );
 };
 
 export const addUserToAuctionService = (auctionId, productId, token) => {
@@ -32,4 +42,7 @@ export const getEnrolledInAuctionRoomService = (token) => {
   return axios.get(`${URL}getEnrolledInAuctionRoom`, {
     headers: { "x-auth-token": token },
   });
+};
+export const getAuctionRoomUsingProductIdService = (productId) => {
+  return axios.get(`${URL}getAuction/${productId}`);
 };

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { paginate } from "../../components/paginate";
 import Paginations from "../../components/pagination";
 
-const ProductTable = ({ product, handleAdd }) => {
+const ProductTable = ({ product }) => {
   const [filter, setFilter] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,15 +10,15 @@ const ProductTable = ({ product, handleAdd }) => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   if (product?.length == 0)
     return <p className="text-red-400 text-[30px]">There is no product </p>;
 
   let filteredProduct = product?.filter(
     (field) =>
-      field?.product?.productName?.match(new RegExp(filter, "i")) ||
+      field?.product?.product?.productName?.match(new RegExp(filter, "i")) ||
       field?.productName?.match(new RegExp(filter, "i"))
   );
+
   const products = paginate(filteredProduct, currentPage, pageSize);
 
   return (
@@ -51,7 +50,7 @@ const ProductTable = ({ product, handleAdd }) => {
                         Product Name
                       </th>
                       <th className="border text-[18px] text-white p-5 border-slate-100">
-                        Product Quantity
+                        Quantity
                       </th>
                       <th className="border text-[18px] text-white p-5 border-slate-100">
                         Grade
@@ -59,12 +58,9 @@ const ProductTable = ({ product, handleAdd }) => {
                       <th className="border text-[18px] text-white p-5 border-slate-100">
                         Location
                       </th>
-                      <th className="border text-[18px] text-white p-5 border-slate-100">
-                        Type
-                      </th>
 
                       <th className="border text-[18px] text-white p-5 border-slate-100">
-                        Add to Auction
+                        Auction Status
                       </th>
                     </tr>
                   </thead>
@@ -78,8 +74,9 @@ const ProductTable = ({ product, handleAdd }) => {
                         key={index}
                       >
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.productName ||
-                            product?.product?.productName}
+                          {product?.productName
+                            ? product?.productName
+                            : product?.product?.product?.productName}
                         </td>
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
                           {product?.productQuantity ||
@@ -97,32 +94,30 @@ const ProductTable = ({ product, handleAdd }) => {
                                 : "bg-red-500 text-white "
                             }`}
                           >
-                            {(product?.grade || product?.product?.grade) ??
+                            {(product?.grade ||
+                              product?.product?.product?.grade) ??
                               "Not graded"}
                           </p>
                         </td>
                         <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.location || product?.product?.location}
-                        </td>
-                        <td className="border border-slate-300 text-slate-800 p-2 text-lg text-left ">
-                          {product?.productType ||
-                            product?.product?.productType}
+                          {product?.location ||
+                            product?.product?.product?.location}
                         </td>
 
                         <td
                           className={`border border-slate-300 text-slate-800 p-2 text-lg text-left`}
                         >
                           <p
-                            onClick={() => handleAdd(product._id)}
-                            className={`bg-slate-700 rounded-md text-white text-center ${
-                              product?.product?.productName
-                                ? "bg-transparent text-black"
-                                : " hover:bg-slate-600"
+                            className={`rounded-md py-1 px-2 text-white text-center ${
+                              product?.isActive ? "bg-[green]" : "bg-[#3b58a7]"
                             }`}
                           >
-                            {product?.product?.productName
-                              ? "In Auction"
-                              : "Add to auction"}
+                            {console.log(product)}
+                            {product?.isActive
+                              ? "Pending auction"
+                              : product?.isDone
+                              ? "Completed"
+                              : "Pending payment"}
                           </p>
                         </td>
                       </tr>

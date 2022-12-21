@@ -23,7 +23,6 @@ function LoginPage() {
     try {
       const { data } = await loginService(values);
       if (data) {
-        // console.log(data);
         localStorage.setItem("userInfo", data);
         window.location = "/";
       }

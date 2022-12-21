@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { getSpecificProductService } from "../../service/productService";
 
@@ -8,8 +8,11 @@ import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import { getSpecificProductInAuctionRoomService } from "../../service/auctionService";
 import { getBidsForSpecificAuctionService } from "../../service/bidService";
+import CustomModal from "../../components/CustomModal";
+import CustomToast from "../../components/CustomToast";
 
 const JoinAuction = ({ socket }) => {
+  const navigate = useNavigate();
   const { auctionRoomId, productId } = useParams();
   const { user } = useContext(AuthContext);
 
@@ -20,7 +23,7 @@ const JoinAuction = ({ socket }) => {
   const [currentBidder, setCurrentBidders] = useState({});
   const [chat, setChat] = useState("");
   const [bids, setBids] = useState({});
-
+  const [modal, setModal] = useState(false);
   const [countDown, setCountDown] = useState();
 
   useEffect(() => {
@@ -31,6 +34,21 @@ const JoinAuction = ({ socket }) => {
     socket.emit("joinAuctionRoom", {
       user: user,
       auctionRoomId,
+    });
+
+    return () => {
+      // socket.emit("leaveAuctionRoom", { auctionRoomId, user });
+      socket.off();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("auctionDone", ({ auctionDone, winner }) => {
+      if (auctionDone && winner?.bids[0]?.buyerId == user.id) {
+        navigate(`/winner/${productId}/${winner?.bids[0]?.amount}`);
+      } else {
+        setModal(true);
+      }
     });
 
     return () => {
@@ -66,12 +84,19 @@ const JoinAuction = ({ socket }) => {
     });
   }, []);
 
+  useEffect(() => {
+    socket.on("messageError", (data) => {
+      CustomToast("error", data);
+    });
+  }, []);
+
   const getProuctInformation = async () => {
     setLoading(true);
     try {
       const { data } = await getSpecificProductInAuctionRoomService(productId);
       if (data) {
-        setProduct(data[0]?.product);
+        console.log(data);
+        setProduct(data);
       }
     } catch (error) {
       console.log(error);
@@ -92,10 +117,17 @@ const JoinAuction = ({ socket }) => {
   };
 
   const handleMsg = async () => {
-    await socket.emit("sendBid", { auctionRoomId, chat, user });
-    socket.emit("requestTimer", {
+    await socket.emit("sendBid", {
       auctionRoomId,
+      chat,
+      user,
+      productId,
+      productQuantity: product?.product?.productQuantity,
+      seller: product?.product?.product?.seller,
     });
+    // socket.emit("requestTimer", {
+    //   auctionRoomId,
+    // });
     setChat("");
   };
 
@@ -113,35 +145,40 @@ const JoinAuction = ({ socket }) => {
           }  flex-col w-full justify-between min-h-[50vh] px-20 py-10 `}
         >
           <div className="flex flex-row justify-center w-full">
-            <p className="font-mono text-[30px] ">
-              {currentBidder?.firstName ?? "Buyer"} bids :
-            </p>
-            <p className="font-mono text-[30px] ">{msg ? msg : 0} ETB</p>
+            {currentBidder?.firstName && (
+              <>
+                <p className="font-mono text-[30px] ">
+                  {currentBidder?.firstName}
+                  bids :
+                </p>
+                <p className="font-mono text-[30px] ">{msg ? msg : 0} ETB</p>
+              </>
+            )}
           </div>
           <div className="flex justify-between items-center">
             <div className="flex flex-col w-[50%]">
               <h3 className="text-3xl font-semibold text-left my-2 text-[#074E40]">
-                Seller {product?.seller?.firstName}
+                Seller {product?.product?.product.seller?.firstName}
               </h3>
               <div className="p-5 flex flex-col justify-center items-center bg-[#DEEFE3] w-full  lg:w-[60%] py-10 rounded-[10px]">
                 <h3 className="text-2xl font-semibold text-left text-[#074E40]">
-                  {product?.productName}
+                  {product?.product?.product?.productName}
                 </h3>
                 <div className="h-full w-full flex flex-col items-start my-5">
                   <p className="text-[18px] font-mono text-[#3D5833]">
-                    Type: {product?.productType}
+                    Type: {product?.product?.product.productType}
                   </p>
 
                   {product?.grade && (
                     <p className="text-[18px] font-mono text-[#3D5833]">
-                      Grade: {product?.grade}
+                      Grade: {product?.product?.product.grade}
                     </p>
                   )}
                   <p className="text-[18px] font-mono text-[#3D5833]">
-                    Quantity: {product?.productQuantity}
+                    Quantity: {product?.product?.productQuantity}
                   </p>
                   <p className="text-[18px] font-mono text-[#3D5833]">
-                    Location: {product?.location}
+                    Location: {product?.product?.product.location}
                   </p>
                 </div>
               </div>
@@ -199,6 +236,14 @@ const JoinAuction = ({ socket }) => {
                   </div>
                 ))}
               </div>
+              {modal && (
+                <CustomModal
+                  onClick={() => {
+                    window.location = "/auction";
+                    setTimeout(() => setModal(false), 2000);
+                  }}
+                />
+              )}
             </>
           ) : (
             ""

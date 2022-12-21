@@ -1,23 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import ProductTable from "../../Admin/components/ProductTable";
+import CustomAppTable from "../../components/CustomAppTable";
+import CustomTable from "../../components/CustomTable";
 import CustomToast from "../../components/CustomToast";
 import Header from "../../components/Header";
+import AuthContext from "../../context/AuthContext";
 import {
   addProductToAuctionService,
   getMyProductInAuctionService,
 } from "../../service/auctionService";
 import { getMyProductService } from "../../service/productService";
+import { getSellerProductService } from "../../service/wareHouseService";
 
 const SellerPage = () => {
+  const { user, setBidId } = useContext(AuthContext);
   const [product, setProduct] = useState([]);
   const [productInAuction, setProductInAuction] = useState([]);
+  const [productInWare, setProductInWare] = useState([]);
   const [laoding, setLoading] = useState(false);
+  const [filter, setFilter] = useState([]);
   const [prodLaoding, setProLoading] = useState(false);
+  const [wareLaoding, setWareLoading] = useState(false);
 
   useEffect(() => {
     getAllProduct();
     myProductInAuction();
+    getAllProductInWareHouse();
   }, []);
 
   const getAllProduct = async () => {
@@ -26,54 +35,95 @@ const SellerPage = () => {
     try {
       const { data } = await getMyProductService(token);
       if (data) setProduct(data);
-      // checkIfProductExist(data);
+    } catch (error) {
+      console.log(error.response.data || error.message);
+      // CustomToast("error", error.response.data);
+    }
+    setLoading(false);
+  };
+  const getAllProductInWareHouse = async () => {
+    setWareLoading(true);
+    const token = localStorage.getItem("userInfo");
+    try {
+      const { data } = await getSellerProductService(token);
+      if (data) setProductInWare(data);
     } catch (error) {
       console.log(error.response.data || error.message);
       CustomToast("error", error.response.data);
     }
-    setLoading(false);
+    setWareLoading(false);
   };
 
-  const myProductInAuction = async (products) => {
+  const myProductInAuction = async () => {
     const token = localStorage.getItem("userInfo");
     setProLoading(true);
     try {
       const { data } = await getMyProductInAuctionService(token);
       if (data) {
-        setProductInAuction(data);
+        const filtered = data.filter(
+          (items) => items?.product != null && items?.product != undefined
+        );
+        setProductInAuction(filtered);
       }
     } catch (error) {
       console.log(error.response.data || error.message);
-      CustomToast("error", error.response.data || error.message);
+      // CustomToast("error", error.response.data || error.message);
     }
     setProLoading(false);
   };
 
-  const handleAddProduct = async (productId) => {
+  const handleAddProduct = async (productId, productQuantity) => {
+    const token = localStorage.getItem("userInfo");
+    const owner = user.id;
     try {
-      const { data } = await addProductToAuctionService(productId);
+      const { data } = await addProductToAuctionService(
+        productId,
+        productQuantity,
+        owner,
+        token
+      );
       if (data) {
         CustomToast("success", data?.msg);
         myProductInAuction();
       }
     } catch (error) {
-      CustomToast("error", error.response.data || error.message);
+      // CustomToast("error", error.response.data || error.message);
     }
   };
+
+  let filteredProduct = product?.filter((product) =>
+    product?.productName?.match(new RegExp(filter, "i"))
+  );
 
   return (
     <div>
       <Header ref={[]} />
       <div className="px-20">
         <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
-          My Product
+          All Products
         </h4>
         {laoding ? (
           <p>Loading</p>
         ) : product?.length ? (
-          <ProductTable handleAdd={handleAddProduct} product={product} />
+          <CustomAppTable
+            column={[
+              {
+                productName: "Product Name",
+                productQuantity: "Quantitiy",
+                location: "Location",
+                grade: "Grade",
+              },
+            ]}
+            handler={handleAddProduct}
+            field={filteredProduct}
+            count={filteredProduct.length}
+            filter={filter}
+            setFilter={setFilter}
+          />
         ) : (
-          <p className="text-red">No product found</p>
+          <p className="text-[#c45d5d] font-mono text-[17px]">
+            No product found
+          </p>
         )}
       </div>
 
@@ -88,6 +138,25 @@ const SellerPage = () => {
         ) : (
           <p className="text-[#c45d5d] font-mono text-[17px]">
             You don't have a product in auction
+          </p>
+        )}
+      </div>
+
+      <div className="px-20">
+        <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
+          Product in Warehouse
+        </h4>
+        {wareLaoding ? (
+          <p>Loading</p>
+        ) : productInWare?.length ? (
+          <CustomTable
+            handler={handleAddProduct}
+            count={productInWare.length}
+            auction={productInWare}
+          />
+        ) : (
+          <p className="text-[#c45d5d] font-mono text-[17px]">
+            You don't have a product in warhouse
           </p>
         )}
       </div>

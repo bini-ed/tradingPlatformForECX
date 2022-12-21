@@ -8,8 +8,9 @@ router.get(
   "/getAllProductInAuctionRoom",
   auctionRoomController.getAllProductInAuctionRoom
 );
-router.post(
-  "/addProductToAuction/:productId",
+router.get(
+  "/addProductToAuction/:productId/:productQuantity/:owner",
+  protectUrl,
   auctionRoomController.addProductToAuctionRoom
 );
 router.get(
@@ -24,13 +25,16 @@ router.get(
 );
 router.get(
   "/getSpecificProductInAuctionRoom/:productId",
-
   auctionRoomController.getSpecificProductInAuctionRoom
 );
 router.get(
   "/getEnrolledInAuctionRoom",
   protectUrl,
   auctionRoomController.getEnrolledInAuctionRoom
+);
+router.get(
+  "/getAuction/:productId",
+  auctionRoomController.getAuctionUsingProductId
 );
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { Product, validate } = require("../model/productModel");
 const { User } = require("../model/userModel");
+const WareHouse = require("../model/warehouseModel");
 
 const addProduct = async (req, res) => {
   const {
@@ -22,14 +23,22 @@ const addProduct = async (req, res) => {
     productQuantity,
     location,
     productType,
-    grade,
+    grade: grade ? grade : "b",
     seller: findUser._id,
     productDate,
   });
 
   const item = await product.save();
-  if (!item) return res.status(400).send("Error Occured,Please try again");
+  const wareHouseProduct = {
+    productQuantity,
+    product: product._id,
+    owner: product.seller,
+    inSale: false,
+  };
+  const wareHouse = new WareHouse(wareHouseProduct);
+  const saveWareHouse = await wareHouse.save();
 
+  if (!item) return res.status(400).send("Error Occured,Please try again");
   if (item) res.send("Product registered successfully");
 };
 
@@ -53,8 +62,8 @@ const getMyProduct = async (req, res) => {
 const getSpecificProduct = async (req, res) => {
   const { id } = req.params;
   const product = await Product.findById(id)
-    .populate("seller", "-password -__v -date")
-    .select("-__v -date");
+    .populate("seller", "-password -__v")
+    .select("-__v");
   if (!product) return res.status(400).send("No product found");
   return res.send(product);
 };
