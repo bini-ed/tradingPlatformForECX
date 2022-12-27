@@ -36,5 +36,10 @@ router.get(
   "/getAuction/:productId",
   auctionRoomController.getAuctionUsingProductId
 );
+router.get(
+  "/getAuctionHistory",
+  protectUrl,
+  auctionRoomController.getAuctionHistory
+);
 
 module.exports = router;

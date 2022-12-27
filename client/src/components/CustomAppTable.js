@@ -12,23 +12,26 @@ function CustomAppTable({
   count,
   path,
   handler,
+  color,
 }) {
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-  if (count === 0)
-    return <p className="text-red-400 text-[30px]">There is no field </p>;
 
   const fields = paginate(field, currentPage, pageSize);
 
   return (
     <div className="w-full">
       <div className="flex flex-col justify-center m-auto w-[100%] ">
-        <div className="flex flex-row rounded-md bg-[#48a9a6] my-3 place-self-start">
+        <div
+          className={`flex flex-row rounded-md ${
+            color ? color : "bg-[#48a9a6]"
+          } my-3 place-self-start`}
+        >
           <label
             className="text-lg text-white font-semibold p-1"
             htmlFor="filter"
@@ -49,20 +52,24 @@ function CustomAppTable({
             <div className="min-w-full inline-block align-middle">
               <div className="border rounded-[20px] overflow-hidden dark:border-[#69dc9e]">
                 <table className="min-w-full  divide-y divide-[#69dc9e] dark:divide-[#69dc9e]">
-                  <thead className="bg-[#48a9a6]  w-[100%]">
+                  <thead
+                    className={`${
+                      color ? `${color}` : "bg-[#48a9a6]"
+                    }  w-[100%]`}
+                  >
                     <tr>
                       {column?.map((columns, index) =>
                         Object.keys(columns).map((key, index) => (
                           <th
                             key={index}
-                            className="border text-[18px] w-[20%] text-white py-5 border-slate-100"
+                            className="border text-sm md:text-md lg:text-lg w-[20%] text-white py-5 border-slate-100"
                           >
                             {columns[key]}
                           </th>
                         ))
                       )}
                       {handler ? (
-                        <th className="border text-[18px] w-[20%] text-white  border-slate-100">
+                        <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white  border-slate-100">
                           <p>Add to auction</p>
                         </th>
                       ) : (
@@ -73,8 +80,13 @@ function CustomAppTable({
                   <tbody>
                     {fields?.map((field, index) => (
                       <tr
+                        onClick={() => navigate(`${path}/${field._id}`)}
                         className={`cursor-pointer ${
-                          index % 2 == 0 ? "bg-[#d7f8ee]" : "bg-[#f6f7f6]"
+                          color
+                            ? `bg-slate-500 hover:bg-slate-400`
+                            : index % 2 == 0
+                            ? "bg-[#d7f8ee]"
+                            : "bg-[#f6f7f6]"
                         } hover:bg-[#b8e6cf]`}
                         key={index}
                       >
@@ -85,13 +97,16 @@ function CustomAppTable({
                               .map((c) => (
                                 <td
                                   key={index}
-                                  className="border border-slate-100 text-slate-800 p-2 text-lg text-left "
+                                  className={`border border-slate-100 ${
+                                    color ? "text-white" : "text-slate-800"
+                                  } text-sm md:text-md lg:text-lg p-2`}
                                 >
                                   {field[c]}
                                 </td>
                               ))
                           )
                         )}
+
                         {handler ? (
                           <tr
                             className={`flex justify-center items-center cursor-pointer py-1 px-2 ${"bg-[#f6f7f6"} hover:bg-[#b8e6cf]`}

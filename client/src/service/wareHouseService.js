@@ -2,7 +2,7 @@ import axios from "axios";
 import { URL } from "../config";
 
 export const getProductFromWareHouse = (token) => {
-  return axios.get(`${URL}getInformation`, {
+  return axios.get(`${URL}getWarehouse`, {
     headers: {
       "x-auth-token": token,
     },
@@ -22,4 +22,8 @@ export const getSellerProductService = (token) => {
       "x-auth-token": token,
     },
   });
+};
+
+export const getProductInWarehouse = () => {
+  return axios.get(`${URL}getProductInWarehouse`);
 };

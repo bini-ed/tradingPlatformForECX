@@ -22,8 +22,10 @@ const SellerPage = () => {
   const [filter, setFilter] = useState([]);
   const [prodLaoding, setProLoading] = useState(false);
   const [wareLaoding, setWareLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    setErrorMessage("");
     getAllProduct();
     myProductInAuction();
     getAllProductInWareHouse();
@@ -36,6 +38,7 @@ const SellerPage = () => {
       const { data } = await getMyProductService(token);
       if (data) setProduct(data);
     } catch (error) {
+      setErrorMessage(error.response.data || error.message);
       console.log(error.response.data || error.message);
       // CustomToast("error", error.response.data);
     }
@@ -49,7 +52,8 @@ const SellerPage = () => {
       if (data) setProductInWare(data);
     } catch (error) {
       console.log(error.response.data || error.message);
-      CustomToast("error", error.response.data);
+      // CustomToast("error", error.response.data);
+      setErrorMessage(error.response.data || error.message);
     }
     setWareLoading(false);
   };
@@ -66,7 +70,8 @@ const SellerPage = () => {
         setProductInAuction(filtered);
       }
     } catch (error) {
-      console.log(error.response.data || error.message);
+      // console.log(error.response.data || error.message);
+      setErrorMessage(error.response.data || error.message);
       // CustomToast("error", error.response.data || error.message);
     }
     setProLoading(false);
@@ -87,6 +92,7 @@ const SellerPage = () => {
         myProductInAuction();
       }
     } catch (error) {
+      setErrorMessage(error.response.data || error.message);
       // CustomToast("error", error.response.data || error.message);
     }
   };
@@ -119,6 +125,7 @@ const SellerPage = () => {
             count={filteredProduct.length}
             filter={filter}
             setFilter={setFilter}
+            path="/productDetail"
           />
         ) : (
           <p className="text-[#c45d5d] font-mono text-[17px]">

@@ -25,8 +25,8 @@ const TransactionTable = ({ transaction }) => {
       <div className="w-full">
         <div className="flex flex-col justify-center w-[100%]">
           <div className="flex flex-col">
-            <div className="min-w-full px-20 my-10 inline-block align-middle">
-              <div className="flex flex-row w-[30%] rounded-md bg-slate-500 my-3 place-self-start">
+            <div className="px-20 my-10 inline-block align-middle">
+              <div className="flex w-max rounded-md bg-slate-500 my-3 place-self-start">
                 <label
                   className="text-lg text-white font-semibold p-1"
                   htmlFor="filter"
@@ -36,11 +36,12 @@ const TransactionTable = ({ transaction }) => {
                 <input
                   type="text"
                   name="filter"
-                  className="border border-slate-400 m-2 focus:outline-none rounded-sm focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                  className="border border-slate-400 m-2 focus:outline-none rounded-sm focus:border-blue-200 focus:ring-1 focus:ring-blue-200"
                   value={filter}
                   onChange={(e) => setFilter(e.currentTarget.value)}
                 ></input>
               </div>
+
               <table className="table-auto justify-center border-slate-500 w-[100%]">
                 <thead className="bg-slate-800 w-[100%]">
                   <tr>

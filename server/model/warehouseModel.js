@@ -20,6 +20,11 @@ const warehouseSchema = mongoose.Schema({
     required: true,
     default: false,
   },
+  inWarehouse: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   paymentDone: {
     type: Boolean,
     required: true,

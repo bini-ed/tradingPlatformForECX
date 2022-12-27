@@ -7,6 +7,7 @@ import "./App.css";
 import AdminNavigation from "./Admin/components/AdminNavigation";
 import SideBar from "./Admin/components/SideBar";
 import AdminPanel from "./Admin/Page/AdminPanel";
+import AddWarehouseOfficer from "./Admin/Page/addWarehouseOfficer";
 import Completed from "./Admin/Page/Completed";
 import Deactivated from "./Admin/Page/Deactivated";
 import OnGoing from "./Admin/Page/OnGoing";
@@ -27,6 +28,10 @@ import WinnerPage from "./Pages/Auction/WinnerPage";
 import ProductDetail from "./Pages/Seller/ProductDetail";
 import TrasnactionDetail from "./Admin/Page/TrasnactionDetail";
 import AddTransaction from "./Pages/Buyer/AddTransaction";
+import Price from "./Admin/Page/Price";
+import AddPrice from "./Admin/Page/AddPrice";
+import EditPrice from "./Admin/Page/EditPrice";
+import AddRoles from "./Admin/Page/AddRoles";
 
 const newSocket = io(URL);
 const token = localStorage.getItem("userInfo");
@@ -71,6 +76,46 @@ function App() {
             element={
               <AdminPanel>
                 <OnGoing />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/price"
+            element={
+              <AdminPanel>
+                <Price />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/price/addPrice"
+            element={
+              <AdminPanel>
+                <AddPrice />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/addRole"
+            element={
+              <AdminPanel>
+                <AddRoles />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/warehouse"
+            element={
+              <AdminPanel>
+                <AddWarehouseOfficer />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/price/editPrice/:priceId"
+            element={
+              <AdminPanel>
+                <EditPrice />
               </AdminPanel>
             }
           ></Route>

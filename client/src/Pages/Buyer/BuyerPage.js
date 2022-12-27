@@ -60,9 +60,13 @@ const BuyerPage = () => {
   return (
     <div>
       <Header ref={[]} />
+
       <Link
+        style={{ pointerEvents: auction.length ? "" : "none" }}
         to={"/auction"}
-        className="p-3 my-3 w-fit absolute right-3 bg-[green] rounded-md text-white text-right font-semibold text-[18px]"
+        className={`p-3 my-3 w-fit absolute right-3 ${
+          auction.length ? "bg-[green]" : "bg-[grey]"
+        } rounded-md text-white text-right font-semibold text-[18px]`}
       >
         Join Auction
       </Link>
@@ -70,18 +74,23 @@ const BuyerPage = () => {
         <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
           Upcoming Auction
         </h2>
-        <Carousel
-          message={message}
-          handleAddUser={handleAddUser}
-          loading={loading}
-          auction={auction}
-          open={open}
-          setOpen={setOpen}
-        />
+        {auction.length ? (
+          <Carousel
+            message={message}
+            handleAddUser={handleAddUser}
+            loading={loading}
+            auction={auction}
+            open={open}
+            setOpen={setOpen}
+          />
+        ) : (
+          <p className="text-[brown] font-mono text-lg">
+            No upcoming auction at the moment
+          </p>
+        )}
         <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
           My Products
         </h2>
-        {/* <CustomTable auction={auction} count={auction.length} /> */}
 
         <CustomAppTable
           column={[

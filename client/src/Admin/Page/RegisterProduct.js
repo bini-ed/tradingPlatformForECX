@@ -114,7 +114,7 @@ const RegisterProduct = () => {
                 </div>
 
                 <div className={`w-[90%] px-5 my-2`}>
-                  <p className="text-[#4D5959] text-left">Payment Date</p>
+                  <p className="text-[#4D5959] text-left">Product Date</p>
                   <ReactDatePicker
                     autoComplete="off"
                     className={`w-full outline-[#99d5e9] ${
@@ -124,7 +124,7 @@ const RegisterProduct = () => {
                     onChange={(date) => {
                       setFieldValue("productDate", date);
                     }}
-                    placeholderText="Date of payment"
+                    placeholderText="Date of product"
                     name="startDate"
                     dateFormat="dd/MM/yyyy"
                   />

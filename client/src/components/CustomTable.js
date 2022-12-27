@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { paginate } from "./paginate";
 import Paginations from "./pagination";
@@ -11,7 +11,7 @@ const CustomTable = ({ auction: product, count, handler }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const authContext = useContext(AuthContext);
   const { user } = authContext;
-
+  const navigate = useNavigate();
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -60,11 +60,11 @@ const CustomTable = ({ auction: product, count, handler }) => {
                       <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
                         Payment
                       </th>
-                      {/* <th className="border text-[18px] w-[25%] text-white p-5 border-slate-100">
-                        Status
-                      </th> */}
-                      <th className="border text-[18px] w-[25%] text-white p-5 border-slate-100">
+                      <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
                         Add to auction
+                      </th>
+                      <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
+                        Status
                       </th>
                     </tr>
                   </thead>
@@ -85,48 +85,48 @@ const CustomTable = ({ auction: product, count, handler }) => {
                         <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
                           {auction?.product?.productType}
                         </td>
-                        {/* 
-                        <td className="border border-slate-100 text-slate-800 p-2 text-lg text-left ">
-                          {auction?.owner == user.id ? (
-                            <p className="bg-green-800 rounded-md text-center text-white">
-                              Not sold
-                            </p>
-                          ) : (
-                            <p className="bg-red-800 rounded-md text-center text-white">
-                              Sold
-                            </p>
-                          )} 
-                        </td>
-                          */}
 
                         {auction.owner == auction.product.seller ? (
                           <td className="border-slate-100 text-slate-800 p-2  text-center ">
-                            <Link
-                              to={`/productDetail/${auction?.product?._id}`}
-                              className="p-1 px-20 rounded-md text-[#3f3f3f] bg-[orange] w-full text-sm md:text-md lg:text-lg text-left "
+                            <p
+                              onClick={() =>
+                                navigate(
+                                  `/productDetail/${auction?.product?._id}`
+                                )
+                              }
+                              className="p-1 w-[90%] rounded-md text-[#ffffff] bg-orange-400 text-sm md:text-md lg:text-lg text-center "
                             >
                               Add to auction
-                            </Link>
+                            </p>
                           </td>
                         ) : auction?.paymentDone ? (
                           <td className="flex border-slate-100 text-slate-800 p-2  w-full text-center ">
-                            <Link
-                              to={`/productDetail/${auction?.product?._id}`}
+                            <p
+                              onClick={() =>
+                                navigate(
+                                  `/productDetail/${auction?.product?._id}`
+                                )
+                              }
                               className="p-1 w-[90%] rounded-md text-[#ffffff] bg-[purple] text-sm md:text-md lg:text-lg text-center "
                             >
                               Add to auctions
-                            </Link>
+                            </p>
                           </td>
                         ) : (
                           <td className="border-slate-100 text-slate-800 p-2  text-center ">
-                            <Link
-                              to={`/pay/${auction._id}`}
-                              className="p-1 px-20 rounded-md text-[#3f3f3f] bg-orange-300 w-full text-sm md:text-md lg:text-lg text-left "
+                            <p
+                              onClick={() => navigate(`/pay/${auction._id}`)}
+                              className="p-1 w-[90%] rounded-md text-[#ffffff] bg-orange-300 text-sm md:text-md lg:text-lg text-center "
                             >
                               Pay
-                            </Link>
+                            </p>
                           </td>
                         )}
+                        <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
+                          {auction.owner == auction.product.seller
+                            ? "My product"
+                            : "Bought product"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

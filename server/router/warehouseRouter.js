@@ -7,6 +7,10 @@ const router = experess.Router();
 
 router.get("/getWarehouse", wareHouserController.getWareHouse);
 router.get(
+  "/getProductInWarehouse",
+  wareHouserController.getProductFromWareHouse
+);
+router.get(
   "/getSellerProduct",
   protectUrl,
   wareHouserController.getSellerProductFromWareHouse

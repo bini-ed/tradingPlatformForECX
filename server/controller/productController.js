@@ -23,7 +23,7 @@ const addProduct = async (req, res) => {
     productQuantity,
     location,
     productType,
-    grade: grade ? grade : "b",
+    grade: grade ? grade : 1,
     seller: findUser._id,
     productDate,
   });

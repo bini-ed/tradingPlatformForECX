@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   grade: {
-    type: String,
+    type: mongoose.Schema.Types.Number,
   },
   seller: {
     type: mongoose.Schema.Types.ObjectId,

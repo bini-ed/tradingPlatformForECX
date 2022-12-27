@@ -115,7 +115,7 @@ const Header = forwardRef(({ onBackClick }, ref) => {
                     window.location =
                       user.role.toLowerCase() == "admin" ||
                       user.role.toLowerCase() == "warehouse"
-                        ? `/${user.role.toLowerCase()}`
+                        ? `/admin`
                         : "/buyer";
                   }}
                   className={`text-[14px] md:text-[15px] lg:text-[16px]   hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-[#42ad59] p-2 rounded-lg  ${

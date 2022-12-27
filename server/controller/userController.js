@@ -33,6 +33,7 @@ const registerUser = async (req, res) => {
     // .select("-password -createdAt -updatedAt -__v");4
   }
 };
+
 const authUser = async (req, res) => {
   const { email, password } = req.body;
 

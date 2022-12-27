@@ -4,6 +4,7 @@ import CustomToast from "../../components/CustomToast";
 import { getAllProductService } from "../../service/productService";
 import ProductTable from "../components/ProductTable";
 import Loader from "../../components/Loader";
+import { getProductInWarehouse } from "../../service/wareHouseService";
 
 const Products = () => {
   const [product, setProduct] = useState([]);
@@ -16,14 +17,11 @@ const Products = () => {
   const getAllProduct = async () => {
     setLoading(true);
     try {
-      const { data } = await getAllProductService(
-        localStorage.getItem("userInfo")
-      );
-      console.log(data);
+      const { data } = await getProductInWarehouse();
+      // console.log(data);
       if (data) setProduct(data);
     } catch (error) {
-      console.log(error.response.data || error.message);
-      CustomToast("error", error.response.data);
+      // CustomToast("error", error.response.data);
     }
     setLoading(false);
   };
@@ -33,7 +31,11 @@ const Products = () => {
       {loading ? (
         <Loader />
       ) : (
-        <ProductTable product={product} count={product.length} />
+        <ProductTable
+          color="bg-slate-800"
+          product={product}
+          count={product.length}
+        />
       )}
     </div>
   );
