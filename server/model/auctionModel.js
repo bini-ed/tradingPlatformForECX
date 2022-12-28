@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
 const auctionSchema = new mongoose.Schema({
   auctionRoom: [
@@ -10,6 +10,7 @@ const auctionSchema = new mongoose.Schema({
       date: {
         type: mongoose.Schema.Types.Date,
         required: true,
+        default: Date.now(),
       },
     },
   ],

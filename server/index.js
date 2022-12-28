@@ -12,6 +12,8 @@ const bidRouter = require("./router/bidRouter");
 const wareHouseRouter = require("./router/warehouseRouter");
 const transactionRouter = require("./router/transactionRouter");
 const priceRouter = require("./router/priceRouter");
+const auctionRouter = require("./router/auctionRouter");
+const productNameRouter = require("./router/productNameRouter");
 const path = require("path");
 
 const socketServer = require("./socket");
@@ -46,5 +48,7 @@ app.use("/", bidRouter);
 app.use("/", auctionRoomRouter);
 app.use("/", wareHouseRouter);
 app.use("/", priceRouter);
+app.use("/", auctionRouter);
+app.use("/", productNameRouter);
 
 httpServer.listen(port, () => console.log("Listening"));

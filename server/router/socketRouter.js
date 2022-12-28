@@ -35,7 +35,7 @@ const getTimer = (
   countdown = 60;
   const interval = setInterval(async function () {
     countdown--;
-    if (countdown == 10) {
+    if (countdown == 50) {
       clearInterval(interval);
       const findWinner = await Bid.findOne(
         { auctionId: auctionRoomId },
@@ -45,33 +45,33 @@ const getTimer = (
         return res.status(404).send("Operation failed, Please try again");
       } else {
         console.log(findWinner);
-        // const warehouse = await WareHouse.findOneAndUpdate(
-        //   {
-        //     _id: productId,
-        //     productQuantity,
-        //     owner: seller,
-        //     inSale: true,
-        //   },
-        //   { owner: findWinner?.bids[0]?.buyerId?._id, inSale: false }
-        // );
-        // if (warehouse) {
-        //   const auctionRoom = await AuctionRoom.findByIdAndUpdate(
-        //     auctionRoomId,
-        //     {
-        //       isStarted: false,
-        //       isActive: false,
-        //       // users: [],
-        //     }
-        //   );
-        // if (!auctionRoom) console.log("auctionRoom err");
-        // else {
-        io.sockets
-          .to(auctionRoomId)
-          .emit("auctionDone", { auctionDone: true, winner: findWinner });
-        // }
-        // } else {
-        //   console.log("warehouse error");
-        // }
+        const warehouse = await WareHouse.findOneAndUpdate(
+          {
+            _id: productId,
+            productQuantity,
+            owner: seller,
+            inSale: true,
+          },
+          { owner: findWinner?.bids[0]?.buyerId?._id, inSale: false }
+        );
+        if (warehouse) {
+          const auctionRoom = await AuctionRoom.findByIdAndUpdate(
+            auctionRoomId,
+            {
+              isStarted: false,
+              isActive: false,
+              // users: [],
+            }
+          );
+          if (!auctionRoom) console.log("auctionRoom err");
+          else {
+            io.sockets
+              .to(auctionRoomId)
+              .emit("auctionDone", { auctionDone: true, winner: findWinner });
+          }
+        } else {
+          console.log("warehouse error");
+        }
       }
     }
     io.sockets.to(auctionRoomId).emit("getTimer", { countdown });

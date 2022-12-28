@@ -1,5 +1,5 @@
 import { ErrorMessage, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
 import ReactDatePicker from "react-datepicker";
@@ -8,6 +8,7 @@ import FormField from "../../components/FormField";
 import CustomToast from "../../components/CustomToast";
 import { addProductService } from "../../service/productService";
 import Loader from "../../components/Loader";
+import { getAllProductNameService } from "../service/productNameService";
 
 const RegisterProduct = () => {
   const validationSchema = Yup.object().shape({
@@ -20,6 +21,23 @@ const RegisterProduct = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [productName, setProductName] = useState([]);
+
+  useEffect(() => {
+    getProductName();
+    return () => {};
+  }, []);
+
+  const getProductName = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getAllProductNameService();
+      if (data) setProductName(data);
+    } catch (error) {
+      CustomToast("error", error.response.data ?? error.message);
+    }
+    setLoading(false);
+  };
 
   const handleAddProduct = async (values) => {
     const token = localStorage.getItem("userInfo");
@@ -59,12 +77,42 @@ const RegisterProduct = () => {
           {({ isSubmitting, values, setFieldValue, errors }) => (
             <div className="w-full flex justify-center">
               <Form className="flex flex-col flex-wrap w-[90%] md:w-[70%] lg:w-[60%] lg:max-w-[500px]  rounded-lg bg-slate-200 items-center">
-                <FormField
-                  label="Product Name"
-                  name="productName"
-                  type="text"
-                  error={errors.productName}
-                />
+                <div className="w-[90%] px-5 my-2">
+                  <label
+                    htmlFor="productName"
+                    className="block mb-2 text-left text-[#4D5959]"
+                  >
+                    Product Type
+                  </label>
+                  <select
+                    onChange={(e) => {
+                      setFieldValue("productName", e.currentTarget.value);
+                    }}
+                    id="productName"
+                    className="bg-gray-50 outline-[#99d5e9] text-gray-900 rounded-lg w-full p-2.5 "
+                  >
+                    <option
+                      value=""
+                      className="bg-slate-800 text-white rounded-md"
+                    >
+                      Product Name
+                    </option>
+                    {productName.map((name) => (
+                      <option
+                        value={name.productName}
+                        className="bg-slate-800 text-white rounded-md"
+                      >
+                        {name.productName}
+                      </option>
+                    ))}
+                  </select>
+                  <ErrorMessage
+                    className="text-[red] text-left"
+                    name="productName"
+                    component="p"
+                  />
+                </div>
+
                 <FormField
                   label="Product Quantity per KG"
                   name="productQuantity"

@@ -6,7 +6,7 @@ import Deactivated from "../../asset/icons/deactivated.png";
 import Completed from "../../asset/icons/completed.png";
 import Add from "../../asset/icons/add.png";
 import Price from "../../asset/icons/price.png";
-import jwtDecode from "jwt-decode";
+import Product from "../../asset/icons/product.png";
 import AuthContext from "../../context/AuthContext";
 
 const SideBar = ({ children }) => {
@@ -24,8 +24,9 @@ const SideBar = ({ children }) => {
     { name: "Completed", path: "/admin/completed", icon: Completed },
 
     { name: "Products", path: "/admin/product", icon: Completed },
-    { name: "Add Product", path: "/admin/register", icon: Add },
+    { name: "Register Product", path: "/admin/register", icon: Add },
     { name: "Price", path: "/admin/price", icon: Price },
+    { name: "Add Product", path: "/admin/productName", icon: Product },
   ];
 
   return (
@@ -36,7 +37,8 @@ const SideBar = ({ children }) => {
             {user.role === "admin" &&
             index !== 5 &&
             index !== 6 &&
-            index !== 7 ? (
+            index !== 7 &&
+            index !== 8 ? (
               <NavLink
                 to={option.path}
                 key={index}
@@ -59,7 +61,7 @@ const SideBar = ({ children }) => {
                 </p>
               </NavLink>
             ) : user.role == "warehouse" &&
-              (index == 5 || index == 6 || index == 7) ? (
+              (index == 5 || index == 6 || index == 7 || index == 8) ? (
               <NavLink
                 to={option.path}
                 key={index}

@@ -9,6 +9,7 @@ import {
   addUserToAuctionService,
   getAllProductInAuctionRoomService,
 } from "../../service/auctionService";
+import moment from "moment";
 
 const BuyerPage = () => {
   const [auction, setAuction] = useState([]);
@@ -71,23 +72,29 @@ const BuyerPage = () => {
         Join Auction
       </Link>
       <div className="px-[50px]">
-        <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
+        <h2 className="text-2xl font-semibold mt-10 text-left text-[#996D6D]">
           Upcoming Auction
         </h2>
-        {auction.length ? (
-          <Carousel
-            message={message}
-            handleAddUser={handleAddUser}
-            loading={loading}
-            auction={auction}
-            open={open}
-            setOpen={setOpen}
-          />
-        ) : (
-          <p className="text-[brown] font-mono text-lg">
-            No upcoming auction at the moment
-          </p>
-        )}
+        {auction.map((auctions, index) => (
+          <div key={index}>
+            {auctions?.auctionRoom?.length ? (
+              <Carousel
+                key={index}
+                message={message}
+                handleAddUser={handleAddUser}
+                loading={loading}
+                auction={auctions?.auctionRoom}
+                open={open}
+                setOpen={setOpen}
+                date={moment(auctions?.auctionRoom[0]?.date).format("dddd")}
+              />
+            ) : (
+              <p className="text-[brown] font-mono text-lg">
+                No upcoming auction at the moment
+              </p>
+            )}
+          </div>
+        ))}
         <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
           My Products
         </h2>

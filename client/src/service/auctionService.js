@@ -2,7 +2,8 @@ import axios from "axios";
 import { URL } from "../config";
 
 export const getAllProductInAuctionRoomService = () => {
-  return axios.get(`${URL}getAllProductInAuctionRoom`);
+  // return axios.get(`${URL}getAllProductInAuctionRoom`);
+  return axios.get(`${URL}getAuction`);
 };
 
 export const addProductToAuctionService = (

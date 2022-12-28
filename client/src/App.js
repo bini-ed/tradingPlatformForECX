@@ -32,6 +32,9 @@ import Price from "./Admin/Page/Price";
 import AddPrice from "./Admin/Page/AddPrice";
 import EditPrice from "./Admin/Page/EditPrice";
 import AddRoles from "./Admin/Page/AddRoles";
+import ProductName from "./Admin/Page/ProdutName";
+import AddProductName from "./Admin/Page/AddProductName";
+import EditProductName from "./Admin/Page/EditProductName";
 
 const newSocket = io(URL);
 const token = localStorage.getItem("userInfo");
@@ -96,6 +99,38 @@ function App() {
             }
           ></Route>
           <Route
+            path="/admin/price/editPrice/:priceId"
+            element={
+              <AdminPanel>
+                <EditPrice />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/productName"
+            element={
+              <AdminPanel>
+                <ProductName />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/productName/addProductName"
+            element={
+              <AdminPanel>
+                <AddProductName />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
+            path="/admin/productName/editProductName/:productNameId"
+            element={
+              <AdminPanel>
+                <EditProductName />
+              </AdminPanel>
+            }
+          ></Route>
+          <Route
             path="/admin/addRole"
             element={
               <AdminPanel>
@@ -111,14 +146,7 @@ function App() {
               </AdminPanel>
             }
           ></Route>
-          <Route
-            path="/admin/price/editPrice/:priceId"
-            element={
-              <AdminPanel>
-                <EditPrice />
-              </AdminPanel>
-            }
-          ></Route>
+
           <Route
             path="/admin/ongoing/detail/:transactionId/:warehouseId"
             element={

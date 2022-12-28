@@ -4,6 +4,7 @@ import moment from "moment";
 import AuthContext from "../context/AuthContext";
 import CustomModal from "../utils/CustomModal";
 import Loader from "./Loader";
+import CustomToast from "./CustomToast";
 
 const Carousel = ({
   auction,
@@ -12,6 +13,7 @@ const Carousel = ({
   handleAddUser,
   open,
   setOpen,
+  date,
 }) => {
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -60,6 +62,10 @@ const Carousel = ({
       ? carousel.current.scrollWidth - carousel.current.offsetWidth
       : 0;
   }, []);
+
+  const filteredAuction = auction.filter(
+    (auctions) => auctions.auctionId != null
+  );
 
   return (
     <div>
@@ -118,55 +124,63 @@ const Carousel = ({
             <span className="sr-only">Next</span>
           </button>
         </div>
+        <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
+          {date}
+        </h2>
         <div
           ref={carousel}
           className="carousel-container relative flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
         >
-          {auction.map((resource, index) => {
+          {filteredAuction.map((resource, index) => {
             return (
               <div
                 key={index}
                 className="carousel-item flex flex-col rounded-[20px] w-72 mx-5 snap-start"
               >
-                {console.log(resource)}
                 <div className="p-5 flex flex-col bg-[#DEEFE3] w-72 h-48 rounded-t-[10px]">
                   <h3 className="text-xl font-semibold text-left text-[#074E40]">
-                    {resource?.product?.product?.productName}
+                    {resource?.auctionId?.product?.product?.productName}
                   </h3>
                   <div className="h-full w-full flex flex-col items-start my-5">
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Type: {resource?.product?.product?.productType}
+                      Type: {resource?.auctionId?.product?.product?.productType}
                     </p>
 
                     {resource?.product?.grade && (
                       <p className="text-[16px] font-mono text-[#3D5833]">
-                        Grade: {resource?.product?.product?.grade}
+                        Grade: {resource?.auctionId?.product?.product?.grade}
                       </p>
                     )}
+
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Quantity: {resource?.product?.productQuantity}
+                      Quantity: {resource?.auctionId?.product?.productQuantity}
                     </p>
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Location: {resource?.product?.product?.location}
+                      Location:
+                      {resource?.auctionId?.product?.product?.location}
                     </p>
                   </div>
                 </div>
 
-                <div className="z-[10] w-full h-24 px-5 flex flex-col bg-[#3E363F] rounded-b-[10px]">
+                <div className="w-full h-24 px-3 flex flex-col bg-[#3E363F] rounded-b-[10px]">
                   <p className="text-white text-left font-mono">
-                    Starts at {moment(resource?.date).format("D-MMM-YYYY")}
+                    Starts at{" "}
+                    {moment(resource?.date).format("D-MMM-YYYY hh:mm A")}
                   </p>
 
                   {(() => {
-                    const checkuser = resource?.users?.find(
-                      (users) => users._id == user.id
+                    const checkuser = resource?.auctionId?.users?.find(
+                      (users) => users == user.id
                     );
 
                     if (checkuser)
                       return (
                         <p
                           onClick={() =>
-                            handleAddUser(resource._id, resource?.product?._id)
+                            CustomToast(
+                              "err",
+                              "You have already registered for this auction"
+                            )
                           }
                           className="font-semibold bg-[#509666] cursor-pointer text-[#ffffff] my-5 self-end rounded-md py-2 w-[70%]"
                         >
@@ -177,7 +191,10 @@ const Carousel = ({
                       return (
                         <p
                           onClick={() =>
-                            handleAddUser(resource._id, resource?.product?._id)
+                            handleAddUser(
+                              resource?.auctionId?._id,
+                              resource?.auctionId?.product?._id
+                            )
                           }
                           className="font-semibold bg-[#ffffff] cursor-pointer text-[#074E40] my-5 self-end rounded-md py-2 w-[70%]"
                         >

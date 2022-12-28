@@ -79,6 +79,11 @@ const ProductTable = ({ product, color }) => {
                           Auction Status
                         </th>
                       )}
+                      {
+                        <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
+                          Warhouse Status
+                        </th>
+                      }
                     </tr>
                   </thead>
 
@@ -169,6 +174,17 @@ const ProductTable = ({ product, color }) => {
                             </p>
                           </td>
                         )}
+                        <td
+                          className={`border  border-slate-300 ${
+                            color ? "text-white" : "text-slate-800"
+                          } p-2 text-sm md:text-md lg:text-lg`}
+                        >
+                          {product?.inWarehouse
+                            ? "In warehouse"
+                            : product?.product?.inWarehouse
+                            ? "In warehouse"
+                            : "Released"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
