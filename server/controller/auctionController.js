@@ -32,4 +32,22 @@ const getAuction = async (req, res) => {
   return res.send(findAuction);
 };
 
-module.exports = { addAuction, getAuction };
+const findAuctionByAuctionRoomId = async (req, res) => {
+  const { auctionRoomId } = req.params;
+
+  const findAuction = await Auction.findOne({}).populate({
+    path: "auctionRoom",
+    populate: {
+      path: "auctionId",
+      model: "AuctionRoom",
+      match: { _id: auctionRoomId },
+    },
+  });
+  const getAuctionId = findAuction.auctionRoom.filter(
+    (auctions) => auctions?.auctionId?._id != null
+  );
+  if (!getAuctionId) return res.status(404).send("No role found");
+  return res.send(getAuctionId[0]);
+};
+
+module.exports = { addAuction, getAuction, findAuctionByAuctionRoomId };

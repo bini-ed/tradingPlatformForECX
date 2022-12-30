@@ -22,7 +22,12 @@ const BuyerPage = () => {
   const getAllProduct = async () => {
     try {
       const { data } = await getAllProductInAuctionRoomService();
-      if (data) setAuction(data);
+      if (data) {
+        const filterAuction = data.map((auctions) =>
+          auctions?.auctionRoom?.filter((auction) => auction.auctionId != null)
+        );
+        setAuction(filterAuction);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -77,19 +82,24 @@ const BuyerPage = () => {
         </h2>
         {auction.map((auctions, index) => (
           <div key={index}>
-            {auctions?.auctionRoom?.length ? (
-              <Carousel
-                key={index}
-                message={message}
-                handleAddUser={handleAddUser}
-                loading={loading}
-                auction={auctions?.auctionRoom}
-                open={open}
-                setOpen={setOpen}
-                date={moment(auctions?.auctionRoom[0]?.date).format("dddd")}
-              />
+            {console.log("ac", auctions)}
+            {auctions?.length ? (
+              <>
+                <Carousel
+                  key={index}
+                  message={message}
+                  handleAddUser={handleAddUser}
+                  loading={loading}
+                  auction={auctions}
+                  open={open}
+                  setOpen={setOpen}
+                  date={moment(auctions[auctions.length - 1]?.date).format(
+                    "dddd"
+                  )}
+                />
+              </>
             ) : (
-              <p className="text-[brown] font-mono text-lg">
+              <p className="text-[brown] mt-5 font-mono text-lg">
                 No upcoming auction at the moment
               </p>
             )}

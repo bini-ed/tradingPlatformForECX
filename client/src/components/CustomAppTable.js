@@ -81,13 +81,13 @@ function CustomAppTable({
                     {fields?.map((field, index) => (
                       <tr
                         onClick={() => navigate(`${path}/${field._id}`)}
-                        className={`cursor-pointer ${
+                        className={`cursor-pointer  ${
                           color
                             ? `bg-slate-500 hover:bg-slate-400`
                             : index % 2 == 0
-                            ? "bg-[#d7f8ee]"
-                            : "bg-[#f6f7f6]"
-                        } hover:bg-[#b8e6cf]`}
+                            ? "bg-[#d7f8ee] hover:bg-[#b8e6cf]"
+                            : "bg-[#f6f7f6] hover:bg-[#b8e6cf]"
+                        } `}
                         key={index}
                       >
                         {Object.keys(field).map((key, index) =>

@@ -9,3 +9,6 @@ export const placeBidService = (value, token) => {
 export const getBidsForSpecificAuctionService = (auctionId) => {
   return axios.get(`${URL}getAllBid/${auctionId}`);
 };
+export const getWinnerForSpecificAuction = (auctionId) => {
+  return axios.get(`${URL}getWinner/${auctionId}`);
+};

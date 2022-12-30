@@ -21,6 +21,10 @@ const auctionRoomSchema = new mongoose.Schema({
     required: true,
     default: Date.now(),
   },
+  productQuantity: {
+    type: mongoose.Schema.Types.Number,
+    required: true,
+  },
   isStarted: {
     type: mongoose.Schema.Types.Boolean,
     required: true,

@@ -1,11 +1,13 @@
 const ProductName = require("../model/productNameModel");
 
 const addProductName = async (req, res) => {
-  const { productName } = req.body;
+  const { productName, productType, grade } = req.body;
   const findPrice = await ProductName.findOne({ productName });
   if (!findPrice) {
     const newPoductName = new ProductName({
       productName,
+      productType,
+      grade,
     });
     const saveProductName = await newPoductName.save();
     if (!saveProductName) return res.status(401).send("Product name not added");

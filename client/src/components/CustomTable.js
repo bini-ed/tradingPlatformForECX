@@ -19,7 +19,11 @@ const CustomTable = ({ auction: product, count, handler }) => {
   if (count === 0)
     return <p className="text-red-400 text-[30px]">There is no product </p>;
 
-  let filteredAuction = product?.filter((field) =>
+  let filteredAuctionDisplay = product?.filter(
+    (field) => field.inSale == false
+  );
+
+  let filteredAuction = filteredAuctionDisplay?.filter((field) =>
     field?.product?.productName?.match(new RegExp(filter, "i"))
   );
 
@@ -76,6 +80,7 @@ const CustomTable = ({ auction: product, count, handler }) => {
                         }`}
                         key={index}
                       >
+                        {console.log(auction)}
                         <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
                           {auction.product.productName}
                         </td>
@@ -86,7 +91,7 @@ const CustomTable = ({ auction: product, count, handler }) => {
                           {auction?.product?.productType}
                         </td>
 
-                        {auction.owner == auction.product.seller ? (
+                        {!auction.bought ? (
                           <td className="border-slate-100 text-slate-800 p-2  text-center ">
                             <p
                               onClick={() =>
@@ -123,9 +128,7 @@ const CustomTable = ({ auction: product, count, handler }) => {
                           </td>
                         )}
                         <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
-                          {auction.owner == auction.product.seller
-                            ? "My product"
-                            : "Bought product"}
+                          {!auction.bought ? "My product" : "Bought product"}
                         </td>
                       </tr>
                     ))}

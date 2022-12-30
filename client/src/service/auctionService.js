@@ -47,3 +47,6 @@ export const getEnrolledInAuctionRoomService = (token) => {
 export const getAuctionRoomUsingProductIdService = (productId) => {
   return axios.get(`${URL}getAuction/${productId}`);
 };
+export const getAuctionUsingAuctionRoomService = (auctionRoomId) => {
+  return axios.get(`${URL}findAuctionByAuctionRoom/${auctionRoomId}`);
+};

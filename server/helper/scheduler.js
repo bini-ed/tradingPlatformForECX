@@ -4,7 +4,7 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
   // let date = "";
   const modified = moment(currentAuctionDate);
 
-  console.log("modifie", modified.format("YYYY-MM-DD hh:mm:ss a"));
+  // console.log("modifie", modified.format("YYYY-MM-DD hh:mm:ss a"));
 
   let day = modified.day();
   let dayNumber = modified.date();
@@ -18,18 +18,18 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
           "New date is next month,next year, day = next month day 3 "
         );
         modified.set({
-          year: year == 12 ? year + 1 : year,
-          month: month + 1,
+          year: month == 12 ? year + 1 : year,
+          month: month == 12 ? 0 : month + 1,
           date: 3,
           hour: 09,
           minute: 00,
           second: 00,
         });
-      } else if (day != 6 && day != 7) {
+      } else if (day != 6 && day != 0) {
         console.log("New date is next month , day = next month day 1");
         modified.set({
-          year: year == 12 ? year + 1 : year,
-          month: month + 1,
+          year: month == 12 ? year + 1 : year,
+          month: month == 12 ? 0 : month + 1,
           date: 1,
           hour: 09,
           minute: 00,
@@ -39,10 +39,9 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
     } else if (dayNumber == 30) {
       if (day == 5) {
         console.log("New date is next month,next year, day = next month day 2");
-
         modified.set({
-          year: year == 12 ? year + 1 : year,
-          month: month + 1,
+          year: month == 12 ? year + 1 : year,
+          month: month == 12 ? 0 : month + 1,
           date: 2,
           hour: 09,
           minute: 00,
@@ -63,11 +62,8 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
           second: 00,
         });
       } else {
-        console.log("test", modified);
         console.log("Neww date is current month, day = current month day 30");
         modified.set({ date: 30, hour: 09, minute: 00, second: 00 });
-        console.log(year, month, dayNumber);
-        console.log("test", modified);
       }
     } else {
       if (day == 5) {

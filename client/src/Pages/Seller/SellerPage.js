@@ -80,21 +80,23 @@ const SellerPage = () => {
   const handleAddProduct = async (productId, productQuantity) => {
     const token = localStorage.getItem("userInfo");
     const owner = user.id;
-    try {
-      const { data } = await addProductToAuctionService(
-        productId,
-        productQuantity,
-        owner,
-        token
-      );
-      if (data) {
-        CustomToast("success", data?.msg);
-        myProductInAuction();
-      }
-    } catch (error) {
-      setErrorMessage(error.response.data || error.message);
-      // CustomToast("error", error.response.data || error.message);
-    }
+
+    console.log("seller", productId, productQuantity);
+    // try {
+    //   const { data } = await addProductToAuctionService(
+    //     productId,
+    //     productQuantity,
+    //     owner,
+    //     token
+    //   );
+    //   if (data) {
+    //     CustomToast("success", data?.msg);
+    //     myProductInAuction();
+    //   }
+    // } catch (error) {
+    //   setErrorMessage(error.response.data || error.message);
+    //   // CustomToast("error", error.response.data || error.message);
+    // }
   };
 
   let filteredProduct = product?.filter((product) =>

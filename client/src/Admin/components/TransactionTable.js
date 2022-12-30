@@ -14,9 +14,9 @@ const TransactionTable = ({ transaction }) => {
   };
 
   let filteredTransaction = transaction?.filter((product) =>
-    product.bid.bids[product?.bid?.bids?.length - 1]?.buyerId?.firstName.match(
-      new RegExp(filter, "i")
-    )
+    product?.bid?.bids[
+      product?.bid?.bids?.length - 1
+    ]?.buyerId?.firstName.match(new RegExp(filter, "i"))
   );
   const trans = paginate(filteredTransaction, currentPage, pageSize);
 

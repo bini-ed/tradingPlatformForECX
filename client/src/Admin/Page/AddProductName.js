@@ -11,6 +11,8 @@ const AddProductName = () => {
   const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object().shape({
     productName: Yup.string().required().label("Product Name"),
+    productType: Yup.string().required().label("Product Type"),
+    grade: Yup.string().required().label("Product Grade"),
   });
 
   const handleAddProductName = async (values) => {
@@ -36,13 +38,15 @@ const AddProductName = () => {
         <Formik
           initialValues={{
             productName: "",
+            productType: [],
+            grade: [],
           }}
           onSubmit={(values) => {
             handleAddProductName(values);
           }}
           validationSchema={validationSchema}
         >
-          {() => (
+          {({ values }) => (
             <div className="w-full flex justify-center">
               <Form className="flex flex-col flex-wrap w-[90%] md:w-[70%] lg:w-[60%] lg:max-w-[500px]  rounded-lg bg-slate-200 items-center">
                 <FormField
@@ -50,6 +54,12 @@ const AddProductName = () => {
                   name="productName"
                   type="text"
                 />
+                <FormField
+                  label="Product Type"
+                  name="productType"
+                  type="text"
+                />
+                <FormField label="Product Grade" name="grade" type="text" />
 
                 <div className="flex flex-col justify-center my-5 items-center w-full">
                   <button

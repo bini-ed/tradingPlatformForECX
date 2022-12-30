@@ -35,6 +35,7 @@ import AddRoles from "./Admin/Page/AddRoles";
 import ProductName from "./Admin/Page/ProdutName";
 import AddProductName from "./Admin/Page/AddProductName";
 import EditProductName from "./Admin/Page/EditProductName";
+import UserInformation from "./Pages/UserInformation";
 
 const newSocket = io(URL);
 const token = localStorage.getItem("userInfo");
@@ -197,6 +198,7 @@ function App() {
             path="/joinAuction/:auctionRoomId/:productId"
             element={<JoinAuction socket={newSocket} />}
           ></Route>
+          <Route path="/userInfo" element={<UserInformation />}></Route>
           <Route path="/seller" element={<SellerPage />}></Route>
           <Route
             path="/productDetail/:productId"

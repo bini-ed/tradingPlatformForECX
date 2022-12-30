@@ -116,6 +116,7 @@ const ProductTable = ({ product, color }) => {
                             color ? "text-white" : "text-slate-800"
                           } p-2 text-sm md:text-md lg:text-lg`}
                         >
+                          {console.log(product)}
                           {product?.productQuantity ||
                             product?.product?.productQuantity}
                         </td>

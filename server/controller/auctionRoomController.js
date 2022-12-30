@@ -8,7 +8,7 @@ const scheduler = require("../helper/scheduler");
 const addProductToAuctionRoom = async (req, res) => {
   const { productId, productQuantity, owner } = req.params;
   const { id } = req.user;
-  const now = moment().date();
+  const now = moment();
 
   const findAuctionDate = await Auction.findOne().sort({ _id: -1 }).limit(1);
   // .populate({
@@ -19,82 +19,112 @@ const addProductToAuctionRoom = async (req, res) => {
   //   },
   // });
 
-  const findProduct = await WareHouse.findOne({
+  const findWarehouse = await WareHouse.findOne({
     product: productId,
     owner: owner,
   })
     .populate("product", "-__v")
     .select("-__v");
 
-  if (!findProduct) return res.status(404).send("Couldn't find this product");
-  else if (findProduct.productQuantity == 0)
+  if (!findWarehouse) return res.status(404).send("Couldn't find this product");
+  else if (findWarehouse.productQuantity == 0)
     return res.status(404).send("No remaining amount in warehouse");
-  else if (!findProduct?.product?.grade)
+  else if (!findWarehouse?.product?.grade)
     return res
       .status(404)
       .send("Product needs to be graded before adding to auction");
   else {
-    if (findProduct?.productQuantity == productQuantity) {
-      const findIfProductExist = await AuctionRoom.findOne({
-        product: productId,
-      });
-      if (!findIfProductExist) {
-        const auction = new AuctionRoom({
-          product: productId,
-          isActive: true,
-          seller: id,
-        });
+    // if (findWarehouse?.productQuantity == productQuantity) {
+    //   const findIfProductExist = await AuctionRoom.findOne({
+    //     product: findWarehouse?.product?._id,
+    //   });
+    //   const product = new WareHouse({
+    //     product: productId,
+    //     productQuantity,
+    //     owner: findWarehouse.owner,
+    //     inSale: true,
+    //   });
+    //   const item = await product.save();
+    //   if (!findIfProductExist) {
+    //     const auction = new AuctionRoom({
+    //       product: findWarehouse?._id,
+    //       isActive: true,
+    //       seller: id,
+    //       productQuantity,
+    //     });
 
-        let newAuctionDate;
-        if (!findAuctionDate) {
-          const date = scheduler(moment(), 0);
-          newAuctionDate = new Auction({
-            auctionRoom: [{ auctionId: auction._id, date }],
-          });
-        } else if (findAuctionDate?.auctionRoom?.length < 7) {
-          const currentAuctionDate =
-            findAuctionDate.auctionRoom[
-              findAuctionDate?.auctionRoom?.length - 1
-            ].date;
-          const auctionDate = moment(currentAuctionDate);
-          if (now > auctionDate.date()) {
-            console.log("pass");
-          } else {
-            const date = moment(currentAuctionDate).set({
-              hour: auctionDate.hour() + 1,
-            });
-            console.log("date", date);
-            findAuctionDate?.auctionRoom.push({
-              auctionId: auction._id,
-              date,
-            });
-            newAuctionDate = findAuctionDate;
-            await findAuctionDate.save();
-          }
-        } else {
-          const currentAuctionDate =
-            findAuctionDate.auctionRoom[
-              findAuctionDate?.auctionRoom?.length - 1
-            ].date;
-          const date = scheduler(currentAuctionDate, 1);
-          newAuctionDate = new Auction({
-            auctionRoom: [{ auctionId: auction._id, date }],
-          });
-        }
+    //     let newAuctionDate;
+    //     if (!findAuctionDate) {
+    //       const date = scheduler(moment(), 0);
+    //       newAuctionDate = new Auction({
+    //         auctionRoom: [{ auctionId: auction._id, date }],
+    //       });
+    //     } else if (findAuctionDate?.auctionRoom?.length < 7) {
+    //       const currentAuctionDate =
+    //         findAuctionDate.auctionRoom[
+    //           findAuctionDate?.auctionRoom?.length - 1
+    //         ].date;
+    //       const auctionDate = moment(currentAuctionDate);
+    //       if (
+    //         now.year() > auctionDate.year() &&
+    //         now.month() > auctionDate.month() &&
+    //         now.date() > auctionDate.date()
+    //       ) {
+    //         return res.status(404).send("Couldn't add this product");
+    //       } else {
+    //         const date = moment(currentAuctionDate).set({
+    //           hour: auctionDate.hour() + 1,
+    //         });
+    //         findAuctionDate?.auctionRoom.push({
+    //           auctionId: auction._id,
+    //           date,
+    //         });
+    //         newAuctionDate = findAuctionDate;
+    //       }
+    //     } else {
+    //       const currentAuctionDate =
+    //         findAuctionDate.auctionRoom[
+    //           findAuctionDate?.auctionRoom?.length - 1
+    //         ].date;
+    //       const date = scheduler(currentAuctionDate, 1);
+    //       newAuctionDate = new Auction({
+    //         auctionRoom: [{ auctionId: auction._id, date }],
+    //       });
+    //     }
 
-        const saveAuction = await newAuctionDate.save();
-        if (!saveAuction)
-          return res.status(404).send("Couldn't add this auction");
-        else {
-          const saveProduct = await auction.save();
-          if (!saveProduct)
-            return res.status(404).send("Couldn't add this product");
-        }
-        return res.send("This Product is added to auction");
-      } else {
-        return res.status(404).send("This product is already added");
-      }
-    } else if (productQuantity > findProduct.productQuantity) {
+    //     console.log("warehouse", findWarehouse._id);
+    //     console.log("product", productId);
+    //     console.log("owner", id);
+
+    //     const saveProduct = await auction.save();
+    //     if (!saveProduct)
+    //       return res.status(404).send("Couldn't add this auction");
+    //     else {
+    //       const saveAuction = await newAuctionDate.save();
+    //       if (!saveAuction)
+    //         return res.status(404).send("Couldn't add this product");
+    //       else {
+    //         const updateProduct = await WareHouse.findOneAndUpdate(
+    //           {
+    //             _id: findWarehouse._id,
+    //             product: productId,
+    //             owner: id,
+    //           },
+    //           {
+    //             productQuantity: 0,
+    //             inSale: false,
+    //           }
+    //         );
+    //         if (!updateProduct)
+    //           return res.status(404).send("Couldn't update this auction");
+    //       }
+    //     }
+    //     return res.send("This Product is added to auction");
+    //   } else {
+    //     return res.status(404).send("This product is already added");
+    //   }
+    // } else.
+    if (productQuantity > findWarehouse.productQuantity) {
       return res
         .status(404)
         .send("You don't have enough qunatity in warehouse");
@@ -102,18 +132,20 @@ const addProductToAuctionRoom = async (req, res) => {
       const product = new WareHouse({
         product: productId,
         productQuantity,
-        owner: findProduct.product.seller,
+        owner: findWarehouse.owner,
         inSale: true,
       });
+
       const item = await product.save();
+      let newAuctionDate;
       if (item) {
         const auction = new AuctionRoom({
-          product: item._id,
+          product: product._id,
           isActive: true,
           seller: id,
+          productQuantity,
         });
 
-        let newAuctionDate;
         if (!findAuctionDate) {
           const date = scheduler(moment(), 0);
           newAuctionDate = new Auction({
@@ -125,19 +157,24 @@ const addProductToAuctionRoom = async (req, res) => {
               findAuctionDate?.auctionRoom?.length - 1
             ].date;
           const auctionDate = moment(currentAuctionDate);
-          if (now > auctionDate.date()) {
-            console.log("pass");
+
+          if (
+            now.year() > auctionDate.year() &&
+            now.month() > auctionDate.month() &&
+            now.date() > auctionDate.date()
+          ) {
+            return res.status(404).send("Couldn't add this product");
           } else {
             const date = moment(currentAuctionDate).set({
               hour: auctionDate.hour() + 1,
             });
-            console.log("date", date);
+
             findAuctionDate?.auctionRoom.push({
               auctionId: auction._id,
               date,
             });
             newAuctionDate = findAuctionDate;
-            await findAuctionDate.save();
+            // await findAuctionDate.save();
           }
         } else {
           const currentAuctionDate =
@@ -157,17 +194,25 @@ const addProductToAuctionRoom = async (req, res) => {
           return res.status(404).send("Couldn't add this product");
         else {
           const parsedQuantity = parseInt(productQuantity);
-          const newQuantity = findProduct.productQuantity - parsedQuantity;
+          const newQuantity = findWarehouse.productQuantity - parsedQuantity;
           const updateProduct = await WareHouse.findOneAndUpdate(
-            { product: productId },
+            {
+              _id: findWarehouse._id,
+              product: productId,
+              owner: id,
+            },
             {
               productQuantity: newQuantity,
               inSale: false,
             }
           );
-          if (updateProduct)
+
+          if (updateProduct) {
             return res.send("This Product is added to auction");
+          }
         }
+      } else {
+        return res.status(404).send("Operation failed in auction");
       }
     }
   }
@@ -197,7 +242,6 @@ const addUserToAuctionRoom = async (req, res) => {
           .status(404)
           .send("You are already registered for this auction");
       } else {
-        console.log(auctionRoomId, "prod:-", productId);
         const saveProduct = await AuctionRoom.findOneAndUpdate(
           { _id: auctionRoomId, product: productId },
           {
@@ -283,7 +327,7 @@ const getEnrolledInAuctionRoom = async (req, res) => {
     users: mongoose.Types.ObjectId(id),
     isActive: true,
   }).populate({ path: "product", populate: { path: "product" } });
-  if (!findUser.length) return res.status(404).send("Not product found");
+  if (!findUser.length) return res.status(404).send("No Auction found");
   return res.send(findUser);
 };
 const getAuctionHistory = async (req, res) => {
@@ -294,7 +338,7 @@ const getAuctionHistory = async (req, res) => {
     .populate({ path: "product", populate: { path: "product" } })
     .populate("users");
 
-  if (!findUser.length) return res.status(404).send("Not product found");
+  if (!findUser.length) return res.status(404).send("No Auction found");
   return res.send(findUser);
 };
 

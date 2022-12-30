@@ -52,6 +52,8 @@ const ProductName = () => {
               column={[
                 {
                   productName: "Product Name",
+                  grade: "Product Grade",
+                  productType: "Product Type",
                 },
               ]}
               field={filteredProductName}
@@ -63,7 +65,7 @@ const ProductName = () => {
             />
           ) : (
             <>
-              <p className="text-[red] font-mono text-lg">No price found</p>
+              <p className="text-[red] font-mono text-lg">No product found</p>
             </>
           )}
         </>

@@ -52,6 +52,7 @@ const ProductDetail = () => {
   const handleAddProductToAuction = async (values) => {
     const token = localStorage.getItem("userInfo");
     setLoading(true);
+    console.log(values, productId);
     try {
       const { data } = await addProductToAuctionService(
         productId,

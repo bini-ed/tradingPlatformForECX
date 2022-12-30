@@ -75,8 +75,6 @@ const AuctionPage = () => {
                     {items?.users?.length}
                   </p>
 
-                  {console.log(items.product._id)}
-
                   {!items?.isStarted ? (
                     !items?.isCompleted ? (
                       <p className="text-white p-2 bg-[#ce8961] w-[25%]">

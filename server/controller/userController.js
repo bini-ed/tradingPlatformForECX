@@ -67,7 +67,7 @@ const getUserInformation = async (req, res) => {
 
   let user = await User.findById(id)
     .populate("role", "roleName -_id")
-    .select(" -createdAt -updatedAt -phoneNumber -password -__v");
+    .select(" -createdAt -updatedAt  -password -__v");
   if (!user) return res.status(400).send("No user found");
   return res.send(user);
 };
