@@ -37,10 +37,11 @@ const ProductDetail = () => {
       );
       if (data) setProduct(data);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
     setLoading(false);
   };
+  console.log(product);
 
   useEffect(() => {
     getProductDetail();

@@ -5,12 +5,7 @@ const prductNameSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  productType: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
+
   grade: [
     {
       type: String,

@@ -33,7 +33,7 @@ const SideBar = ({ children }) => {
     <div className="min-h-[calc(100vh-70px)] flex border-t-2 border-y-slate-600">
       <div className="bg-slate-800 w-[100px] lg:w-[20%] lg:max-w-[350px] min-h-[calc(100vh-66px)] p-2">
         {options.map((option, index) => (
-          <>
+          <div key={index}>
             {user.role === "admin" &&
             index !== 5 &&
             index !== 6 &&
@@ -86,7 +86,7 @@ const SideBar = ({ children }) => {
             ) : (
               console.log(user.role, index)
             )}
-          </>
+          </div>
         ))}
       </div>
       <section className="w-full">{children}</section>

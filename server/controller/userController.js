@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
   if (user)
     return res
       .status(400)
-      .send("User is already registered,Try again with another phone number!!");
+      .send("User is already registered,Try again with another email!!");
   else {
     user = new User({
       firstName,
@@ -72,4 +72,38 @@ const getUserInformation = async (req, res) => {
   return res.send(user);
 };
 
-module.exports = { registerUser, authUser, getUserInformation };
+const updateUser = async (req, res) => {
+  const { firstName, lastName, email, phoneNumber } = req.body;
+  const { id } = req.user;
+
+  const user = await User.findById(id).populate("role");
+  if (!user)
+    return res
+      .status(400)
+      .send("User is already registered,Try again with another phone number!!");
+  else {
+    const updateUsers = {
+      firstName: firstName ? firstName : user.firstName,
+      lastName: lastName ? lastName : user.lastName,
+      phoneNumber: phoneNumber ? phoneNumber : user.phoneNumber,
+      email: email ? email : user.email,
+    };
+
+    const updateUser = await User.findByIdAndUpdate(id, updateUsers, {
+      new: true,
+    });
+
+    if (!updateUser)
+      return res.status(401).send("User information not updated");
+    const token = await updateUser.generateToken(user.role.roleName);
+    if (token) {
+      res.json({
+        msg: "User information updated successfully",
+        data: updateUser,
+        token,
+      });
+    }
+  }
+};
+
+module.exports = { registerUser, authUser, getUserInformation, updateUser };

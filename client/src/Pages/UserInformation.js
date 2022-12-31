@@ -1,21 +1,22 @@
-import { ErrorMessage, Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import { Form, Formik } from "formik";
+import React, { useContext, useEffect, useState } from "react";
 
-import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 
-import Background from "../asset/bg.png";
 import FormField from "../components/FormField";
 import CustomToast from "../components/CustomToast";
 import Loader from "../components/Loader";
-import { getRoleService } from "../service/roleService";
+
 import {
   getUserInformationService,
-  signupService,
+  updateInfoService,
 } from "../service/userService";
+import jwtDecode from "jwt-decode";
+import AuthContext from "../context/AuthContext";
 
 const UserInformation = () => {
-  const [user, setRole] = useState({});
+  const [users, setUsers] = useState({});
+  const { setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -23,19 +24,16 @@ const UserInformation = () => {
     lastName: Yup.string().required().label("Last Name"),
     phoneNumber: Yup.string().required().label("Phone Number"),
     email: Yup.string().email().required().label("Email"),
-    role: Yup.string().required().label("Role"),
-    password: Yup.string().required().label("Password"),
   });
 
-  const getRole = async () => {
+  const getUserInfo = async () => {
     setLoading(true);
     try {
       const { data } = await getUserInformationService(
         localStorage.getItem("userInfo")
       );
       if (data) {
-        console.log(data);
-        setRole(data);
+        setUsers(data);
       }
     } catch (error) {
       console.log(error.response.data);
@@ -44,19 +42,26 @@ const UserInformation = () => {
   };
 
   useEffect(() => {
-    getRole();
+    getUserInfo();
     return () => {
-      setRole([]);
+      setUsers({});
     };
   }, []);
-
-  const handleSignup = async (values) => {
+  const handleUpdate = async (values) => {
     setLoading(true);
     try {
-      const { data } = await signupService(values);
+      const { data } = await updateInfoService(
+        values,
+        localStorage.getItem("userInfo")
+      );
       if (data) {
-        CustomToast("success", data);
-        window.location = "/login";
+        CustomToast("success", data.msg);
+        setUsers(data.data);
+        const user = await jwtDecode(data.token);
+        if (user) {
+          setUser(user);
+          localStorage.setItem("userInfo", data.token);
+        }
       }
     } catch (error) {
       CustomToast("error", error?.response?.data);
@@ -77,15 +82,13 @@ const UserInformation = () => {
               </div>
               <Formik
                 initialValues={{
-                  firstName: user?.firstName,
-                  lastName: user?.lastName,
-                  phoneNumber: user?.phoneNumber,
-                  email: user?.email,
-                  password: user?.password,
-                  role: user?.role,
+                  firstName: users?.firstName,
+                  lastName: users?.lastName,
+                  phoneNumber: users?.phoneNumber,
+                  email: users?.email,
                 }}
                 onSubmit={(values) => {
-                  handleSignup(values);
+                  handleUpdate(values);
                 }}
                 validationSchema={validationSchema}
               >

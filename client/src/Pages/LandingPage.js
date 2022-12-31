@@ -12,6 +12,7 @@ import AnimatedChickpeas from "../asset/animated/chickpeas.png";
 import AnimatedCorn from "../asset/animated/corn.png";
 import AnimatedSesame from "../asset/animated/sesame.png";
 import AnimatedWheat from "../asset/animated/wheat.png";
+import LandingPageHeader from "../components/LandingPageHeader";
 
 function LandingPage() {
   const products = [
@@ -72,10 +73,10 @@ function LandingPage() {
   ];
   return (
     <div className="min-h-screen relative overflow-x-hidden">
-      <Header
+      <LandingPageHeader
         ref={[homeRef, aboutRef, whatRef]}
         onBackClick={executeScroll}
-      ></Header>
+      ></LandingPageHeader>
       <div className="flex flex-col  bg-[#DEF2E6] pb-[600px] sm:pb-[500px] md:pb-[400px] ">
         <div className="flex flex-col md:flex-row justify-evenly items-center bg-[#DEF2E6] min-h-[30vh] md:min-h-[60vh]">
           <div

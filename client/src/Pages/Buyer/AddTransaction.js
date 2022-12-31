@@ -70,7 +70,6 @@ const AddTransaction = () => {
 
   return (
     <div>
-      <Header ref={[]}></Header>
       {loading ? (
         <Loader />
       ) : (

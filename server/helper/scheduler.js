@@ -35,6 +35,30 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
           minute: 00,
           second: 00,
         });
+      } else if (day == 6) {
+        console.log(
+          "Saturday New date is next year ,next month, day = next month day 2"
+        );
+        modified.set({
+          year: month == 12 ? year + 1 : year,
+          month: month == 12 ? 0 : month + 1,
+          date: 2,
+          hour: 09,
+          minute: 00,
+          second: 00,
+        });
+      } else {
+        console.log(
+          "Sunday New date is next year ,next month, day = next month day 1"
+        );
+        modified.set({
+          year: month == 12 ? year + 1 : year,
+          month: month == 12 ? 0 : month + 1,
+          date: 1,
+          hour: 09,
+          minute: 00,
+          second: 00,
+        });
       }
     } else if (dayNumber == 30) {
       if (day == 5) {

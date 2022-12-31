@@ -52,8 +52,6 @@ const ProductName = () => {
               column={[
                 {
                   productName: "Product Name",
-                  grade: "Product Grade",
-                  productType: "Product Type",
                 },
               ]}
               field={filteredProductName}

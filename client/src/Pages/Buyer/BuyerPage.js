@@ -65,8 +65,6 @@ const BuyerPage = () => {
 
   return (
     <div>
-      <Header ref={[]} />
-
       <Link
         style={{ pointerEvents: auction.length ? "" : "none" }}
         to={"/auction"}

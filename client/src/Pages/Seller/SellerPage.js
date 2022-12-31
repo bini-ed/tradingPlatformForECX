@@ -105,7 +105,6 @@ const SellerPage = () => {
 
   return (
     <div>
-      <Header ref={[]} />
       <div className="px-20">
         <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
           All Products

@@ -16,3 +16,11 @@ export const getUserInformationService = (token) => {
 export const loginService = (value) => {
   return axios.post(`${URL}login`, value);
 };
+
+export const updateInfoService = (value, token) => {
+  return axios.post(`${URL}updateUser`, value, {
+    headers: {
+      "x-auth-token": token,
+    },
+  });
+};

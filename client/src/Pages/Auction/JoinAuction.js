@@ -202,7 +202,6 @@ const JoinAuction = ({ socket }) => {
 
   return (
     <div className=" min-h-screen overflow-x-hidden">
-      <Header ref={[]} />
       {loading || bidLoading || priceLoading || auctionLoading ? (
         <Loader />
       ) : (

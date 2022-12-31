@@ -29,7 +29,6 @@ const AuctionPage = () => {
 
   return (
     <div className="min-h-screen">
-      <Header ref={[]} />
       <div className="px-10">
         {laoding ? (
           <Loader />

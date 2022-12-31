@@ -26,8 +26,6 @@ const WinnerPage = () => {
 
   return (
     <div className="flex flex-col  min-h-screen">
-      <Header ref={[]} />
-
       <div className="flex flex-col flex-1 bg-[#074E40] px-20">
         {/* <h3 className="text-white font-mono text-2xl">
           Congratulation you have won the auction

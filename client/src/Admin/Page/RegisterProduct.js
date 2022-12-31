@@ -18,11 +18,12 @@ const RegisterProduct = () => {
     productType: Yup.string().required().label("Product Type"),
     productDate: Yup.string().required().label("Product Date"),
     seller: Yup.string().required().label("Seller"),
+    grade: Yup.string().required().label("Grade"),
   });
 
   const [loading, setLoading] = useState(false);
   const [productName, setProductName] = useState([]);
-
+  let productIndex = null;
   useEffect(() => {
     getProductName();
     return () => {};
@@ -68,6 +69,7 @@ const RegisterProduct = () => {
             productType: "",
             productDate: "",
             seller: "",
+            grade: "",
           }}
           onSubmit={(values) => {
             handleAddProduct(values);
@@ -82,10 +84,10 @@ const RegisterProduct = () => {
                     htmlFor="productName"
                     className="block mb-2 text-left text-[#4D5959]"
                   >
-                    Product Type
+                    Product Name
                   </label>
                   <select
-                    onChange={(e) => {
+                    onChange={(e, index) => {
                       setFieldValue("productName", e.currentTarget.value);
                     }}
                     id="productName"
@@ -97,9 +99,13 @@ const RegisterProduct = () => {
                     >
                       Product Name
                     </option>
-                    {productName.map((name) => (
+                    {productName.map((name, index) => (
                       <option
                         value={name.productName}
+                        onChange={() => {
+                          productIndex = index;
+                          console.log("ssss", name);
+                        }}
                         className="bg-slate-800 text-white rounded-md"
                       >
                         {name.productName}
@@ -131,6 +137,47 @@ const RegisterProduct = () => {
                   type="text"
                   error={errors.seller}
                 />
+
+                <div className="w-[90%] px-5 my-2">
+                  <label
+                    htmlFor="grade"
+                    className="block mb-2 text-left text-[#4D5959]"
+                  >
+                    Product Grade
+                  </label>
+                  <select
+                    onChange={(e) => {
+                      setFieldValue("grade", e.currentTarget.value);
+                    }}
+                    id="grade"
+                    className="bg-gray-50 outline-[#99d5e9] text-gray-900 rounded-lg w-full p-2.5 "
+                  >
+                    <option
+                      value=""
+                      className="bg-slate-800 text-white rounded-md"
+                    >
+                      Product Grade
+                    </option>
+
+                    {productName
+                      .filter((pn) => pn.productName == values.productName)
+                      .map((grades) => {
+                        return grades?.grade?.map((grade) => (
+                          <option
+                            value={grade}
+                            className="bg-slate-800 text-white rounded-md"
+                          >
+                            {grade}
+                          </option>
+                        ));
+                      })}
+                  </select>
+                  <ErrorMessage
+                    className="text-[red] text-left"
+                    name="grade"
+                    component="p"
+                  />
+                </div>
 
                 <div className="w-[90%] px-5 my-2">
                   <label
