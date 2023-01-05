@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Header = () => {
   const [height, setHeight] = useState(window.scrollY);
@@ -24,6 +25,12 @@ const Header = () => {
       </Link>
 
       <div className=" w-[50%] md:w-[70%] flex justify-end">
+        <Link
+          to={"/notification"}
+          className="text-slate-600 cursor-pointer hover:animate-pulse p-2 font-semibold text-[14px] sm:text-[16px] md:text-[18px] mx-2"
+        >
+          <NotificationsIcon />
+        </Link>
         <Link
           to={"/userInfo"}
           className="text-slate-600 cursor-pointer hover:animate-pulse p-2 font-semibold text-[14px] sm:text-[16px] md:text-[18px] mx-2"

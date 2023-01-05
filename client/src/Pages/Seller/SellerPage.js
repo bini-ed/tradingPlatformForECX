@@ -4,6 +4,7 @@ import ProductTable from "../../Admin/components/ProductTable";
 import CustomAppTable from "../../components/CustomAppTable";
 import CustomTable from "../../components/CustomTable";
 import CustomToast from "../../components/CustomToast";
+import Loader from "../../components/Loader";
 import Header from "../../components/Header";
 import AuthContext from "../../context/AuthContext";
 import {
@@ -77,47 +78,26 @@ const SellerPage = () => {
     setProLoading(false);
   };
 
-  const handleAddProduct = async (productId, productQuantity) => {
-    const token = localStorage.getItem("userInfo");
-    const owner = user.id;
-
-    console.log("seller", productId, productQuantity);
-    // try {
-    //   const { data } = await addProductToAuctionService(
-    //     productId,
-    //     productQuantity,
-    //     owner,
-    //     token
-    //   );
-    //   if (data) {
-    //     CustomToast("success", data?.msg);
-    //     myProductInAuction();
-    //   }
-    // } catch (error) {
-    //   setErrorMessage(error.response.data || error.message);
-    //   // CustomToast("error", error.response.data || error.message);
-    // }
-  };
-
   let filteredProduct = product?.filter((product) =>
     product?.productName?.match(new RegExp(filter, "i"))
   );
+  const handleAddProduct = true;
 
   return (
     <div>
       <div className="px-20">
-        <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
+        <h4 className="text-xl font-semibold  text-left text-[#996D6D]">
           All Products
         </h4>
         {laoding ? (
-          <p>Loading</p>
+          <Loader />
         ) : product?.length ? (
           <CustomAppTable
             column={[
               {
                 productName: "Product Name",
                 productQuantity: "Quantitiy",
-                location: "Location",
+                warehouse: "Warehouse",
                 grade: "Grade",
               },
             ]}
@@ -136,11 +116,11 @@ const SellerPage = () => {
       </div>
 
       <div className="px-20">
-        <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
+        <h4 className="text-xl font-semibold text-left text-[#996D6D]">
           Product in auction
         </h4>
         {prodLaoding ? (
-          <p>Loading</p>
+          <Loader />
         ) : productInAuction?.length ? (
           <ProductTable product={productInAuction} />
         ) : (
@@ -151,11 +131,11 @@ const SellerPage = () => {
       </div>
 
       <div className="px-20">
-        <h4 className="text-xl font-semibold my-5 text-left text-[#996D6D]">
+        <h4 className="text-xl font-semibold text-left text-[#996D6D]">
           Product in Warehouse
         </h4>
         {wareLaoding ? (
-          <p>Loading</p>
+          <Loader />
         ) : productInWare?.length ? (
           <CustomTable
             handler={handleAddProduct}

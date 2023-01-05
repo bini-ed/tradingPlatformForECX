@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const { Auction } = require("../model/auctionModel");
 const { AuctionRoom } = require("../model/auctionRoomModel");
+const { Notification } = require("../model/notificationModel");
 const WareHouse = require("../model/warehouseModel");
 const moment = require("moment");
 const scheduler = require("../helper/scheduler");
@@ -186,11 +187,18 @@ const addProductToAuctionRoom = async (req, res) => {
             auctionRoom: [{ auctionId: auction._id, date }],
           });
         }
+        const notification = new Notification({
+          message: `You have added ${findWarehouse?.product?.productName} to auction`,
+          seen: false,
+          date: new Date(),
+          userId: id,
+        });
 
         const saveProduct = await auction.save();
         const saveAuction = await newAuctionDate.save();
+        const saveNotification = await notification.save();
 
-        if (!saveProduct || !saveAuction)
+        if (!saveProduct || !saveAuction || !saveNotification)
           return res.status(404).send("Couldn't add this product");
         else {
           const parsedQuantity = parseInt(productQuantity);
@@ -225,7 +233,14 @@ const addUserToAuctionRoom = async (req, res) => {
   const findProduct = await WareHouse.find({ product: productId });
   if (!findProduct) return res.status(404).send("Couldn't find this product");
   else {
-    const checkAuction = await AuctionRoom.findById(auctionRoomId);
+    const checkAuction = await AuctionRoom.findById(auctionRoomId).populate({
+      path: "product",
+      model: "warehouse",
+      populate: {
+        path: "product",
+        model: "Product",
+      },
+    });
 
     if (checkAuction?.length)
       return res
@@ -251,7 +266,21 @@ const addUserToAuctionRoom = async (req, res) => {
           }
         );
         if (!saveProduct) return res.status(404).send("Couldn't add this user");
-        return res.send("You are registered for this auction");
+        else {
+          const notification = new Notification({
+            message: `You are registered for ${
+              checkAuction.product.product.productName +
+              " " +
+              checkAuction.product.productQuantity
+            } KG auction`,
+            seen: false,
+            date: new Date(),
+            userId: id,
+          });
+          const saveNotification = await notification.save();
+          if (saveNotification)
+            return res.send("You are registered for this auction");
+        }
       }
     }
   }
@@ -262,7 +291,19 @@ const getAllProductInAuctionRoom = async (req, res) => {
     .populate({
       path: "product",
       select: "-__v",
-      populate: { path: "product", select: "-__v" },
+      populate: {
+        path: "product",
+        select: "-__v",
+        populate: {
+          path: "product",
+          select: "-__v",
+          populate: {
+            path: "warehouse",
+            model: "Storage",
+            select: "-__v",
+          },
+        },
+      },
     })
     .populate("users", "-__v -password -role -date");
 
@@ -276,18 +317,33 @@ const getSpecificProductInAuctionRoom = async (req, res) => {
 
   const findProduct = await AuctionRoom.findOne({
     product: productId,
-  }).populate({
-    path: "product",
-    populate: {
+  })
+    .populate({
       path: "product",
       populate: {
-        path: "seller",
-        select: "-__v -password -email -phoneNumber -role -date ",
+        path: "product",
+        populate: {
+          path: "warehouse",
+          model: "Storage",
+          select: "-__v",
+        },
+
+        select: "-__v",
       },
       select: "-__v",
-    },
-    select: "-__v",
-  });
+    })
+    .populate({
+      path: "product",
+      populate: {
+        path: "product",
+        populate: {
+          path: "seller",
+          select: "-__v -password -email -phoneNumber -role -date ",
+        },
+        select: "-__v",
+      },
+      select: "-__v",
+    });
 
   if (!findProduct) return res.status(404).send("No product found");
   return res.send(findProduct);
@@ -303,6 +359,11 @@ const getSellersProductInAuctionRoom = async (req, res) => {
       populate: {
         path: "product",
         select: "-__v",
+        populate: {
+          path: "warehouse",
+          model: "Storage",
+          select: "-__v",
+        },
       },
     })
     .populate("users", "-__v -password -role -date")
@@ -326,7 +387,20 @@ const getEnrolledInAuctionRoom = async (req, res) => {
   const findUser = await AuctionRoom.find({
     users: mongoose.Types.ObjectId(id),
     isActive: true,
-  }).populate({ path: "product", populate: { path: "product" } });
+  }).populate({
+    path: "product",
+    select: "-__v",
+    populate: {
+      path: "product",
+      select: "-__v",
+      populate: {
+        path: "warehouse",
+        model: "Storage",
+        select: "-__v",
+      },
+    },
+  });
+
   if (!findUser.length) return res.status(404).send("No Auction found");
   return res.send(findUser);
 };

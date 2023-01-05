@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import CustomAppTable from "../../components/CustomAppTable";
-import CustomTable from "../../components/CustomTable";
+import CustomAppTable from "../../../../components/CustomAppTable";
+import CustomTable from "../../../../components/CustomTable";
 
-import CustomToast from "../../components/CustomToast";
-import Loader from "../../components/Loader";
-import { getAllPriceService } from "../service/priceService";
+import CustomToast from "../../../../components/CustomToast";
+import Loader from "../../../../components/Loader";
+import { getAllPriceService } from "../../../service/priceService";
 
 const Price = () => {
   const [price, setPrice] = useState([]);

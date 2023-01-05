@@ -4,11 +4,11 @@ import * as Yup from "yup";
 import "react-datepicker/dist/react-datepicker.css";
 import ReactDatePicker from "react-datepicker";
 
-import FormField from "../../components/FormField";
-import CustomToast from "../../components/CustomToast";
-import { addProductService } from "../../service/productService";
-import Loader from "../../components/Loader";
-import { addPriceService } from "../service/priceService";
+import FormField from "../../../../components/FormField";
+import CustomToast from "../../../../components/CustomToast";
+import { addProductService } from "../../../../service/productService";
+import Loader from "../../../../components/Loader";
+import { addPriceService } from "../../../service/priceService";
 
 const AddPrice = () => {
   const [loading, setLoading] = useState(false);

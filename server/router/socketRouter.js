@@ -1,29 +1,10 @@
 const { Auction } = require("../model/auctionModel");
 const { AuctionRoom } = require("../model/auctionRoomModel");
 const { Bid } = require("../model/bidModel");
+const { Notification } = require("../model/notificationModel");
 const WareHouse = require("../model/warehouseModel");
 
 var countdown = 60;
-
-// var Room = function (io, auctionRoomId) {
-//   this.io = io;
-//   this.auctionRoomId = auctionRoomId;
-//   this.timer = this.timerFunction.bind(this);
-// };
-
-// Room.prototype.timerFunction = function () {
-//   console.log(this.io, this.auctionRoomId);
-//   countdown = 60;
-//   const interval = setInterval(function () {
-//     countdown--;
-//     if (countdown == 0) {
-//       clearInterval(interval);
-//       countdown = 60;
-//     }
-//     this.io.sockets.to(this.auctionRoomId).emit("getTimer", { countdown });
-//   }, 1000);
-//   return interval;
-// };
 
 const getTimer = (
   io,
@@ -41,11 +22,25 @@ const getTimer = (
       const findWinner = await Bid.findOne(
         { auctionId: auctionRoomId },
         { bids: { $slice: -1 } }
-      ).populate({
-        path: "bids.buyerId",
-        model: "User",
-        select: "-__v -password  -email -date",
-      });
+      )
+        .populate({
+          path: "bids.buyerId",
+          model: "User",
+          select: "-__v -password  -email -date",
+        })
+        .populate({
+          path: "auctionId",
+          model: "AuctionRoom",
+          populate: {
+            path: "product",
+            model: "warehouse",
+            populate: {
+              path: "product",
+              model: "Product",
+            },
+          },
+          select: "-__v ",
+        });
 
       if (!findWinner) {
         return io.sockets
@@ -76,9 +71,24 @@ const getTimer = (
           );
           if (!auctionRoom) console.log("auctionRoom err");
           else {
-            io.sockets
-              .to(auctionRoomId)
-              .emit("auctionDone", { auctionDone: true, winner: findWinner });
+            const notification = new Notification({
+              message: `You have won the auction for ${
+                findWinner?.auctionId?.product?.product.productName +
+                " " +
+                productQuantity
+              }`,
+              seen: false,
+              date: new Date(),
+              userId: findWinner?.bids[0]?.buyerId?._id,
+            });
+            const saveNotification = await notification.save();
+            if (saveNotification)
+              io.sockets
+                .to(auctionRoomId)
+                .emit("auctionDone", { auctionDone: true, winner: findWinner });
+            else {
+              console.log("notification err");
+            }
           }
         } else {
           console.log("warehouse error");
@@ -95,7 +105,6 @@ const AuctionTime = async (
   io,
   auctionRoomId,
   productId,
-  user,
   productQuantity,
   seller
 ) => {
@@ -113,59 +122,86 @@ const AuctionTime = async (
   const endTime = getAuctionId[0].date.getTime() + 60 * 60 * 1000;
   const timer = setInterval(async function () {
     const now = new Date().getTime();
-    const distance = endTime - now;
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const timerEnd = endTime - now;
+    const minutes = Math.floor((timerEnd % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timerEnd % (1000 * 60)) / 1000);
 
-    if (distance < 0) {
+    if (timerEnd <= 1) {
       clearInterval(timer);
-      //   const findWinner = await Bid.findOne(
-      //     { auctionId: auctionRoomId },
-      //     { bids: { $slice: -1 } }
-      //   ).populate({
-      //     path: "bids.buyerId",
-      //     model: "User",
-      //     select: "-__v -password  -email -date",
-      //   });
+      const findWinner = await Bid.findOne(
+        { auctionId: auctionRoomId },
+        { bids: { $slice: -1 } }
+      )
+        .populate({
+          path: "bids.buyerId",
+          model: "User",
+          select: "-__v -password  -email -date",
+        })
+        .populate({
+          path: "auctionId",
+          model: "AuctionRoom",
+          populate: {
+            path: "product",
+            model: "warehouse",
+            populate: {
+              path: "product",
+              model: "Product",
+            },
+          },
+          select: "-__v ",
+        });
 
-      //   if (!findWinner) {
-      //     return io.sockets
-      //       .to(socket.id)
-      //       .emit("messageError", "Operation failed, Please try again");
-      //   } else {
-      //     const warehouse = await WareHouse.findOneAndUpdate(
-      //       {
-      //         _id: productId,
-      //         productQuantity,
-      //         owner: seller,
-      //         inSale: true,
-      //       },
-      //       {
-      //         owner: findWinner?.bids[0]?.buyerId?._id,
-      //         inSale: false,
-      //         bought: true,
-      //       }
-      //     );
-      //     if (warehouse) {
-      //       const auctionRoom = await AuctionRoom.findByIdAndUpdate(
-      //         auctionRoomId,
-      //         {
-      //           isStarted: false,
-      //           isActive: false,
-      //           // users: [],
-      //         }
-      //       );
-      //       if (!auctionRoom) console.log("auctionRoom err");
-      //       else {
-      //         io.sockets
-      //           .to(auctionRoomId)
-      //           .emit("auctionDone", { auctionDone: true, winner: findWinner });
-      //       }
-      //     } else {
-      //       console.log("warehouse error");
-      //     }
-      //   }
-      io.emit("timesup");
+      if (!findWinner) {
+        return io.sockets
+          .to(auctionRoomId)
+          .emit("messageError", "Operation failed, Please try again");
+      } else {
+        const warehouse = await WareHouse.findOneAndUpdate(
+          {
+            _id: productId,
+            productQuantity,
+            owner: seller,
+            inSale: true,
+          },
+          {
+            owner: findWinner?.bids[0]?.buyerId?._id,
+            inSale: false,
+            bought: true,
+          }
+        );
+        if (warehouse) {
+          const auctionRoom = await AuctionRoom.findByIdAndUpdate(
+            auctionRoomId,
+            {
+              isStarted: false,
+              isActive: false,
+              // users: [],
+            }
+          );
+          if (!auctionRoom) console.log("auctionRoom err");
+          else {
+            const notification = new Notification({
+              message: `You have won the auction for ${
+                findWinner?.auctionId?.product?.product.productName +
+                " " +
+                productQuantity
+              }`,
+              seen: false,
+              date: new Date(),
+              userId: findWinner?.bids[0]?.buyerId?._id,
+            });
+            const saveNotification = await notification.save();
+            if (saveNotification)
+              io.sockets
+                .to(auctionRoomId)
+                .emit("auctionDone", { auctionDone: true, winner: findWinner });
+          }
+        } else {
+          return io.sockets
+            .to(auctionRoomId)
+            .emit("messageError", "Operation failed, Please try again");
+        }
+      }
     }
     io.sockets.to(auctionRoomId).emit("auctionTime", { minutes, seconds });
   }, 1000);
@@ -180,14 +216,7 @@ const socketRouter = (io) => {
     socket.on(
       "getAuctionTime",
       async ({ auctionRoomId, productId, productQuantity, seller }) => {
-        AuctionTime(
-          io,
-          auctionRoomId,
-          productId,
-
-          productQuantity,
-          seller
-        );
+        AuctionTime(io, auctionRoomId, productId, productQuantity, seller);
       }
     );
 

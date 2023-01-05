@@ -24,12 +24,18 @@ const getAuction = async (req, res) => {
       populate: {
         path: "product",
         model: "Product",
+        populate: { path: "warehouse", model: "Storage", select: "-__v" },
       },
     },
   });
+  const filterAuction = findAuction.filter((fp) =>
+    fp?.auctionRoom.filter(
+      (fa) => fa.auctionId || (null && fa.auctionId?.product?.product != null)
+    )
+  );
 
-  if (!findAuction) return res.status(404).send("No role found");
-  return res.send(findAuction);
+  if (!filterAuction.length) return res.status(404).send("No role found");
+  return res.send(filterAuction);
 };
 
 const findAuctionByAuctionRoomId = async (req, res) => {

@@ -6,6 +6,14 @@ const protectUrl = require("../middleware/authMiddleware");
 const router = experess.Router();
 
 router.get("/getWarehouse", wareHouserController.getWareHouse);
+router.put(
+  "/releaseWarehouse/:warehouseId",
+  wareHouserController.releaseWarehouse
+);
+router.get(
+  "/getSpecificProductInWarehouse/:id",
+  wareHouserController.getSpecificProductInWareHouse
+);
 router.get(
   "/getProductInWarehouse",
   wareHouserController.getProductFromWareHouse

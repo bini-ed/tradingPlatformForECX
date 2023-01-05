@@ -5,6 +5,7 @@ import JoinAuction from "../Pages/Auction/JoinAuction";
 import WinnerPage from "../Pages/Auction/WinnerPage";
 import AddTransaction from "../Pages/Buyer/AddTransaction";
 import BuyerPage from "../Pages/Buyer/BuyerPage";
+import Notification from "../Pages/Notification";
 import ProductDetail from "../Pages/Seller/ProductDetail";
 import SellerPage from "../Pages/Seller/SellerPage";
 import UserInformation from "../Pages/UserInformation";
@@ -23,6 +24,7 @@ const PageRoute = ({ socket }) => {
         ></Route>
         <Route path="/userInfo" element={<UserInformation />}></Route>
         <Route path="/seller" element={<SellerPage />}></Route>
+        <Route path="/notification" element={<Notification />}></Route>
         <Route
           path="/productDetail/:productId"
           element={<ProductDetail />}

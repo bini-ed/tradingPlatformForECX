@@ -1,14 +1,14 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CustomToast from "../../components/CustomToast";
-import Loader from "../../components/Loader";
-import { URL } from "../../config";
-import LabelWithField from "../components/LabelWithField";
+import CustomToast from "../../../components/CustomToast";
+import Loader from "../../../components/Loader";
+import { URL } from "../../../config";
+import LabelWithField from "../../components/LabelWithField";
 import {
   approveTransactionService,
   getTransactionDetailService,
-} from "../service/transactionService";
+} from "../../service/transactionService";
 
 const TrasnactionDetail = () => {
   const { transactionId, warehouseId } = useParams();

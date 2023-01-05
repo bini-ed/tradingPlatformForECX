@@ -11,9 +11,9 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
-  location: {
-    type: String,
+  warehouse: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Storage",
     required: true,
   },
 
@@ -41,7 +41,7 @@ const validateProduct = (User) => {
   const validationSchema = Joi.object({
     productName: Joi.string().required().label("Product Name"),
     productQuantity: Joi.string().required().label("Quantity"),
-    location: Joi.string().required().label("Location"),
+    warehouse: Joi.string().required().label("Warehouse"),
     productType: Joi.string().required().label("Product Type"),
     grade: Joi.string().label("Product Grade"),
     seller: Joi.string().required().label("Seller"),

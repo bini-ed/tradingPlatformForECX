@@ -7,6 +7,7 @@ import Completed from "../../asset/icons/completed.png";
 import Add from "../../asset/icons/add.png";
 import Price from "../../asset/icons/price.png";
 import Product from "../../asset/icons/product.png";
+import Warehouse from "../../asset/icons/warehouse.png";
 import AuthContext from "../../context/AuthContext";
 
 const SideBar = ({ children }) => {
@@ -17,16 +18,17 @@ const SideBar = ({ children }) => {
     { name: "Ongoing", path: "/admin/ongoing", icon: Ongoing },
     {
       name: "Add warehouse officer",
-      path: "/admin/warehouse",
+      path: "/admin/warehouseOfficer",
       icon: Deactivated,
     },
     { name: "Deactivated", path: "/admin/deactivated", icon: Deactivated },
     { name: "Completed", path: "/admin/completed", icon: Completed },
 
-    { name: "Products", path: "/admin/product", icon: Completed },
+    // { name: "Products", path: "/admin/product", icon: Completed },
     { name: "Register Product", path: "/admin/register", icon: Add },
     { name: "Price", path: "/admin/price", icon: Price },
     { name: "Add Product", path: "/admin/productName", icon: Product },
+    { name: "Warehouse", path: "/admin/warehouse", icon: Warehouse },
   ];
 
   return (
@@ -38,7 +40,8 @@ const SideBar = ({ children }) => {
             index !== 5 &&
             index !== 6 &&
             index !== 7 &&
-            index !== 8 ? (
+            index !== 8 &&
+            index !== 9 ? (
               <NavLink
                 to={option.path}
                 key={index}
@@ -61,7 +64,11 @@ const SideBar = ({ children }) => {
                 </p>
               </NavLink>
             ) : user.role == "warehouse" &&
-              (index == 5 || index == 6 || index == 7 || index == 8) ? (
+              (index == 5 ||
+                index == 6 ||
+                index == 7 ||
+                index == 8 ||
+                index == 9) ? (
               <NavLink
                 to={option.path}
                 key={index}

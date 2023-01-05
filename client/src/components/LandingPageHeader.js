@@ -103,18 +103,22 @@ const LandingPageHeader = forwardRef(({ onBackClick }, ref) => {
                   : "flex-col"
               }`}
             >
-              <p
-                onClick={() => {
-                  window.location = "/seller";
-                }}
-                className={`text-[14px] md:text-[15px] lg:text-[16px] bg-orange-300 hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-white px-2 py-1 rounded-lg  ${
-                  width < 768
-                    ? "my-2 w-[100%] hover:bg-[#074E40] p-2 rounded-md text-white"
-                    : ""
-                }`}
-              >
-                Sell Product
-              </p>
+              {user?.role !== "admin" && user?.role !== "warehouse" ? (
+                <p
+                  onClick={() => {
+                    window.location = "/seller";
+                  }}
+                  className={`text-[14px] md:text-[15px] lg:text-[16px] bg-orange-300 hover:bg-[#60c4b0] hover:text-white  font-semibold lg:mx-2 text-white px-2 py-1 rounded-lg  ${
+                    width < 768
+                      ? "my-2 w-[100%] hover:bg-[#074E40] p-2 rounded-md text-white"
+                      : ""
+                  }`}
+                >
+                  Sell Product
+                </p>
+              ) : (
+                ""
+              )}
 
               <p
                 onClick={() => {

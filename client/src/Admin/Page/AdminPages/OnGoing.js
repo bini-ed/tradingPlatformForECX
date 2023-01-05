@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CustomAppTable from "../../components/CustomAppTable";
-import TransactionTable from "../components/TransactionTable";
-import { getAllTransactionService } from "../service/transactionService";
+import CustomAppTable from "../../../components/CustomAppTable";
+import TransactionTable from "../../components/TransactionTable";
+import { getAllTransactionService } from "../../service/transactionService";
 
 const OnGoing = () => {
   const [transaction, setTransaction] = useState([]);

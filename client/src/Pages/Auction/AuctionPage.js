@@ -39,7 +39,7 @@ const AuctionPage = () => {
                 Product Name
               </p>
               <p className="mx-1 text-slate-700 p-2 w-[25%] font-semibold">
-                Location
+                Warehouse
               </p>
               <p className="mx-1 text-slate-700 p-2 w-[25%] font-semibold">
                 Product Type
@@ -62,7 +62,7 @@ const AuctionPage = () => {
                     {items?.product?.product?.productName}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
-                    {items?.product?.product?.location}
+                    {items?.product?.product?.warehouse?.warehouseName}
                   </p>
                   <p className="mx-1 text-slate-700 p-2  w-[25%]">
                     {items?.product?.product?.productType}

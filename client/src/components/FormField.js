@@ -18,6 +18,7 @@ function FormField({ type, name, label, error, disabled }) {
               error ? "outline-[red] border-red-300" : ""
             } rounded-md p-2 my-2 bg-[#ffffff] border-[0.5px] border-slate-300`}
             {...field}
+            type={type}
             disabled={disabled}
           />
         )}

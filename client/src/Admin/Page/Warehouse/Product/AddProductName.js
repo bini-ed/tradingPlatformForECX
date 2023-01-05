@@ -2,10 +2,10 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
 
-import FormField from "../../components/FormField";
-import CustomToast from "../../components/CustomToast";
-import Loader from "../../components/Loader";
-import { addProductNameService } from "../service/productNameService";
+import FormField from "../../../../components/FormField";
+import CustomToast from "../../../../components/CustomToast";
+import Loader from "../../../../components/Loader";
+import { addProductNameService } from "../../../service/productNameService";
 
 const AddProductName = () => {
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const AddProductName = () => {
       <div className="p-15 md:mx-6">
         <div className="text-center">
           <h4 className="text-xl font-semibold block text-gray-500 my-1 ">
-            ECX eTrading Admin Panel
+            ECX eTrading Warehouse officer Panel
           </h4>
         </div>
         <Formik

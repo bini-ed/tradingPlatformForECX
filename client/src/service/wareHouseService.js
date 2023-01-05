@@ -27,3 +27,6 @@ export const getSellerProductService = (token) => {
 export const getProductInWarehouse = () => {
   return axios.get(`${URL}getProductInWarehouse`);
 };
+export const getSpecififcProductInWarehouseService = (id) => {
+  return axios.get(`${URL}getSpecificProductInWarehouse/${id}`);
+};

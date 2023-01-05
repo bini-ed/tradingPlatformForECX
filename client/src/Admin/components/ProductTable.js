@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { paginate } from "../../components/paginate";
 import Paginations from "../../components/pagination";
 
@@ -6,13 +7,13 @@ const ProductTable = ({ product, color }) => {
   const [filter, setFilter] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const navigate = useNavigate();
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
   if (product?.length == 0)
     return (
-      <p className="text-red-400 font-mono text-[30px]">There is no product </p>
+      <p className="text-[brown] font-mono text-[20px]">There is no product </p>
     );
 
   let filteredProduct = product?.filter(
@@ -98,6 +99,13 @@ const ProductTable = ({ product, color }) => {
                             : "bg-[#f6f7f6]  hover:bg-[#b8e6cf]"
                         }`}
                         key={index}
+                        onClick={() =>
+                          color
+                            ? navigate(
+                                `/admin/warehouse/productDetail/${product?._id}`
+                              )
+                            : null
+                        }
                       >
                         <td
                           className={`border 
@@ -116,7 +124,6 @@ const ProductTable = ({ product, color }) => {
                             color ? "text-white" : "text-slate-800"
                           } p-2 text-sm md:text-md lg:text-lg`}
                         >
-                          {console.log(product)}
                           {product?.productQuantity ||
                             product?.product?.productQuantity}
                         </td>
@@ -140,16 +147,19 @@ const ProductTable = ({ product, color }) => {
                               "Not graded"}
                           </p>
                         </td>
+
                         <td
                           className={`border  border-slate-300 ${
                             color ? "text-white" : "text-slate-800"
                           } p-2 text-sm md:text-md lg:text-lg`}
                         >
-                          {product?.location
-                            ? product?.location
-                            : product?.product?.location
-                            ? product?.product?.location
-                            : product?.product?.product?.location}
+                          {console.log(product)}
+                          {product?.warehouse
+                            ? product?.warehouse?.warehouseName
+                            : product?.product?.warehouse?.warehouseName
+                            ? product?.product?.warehouse?.warehouseName
+                            : product?.product?.product?.warehouse
+                                ?.warehouseName}
                         </td>
                         {/* remove this row from admin product page by using color props */}
                         {color ? (
@@ -164,7 +174,11 @@ const ProductTable = ({ product, color }) => {
                           >
                             <p
                               className={`rounded-md py-1 px-2 text-white text-center ${
-                                product?.isDone ? "bg-[green]" : "bg-[#3b58a7]"
+                                product?.isDone
+                                  ? "bg-[green]"
+                                  : product?.isActive
+                                  ? "bg-[#ec612a]"
+                                  : "bg-[#3b58a7]"
                               }`}
                             >
                               {product?.isActive

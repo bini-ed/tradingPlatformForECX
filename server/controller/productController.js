@@ -6,7 +6,7 @@ const addProduct = async (req, res) => {
   const {
     productName,
     productQuantity,
-    location,
+    warehouse,
     productType,
     grade,
     seller,
@@ -21,7 +21,7 @@ const addProduct = async (req, res) => {
   const product = new Product({
     productName,
     productQuantity,
-    location,
+    warehouse,
     productType,
     grade: grade ? grade : 1,
     seller: findUser._id,
@@ -35,15 +35,20 @@ const addProduct = async (req, res) => {
     owner: product.seller,
     inSale: false,
   };
-  const wareHouse = new WareHouse(wareHouseProduct);
-  const saveWareHouse = await wareHouse.save();
+
+  const newwareHouse = new WareHouse(wareHouseProduct);
+  const saveWareHouse = await newwareHouse.save();
 
   if (!item) return res.status(400).send("Error Occured,Please try again");
-  if (item) res.send("Product registered successfully");
+  else {
+    if (saveWareHouse) return res.send("Product registered successfully");
+    return res.status(400).send("Error Occured,Please try again");
+  }
 };
 
 const getAllProduct = async (req, res) => {
   const product = await Product.find()
+    .populate("warehouse")
     .populate("seller", "-__v -date -password")
     .select("-__v -date");
   if (!product.length) return res.status(400).send("No product found");
@@ -53,6 +58,7 @@ const getAllProduct = async (req, res) => {
 const getMyProduct = async (req, res) => {
   const { id } = req.user;
   const product = await Product.find({ seller: id })
+    .populate("warehouse")
     .populate("seller", "-password -__v -date")
     .select("-__v -date");
   if (!product.length) return res.status(400).send("No product found");

@@ -80,7 +80,6 @@ const CustomTable = ({ auction: product, count, handler }) => {
                         }`}
                         key={index}
                       >
-                        {console.log(auction)}
                         <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
                           {auction.product.productName}
                         </td>

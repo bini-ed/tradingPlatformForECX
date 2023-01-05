@@ -65,7 +65,7 @@ const Carousel = ({
 
   const filteredAuction = auction.filter(
     (auctions) =>
-      auctions.auctionId != null && auctions?.auctionId?.product != null
+      auctions.auctionId != null && auctions?.auctionId?.product.product != null
   );
 
   return (
@@ -157,8 +157,11 @@ const Carousel = ({
                       Quantity: {resource?.auctionId.productQuantity}
                     </p>
                     <p className="text-[16px] font-mono text-[#3D5833]">
-                      Location:
-                      {resource?.auctionId?.product?.product?.location}
+                      Warehouse:
+                      {
+                        resource?.auctionId?.product?.product?.warehouse
+                          ?.warehouseName
+                      }
                     </p>
                   </div>
                 </div>

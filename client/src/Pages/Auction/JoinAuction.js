@@ -137,7 +137,7 @@ const JoinAuction = ({ socket }) => {
     }
     setLoading(false);
   };
-
+  console.log(product);
   const getPriceInformation = async () => {
     setPriceLoading(true);
 
@@ -269,7 +269,8 @@ const JoinAuction = ({ socket }) => {
                         product?.productQuantity}
                     </p>
                     <p className="text-[18px] font-mono text-[#3D5833]">
-                      Location: {product?.product?.product.location}
+                      Location:{" "}
+                      {product?.product?.product?.warehouse?.warehouseName}
                     </p>
                   </div>
                 </div>
@@ -332,7 +333,7 @@ const JoinAuction = ({ socket }) => {
                 {modal && (
                   <CustomModal
                     onClick={() => {
-                      window.location = "/auction";
+                      window.location = "/buyer";
                       setTimeout(() => setModal(false), 2000);
                     }}
                   />

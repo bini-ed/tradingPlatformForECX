@@ -1,26 +1,22 @@
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import FormField from "../../../../components/FormField";
 import * as Yup from "yup";
-import "react-datepicker/dist/react-datepicker.css";
-import ReactDatePicker from "react-datepicker";
+import CustomToast from "../../../../components/CustomToast";
+import Loader from "../../../../components/Loader";
+import { addStorageService } from "../../../service/storageService";
 
-import FormField from "../../components/FormField";
-import CustomToast from "../../components/CustomToast";
-import { addProductService } from "../../service/productService";
-import Loader from "../../components/Loader";
-import { addRoleService } from "../../service/roleService";
-
-const AddRoles = () => {
+const AddWarehouse = () => {
+  const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object().shape({
-    roleName: Yup.string().required().label("Role Name"),
+    warehouseName: Yup.string().required().label("Warehouse Name"),
+    location: Yup.string().required().label("Warehouse Location"),
   });
 
-  const [loading, setLoading] = useState(false);
-
-  const handleAddProduct = async (values) => {
+  const handleAddPrice = async (values) => {
     setLoading(true);
     try {
-      const { data } = await addRoleService(values);
+      const { data } = await addStorageService(values);
       if (data) CustomToast("success", data);
     } catch (error) {
       console.log(error);
@@ -34,30 +30,40 @@ const AddRoles = () => {
       <div className="p-15 md:mx-6">
         <div className="text-center">
           <h4 className="text-xl font-semibold block text-gray-500 my-1 ">
-            ECX eTrading Admin Panel
+            ECX eTrading warehouse Panel
           </h4>
         </div>
         <Formik
           initialValues={{
-            roleName: "",
+            warehouseName: "",
+            location: "",
           }}
           onSubmit={(values) => {
-            handleAddProduct(values);
+            handleAddPrice(values);
           }}
           validationSchema={validationSchema}
         >
-          {({ isSubmitting }) => (
+          {() => (
             <div className="w-full flex justify-center">
               <Form className="flex flex-col flex-wrap w-[90%] md:w-[70%] lg:w-[60%] lg:max-w-[500px]  rounded-lg bg-slate-200 items-center">
-                <FormField label="Role Name" name="roleName" type="text" />
+                <FormField
+                  label="Warehouse Name"
+                  name="warehouseName"
+                  type="text"
+                />
+                <FormField
+                  label="Warehouse Location"
+                  name="location"
+                  type="text"
+                />
 
                 <div className="flex flex-col justify-center my-5 items-center w-full">
                   <button
                     type="submit"
                     className="bg-[#232536] px-10 py-2 xs:w-[90%] sm:w-[60%] md:w-[60%] lg:w-[50%] rounded-lg text-white"
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
                   >
-                    Add Product
+                    Add warehouse
                   </button>
                 </div>
               </Form>
@@ -69,4 +75,4 @@ const AddRoles = () => {
   );
 };
 
-export default AddRoles;
+export default AddWarehouse;

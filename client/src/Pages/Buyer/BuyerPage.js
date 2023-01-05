@@ -68,7 +68,7 @@ const BuyerPage = () => {
       <Link
         style={{ pointerEvents: auction.length ? "" : "none" }}
         to={"/auction"}
-        className={`p-3 my-3 w-fit absolute right-3 ${
+        className={`p-3  w-fit absolute right-3 ${
           auction.length ? "bg-[green]" : "bg-[grey]"
         } rounded-md text-white text-right font-semibold text-[18px]`}
       >
@@ -80,7 +80,6 @@ const BuyerPage = () => {
         </h2>
         {auction.map((auctions, index) => (
           <div key={index}>
-            {console.log("ac", auctions)}
             {auctions?.length ? (
               <>
                 <Carousel

@@ -80,7 +80,9 @@ function CustomAppTable({
                   <tbody>
                     {fields?.map((field, index) => (
                       <tr
-                        onClick={() => navigate(`${path}/${field._id}`)}
+                        onClick={() => {
+                          navigate(`${path}/${field._id}`);
+                        }}
                         className={`cursor-pointer  ${
                           color
                             ? `bg-slate-500 hover:bg-slate-400`
@@ -90,6 +92,7 @@ function CustomAppTable({
                         } `}
                         key={index}
                       >
+                        {console.log(field)}
                         {Object.keys(field).map((key, index) =>
                           column?.map((columns) =>
                             Object.keys(columns)
@@ -101,12 +104,13 @@ function CustomAppTable({
                                     color ? "text-white" : "text-slate-800"
                                   } text-sm md:text-md lg:text-lg p-2`}
                                 >
-                                  {field[c]}
+                                  {c == "warehouse"
+                                    ? field[c].warehouseName
+                                    : field[c]}
                                 </td>
                               ))
                           )
                         )}
-
                         {handler ? (
                           <tr
                             className={`flex justify-center items-center cursor-pointer py-1 px-2 ${"bg-[#f6f7f6"} hover:bg-[#b8e6cf]`}

@@ -17,7 +17,7 @@ const ProductDetail = () => {
   const validationSchema = Yup.object().shape({
     productName: Yup.string().required().label("Product Name"),
     productQuantity: Yup.string().required().label("Quantity"),
-    location: Yup.string().required().label("Location"),
+    warehouse: Yup.string().required().label("Warehouse"),
     productType: Yup.string().required().label("Product Type"),
     productDate: Yup.string().required().label("Product Date"),
   });
@@ -41,7 +41,6 @@ const ProductDetail = () => {
     }
     setLoading(false);
   };
-  console.log(product);
 
   useEffect(() => {
     getProductDetail();
@@ -84,7 +83,7 @@ const ProductDetail = () => {
             initialValues={{
               productName: product?.product?.productName,
               productQuantity: product.productQuantity,
-              location: product?.product?.location,
+              warehouse: product?.product?.warehouse.warehouseName,
               productType: product?.product?.productType,
               productDate: moment(product?.product?.date).format("DD-MMM-yyyy"),
             }}
@@ -93,28 +92,25 @@ const ProductDetail = () => {
             }}
             validationSchema={validationSchema}
           >
-            {({ isSubmitting, errors }) => (
+            {({ isSubmitting }) => (
               <div className="w-full flex justify-center">
                 <Form className="flex flex-col flex-wrap w-[90%] md:w-[70%] lg:w-[60%] lg:max-w-[500px]  rounded-lg bg-slate-200 items-center">
                   <FormField
                     label="Product Name"
                     name="productName"
                     type="text"
-                    error={errors.productName}
                     disabled={true}
                   />
                   <FormField
                     label="Product Quantity per KG"
                     name="productQuantity"
                     type="text"
-                    error={errors.productQuantity}
                     disabled={false}
                   />
                   <FormField
-                    label="Location"
-                    name="location"
+                    label="Warehouse"
+                    name="warehouse"
                     type="text"
-                    error={errors.location}
                     disabled={true}
                   />
 
@@ -122,14 +118,12 @@ const ProductDetail = () => {
                     label="Product Type"
                     name="productType"
                     type="text"
-                    error={errors.productType}
                     disabled={true}
                   />
                   <FormField
                     label="Product Date"
                     name="productDate"
                     type="text"
-                    error={errors.productDate}
                     disabled={true}
                   />
 

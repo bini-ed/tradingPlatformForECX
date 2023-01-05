@@ -1,11 +1,11 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import FormField from "../../components/FormField";
-import Loader from "../../components/Loader";
+import FormField from "../../../../components/FormField";
+import Loader from "../../../../components/Loader";
 import * as Yup from "yup";
-import { getRoleService } from "../../service/roleService";
-import { signupService } from "../../service/userService";
-import CustomToast from "../../components/CustomToast";
+import { getRoleService } from "../../../../service/roleService";
+import { signupService } from "../../../../service/userService";
+import CustomToast from "../../../../components/CustomToast";
 
 const AddWarehouseOfficer = () => {
   const [role, setRole] = useState([]);
