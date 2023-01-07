@@ -149,6 +149,7 @@ const addProductToAuctionRoom = async (req, res) => {
 
         if (!findAuctionDate) {
           const date = scheduler(moment(), 0);
+
           newAuctionDate = new Auction({
             auctionRoom: [{ auctionId: auction._id, date }],
           });

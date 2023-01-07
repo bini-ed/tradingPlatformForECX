@@ -3,6 +3,9 @@ const { Bid } = require("../model/bidModel");
 const { Notification } = require("../model/notificationModel");
 const Transaction = require("../model/transactionModel");
 const WareHouse = require("../model/warehouseModel");
+const moment = require("moment");
+const { default: mongoose, isValidObjectId } = require("mongoose");
+const { User } = require("../model/userModel");
 
 const addTransaction = async (req, res) => {
   const file = req.file?.filename;
@@ -78,9 +81,71 @@ const getAllTransaction = async (req, res) => {
   if (findBid.length) return res.send(findBid);
   else return res.status(404).send("No bid found");
 };
+const getUnApprovedTransaction = async (req, res) => {
+  const findBid = await Transaction.find({ approved: false })
+    .populate({
+      path: "bid",
+      populate: {
+        path: "auctionId",
+        populate: { path: "product", populate: { path: "product" } },
+      },
+    })
+    .populate({
+      path: "bid",
+      populate: { path: "bids", populate: { path: "buyerId" } },
+    });
+
+  if (findBid.length) return res.send(findBid);
+  else return res.status(404).send("No bid found");
+};
+const getApprovedTransaction = async (req, res) => {
+  const findBid = await Transaction.find({ approved: true })
+    .populate({
+      path: "bid",
+      populate: {
+        path: "auctionId",
+        populate: { path: "product", populate: { path: "product" } },
+      },
+    })
+    .populate({
+      path: "bid",
+      populate: { path: "bids", populate: { path: "buyerId" } },
+    });
+
+  if (findBid.length) return res.send(findBid);
+  else return res.status(404).send("No bid found");
+};
+const getDelayedTransaction = async (req, res) => {
+  const now = moment();
+  const findBid = await Transaction.find({ approved: false })
+    .populate({
+      path: "bid",
+      populate: {
+        path: "auctionId",
+        populate: { path: "product", populate: { path: "product" } },
+      },
+    })
+    .populate({
+      path: "bid",
+      populate: { path: "bids", populate: { path: "buyerId" } },
+    });
+
+  const transaction = [];
+  if (findBid.length) {
+    findBid.map((fb) => {
+      const diff = now.diff(moment(fb.created_at), "days") + 1;
+      if (diff > 3) {
+        transaction.push(fb);
+      }
+    });
+    if (transaction.length) {
+      console.log(transaction);
+      return res.send(transaction);
+    } else return res.status(404).send("No transaction request found");
+  } else return res.status(404).send("No transaction request found");
+};
 const approveTransaction = async (req, res) => {
   const { warehouseId, transactionId } = req.params;
-
   const finAuction = await AuctionRoom.findOne({ product: warehouseId });
   const findTransaction = await Transaction.findById(transactionId);
 
@@ -146,10 +211,75 @@ const approveTransaction = async (req, res) => {
   }
 };
 
+const penalizeUser = async (req, res) => {
+  const { transactionId } = req.params;
+
+  const findBid = await Transaction.findById(transactionId)
+    .populate({
+      path: "bid",
+      populate: {
+        path: "auctionId",
+        populate: {
+          path: "product",
+          populate: { path: "product" },
+        },
+      },
+    })
+    .populate({
+      path: "bid",
+      populate: { path: "bids", populate: { path: "buyerId" } },
+    });
+
+  if (findBid) {
+    if (findBid?.bid?.auctionId?.product?.product != null) {
+      const currentOwner = findBid?.bid.auctionId.product.owner;
+      const currentSeller = findBid?.bid.auctionId.seller;
+      const currentWarehouse = findBid?.bid.auctionId.product._id;
+      const currentProduct = findBid?.bid.auctionId.product.product._id;
+      const currentQuantity = findBid?.bid.auctionId.productQuantity;
+
+      const penalizeUser = await User.findByIdAndUpdate(
+        currentOwner,
+        {
+          $inc: { count: 1 },
+        },
+        { new: true }
+      );
+      const updateWarehouse = await WareHouse.findOneAndUpdate(
+        {
+          product: currentProduct,
+          owner: currentSeller,
+          // productQuantity: currentQuantity,
+        },
+        {
+          $inc: { productQuantity: currentQuantity },
+          inSale: false,
+          inWareHouse: true,
+          paymentDone: false,
+        },
+        { new: true }
+      );
+      const removeWarehouse = await WareHouse.findByIdAndRemove(
+        currentWarehouse
+      );
+
+      if (penalizeUser && updateWarehouse && removeWarehouse) {
+        return res.send(
+          "User is penalized and the item is returned for the original owner"
+        );
+      }
+    }
+  } else return res.status(404).send("No transaction found");
+};
+
 module.exports = {
   addTransaction,
   getTransactionForSpecificBid,
   getAllTransaction,
   getTransactionDetail,
   approveTransaction,
+  getUnApprovedTransaction,
+  getApprovedTransaction,
+  getDelayedTransaction,
+  penalizeUser,
 };

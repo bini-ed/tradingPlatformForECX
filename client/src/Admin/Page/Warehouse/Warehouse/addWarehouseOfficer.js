@@ -117,7 +117,7 @@ const AddWarehouseOfficer = () => {
                   className="bg-[#232536] px-10 py-2 xs:w-[90%] sm:w-[60%] md:w-[60%] lg:w-[50%] rounded-lg text-white"
                   disabled={isSubmitting}
                 >
-                  Sign up
+                  Add Warehouse Officer
                 </button>
               </div>
             </Form>

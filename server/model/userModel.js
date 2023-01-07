@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  count: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role",

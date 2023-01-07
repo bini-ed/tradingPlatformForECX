@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+
 import { paginate } from "../../components/paginate";
 import Paginations from "../../components/pagination";
 
-const TransactionTable = ({ transaction }) => {
+const TransactionTable = ({ transaction, delayed, path, completed }) => {
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
@@ -54,6 +56,7 @@ const TransactionTable = ({ transaction }) => {
                     <th className="border text-white p-2 border-slate-600">
                       Price
                     </th>
+
                     <th className="border text-white p-2 border-slate-600">
                       Approved
                     </th>
@@ -65,13 +68,13 @@ const TransactionTable = ({ transaction }) => {
                     <tr
                       onClick={() => {
                         navigate(
-                          `/admin/ongoing/detail/${product._id}/${product.bid.auctionId.product._id}`
+                          `${path}/${product._id}/${product.bid.auctionId.product._id}`,
+                          { state: { delayed, completed } }
                         );
                       }}
                       className="cursor-pointer  bg-slate-500 hover:bg-slate-400"
                       key={index}
                     >
-                      {console.log(product)}
                       <td className="border text-center border-slate-800 text-[whitesmoke] p-2 text-lg  ">
                         {product?.bid?.auctionId?.product?.product?.productName}
                       </td>

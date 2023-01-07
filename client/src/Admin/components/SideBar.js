@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import Ongoing from "../../asset/icons/onGoing.png";
-import Deactivated from "../../asset/icons/deactivated.png";
+import Officer from "../../asset/icons/officer.png";
 import Completed from "../../asset/icons/completed.png";
 import Add from "../../asset/icons/add.png";
 import Price from "../../asset/icons/price.png";
+import Disable from "../../asset/icons/disable.png";
+import Role from "../../asset/icons/role.png";
 import Product from "../../asset/icons/product.png";
 import Warehouse from "../../asset/icons/warehouse.png";
 import AuthContext from "../../context/AuthContext";
@@ -14,14 +16,14 @@ const SideBar = ({ children }) => {
   const { user } = useContext(AuthContext);
 
   const options = [
-    { name: "Add Role", path: "/admin/addRole", icon: Ongoing },
+    { name: "Add Role", path: "/admin/addRole", icon: Role },
     { name: "Ongoing", path: "/admin/ongoing", icon: Ongoing },
     {
       name: "Add warehouse officer",
       path: "/admin/warehouseOfficer",
-      icon: Deactivated,
+      icon: Officer,
     },
-    { name: "Deactivated", path: "/admin/deactivated", icon: Deactivated },
+    { name: "Deactivated", path: "/admin/deactivated", icon: Disable },
     { name: "Completed", path: "/admin/completed", icon: Completed },
 
     // { name: "Products", path: "/admin/product", icon: Completed },

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CustomAppTable from "../../../components/CustomAppTable";
 import TransactionTable from "../../components/TransactionTable";
-import { getAllTransactionService } from "../../service/transactionService";
+import { getUnApprovedTransactionService } from "../../service/transactionService";
 
 const OnGoing = () => {
   const [transaction, setTransaction] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(transaction);
+
   useEffect(() => {
     getTransaction();
   }, []);
@@ -14,7 +14,7 @@ const OnGoing = () => {
   const getTransaction = async () => {
     setLoading(true);
     try {
-      const { data } = await getAllTransactionService();
+      const { data } = await getUnApprovedTransactionService();
       if (data) setTransaction(data);
     } catch (error) {
       console.log(error);
@@ -24,7 +24,17 @@ const OnGoing = () => {
 
   return (
     <div>
-      <TransactionTable transaction={transaction} />
+      {transaction.length ? (
+        <TransactionTable
+          delayed={false}
+          path={"/admin/ongoing/detail"}
+          transaction={transaction}
+        />
+      ) : (
+        <p className="text-[brown] text-2xl font-mono">
+          THer is no active transaction request
+        </p>
+      )}
     </div>
   );
 };

@@ -73,6 +73,10 @@ const AdminRoute = () => {
           element={<TrasnactionDetail />}
         ></Route>
         <Route path="/deactivated" element={<Deactivated />}></Route>
+        <Route
+          path="/deactivated/detail/:transactionId/:warehouseId"
+          element={<TrasnactionDetail />}
+        ></Route>
         <Route path="/completed" element={<Completed />}></Route>
       </Routes>
     </AdminPanel>
