@@ -20,6 +20,7 @@ import Warehouse from "../Page/Warehouse/Warehouse/Warehouse";
 import AddWarehouse from "../Page/Warehouse/Warehouse/AddWarehouse";
 import EditWarehouse from "../Page/Warehouse/Warehouse/EditWarehouse";
 import ProductDetail from "../Page/Warehouse/Product/ProductDetail";
+import Auctions from "../Page/Auctions";
 
 const AdminRoute = () => {
   return (
@@ -48,6 +49,7 @@ const AdminRoute = () => {
           element={<EditProductName />}
         ></Route>
         <Route path="/addRole" element={<AddRoles />}></Route>
+        <Route path="/auctions" element={<Auctions />}></Route>
 
         <Route
           path="/warehouseOfficer"

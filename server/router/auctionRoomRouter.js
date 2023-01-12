@@ -36,6 +36,8 @@ router.get(
   "/getAuction/:productId",
   auctionRoomController.getAuctionUsingProductId
 );
+router.get("/startAuction/:auctionRoomId", auctionRoomController.startAuction);
+router.get("/getAllAuction", auctionRoomController.getAuction);
 router.get(
   "/getAuctionHistory",
   protectUrl,

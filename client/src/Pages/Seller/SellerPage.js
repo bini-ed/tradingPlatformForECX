@@ -20,7 +20,7 @@ const SellerPage = () => {
   const [productInAuction, setProductInAuction] = useState([]);
   const [productInWare, setProductInWare] = useState([]);
   const [laoding, setLoading] = useState(false);
-  const [filter, setFilter] = useState([]);
+  const [filter, setFilter] = useState("");
   const [prodLaoding, setProLoading] = useState(false);
   const [wareLaoding, setWareLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");

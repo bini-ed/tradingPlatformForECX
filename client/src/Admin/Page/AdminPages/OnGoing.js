@@ -32,7 +32,7 @@ const OnGoing = () => {
         />
       ) : (
         <p className="text-[brown] text-2xl font-mono">
-          THer is no active transaction request
+          There is no active transaction request
         </p>
       )}
     </div>

@@ -98,7 +98,7 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
         console.log(
           "exec New date is current month, day = current day + 1 day"
         );
-        modified.set({ date: dayNumber + 2, hour: 09, minute: 00, second: 00 });
+        modified.set({ date: dayNumber + 1, hour: 09, minute: 00, second: 00 });
       }
     }
   } else {

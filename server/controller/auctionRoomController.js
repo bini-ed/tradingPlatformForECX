@@ -148,8 +148,8 @@ const addProductToAuctionRoom = async (req, res) => {
         });
 
         if (!findAuctionDate) {
-          const date = scheduler(moment(), 0);
-
+          const date = scheduler(moment());
+          console.log(date);
           newAuctionDate = new Auction({
             auctionRoom: [{ auctionId: auction._id, date }],
           });
@@ -426,6 +426,33 @@ const getAuctionUsingProductId = async (req, res) => {
   if (!findUser) return res.status(404).send("No Auction found");
   return res.send(findUser);
 };
+const getAuction = async (req, res) => {
+  const findAuction = await AuctionRoom.find({ isActive: true })
+    .populate({
+      path: "product",
+      populate: { path: "product" },
+    })
+    .populate("seller", "User");
+
+  if (!findAuction.length) return res.status(404).send("No Auction found");
+  return res.send(findAuction);
+};
+const startAuction = async (req, res) => {
+  const { auctionRoomId } = req.params;
+  const findAuction = await AuctionRoom.findByIdAndUpdate(
+    auctionRoomId,
+    {
+      isStarted: true,
+    },
+    { new: true }
+  ).populate({
+    path: "product",
+    populate: { path: "product" },
+  });
+
+  if (!findAuction) return res.status(404).send("No Auction found");
+  return res.send(findAuction);
+};
 
 module.exports = {
   addProductToAuctionRoom,
@@ -436,4 +463,6 @@ module.exports = {
   getSpecificProductInAuctionRoom,
   getAuctionUsingProductId,
   getAuctionHistory,
+  startAuction,
+  getAuction,
 };

@@ -16,17 +16,17 @@ const SideBar = ({ children }) => {
   const { user } = useContext(AuthContext);
 
   const options = [
-    { name: "Add Role", path: "/admin/addRole", icon: Role },
-    { name: "Ongoing", path: "/admin/ongoing", icon: Ongoing },
+    { name: "Auctions", path: "/admin/auctions", icon: Completed },
     {
       name: "Add warehouse officer",
       path: "/admin/warehouseOfficer",
       icon: Officer,
     },
+    { name: "Ongoing", path: "/admin/ongoing", icon: Ongoing },
     { name: "Deactivated", path: "/admin/deactivated", icon: Disable },
     { name: "Completed", path: "/admin/completed", icon: Completed },
+    { name: "Add Role", path: "/admin/addRole", icon: Role },
 
-    // { name: "Products", path: "/admin/product", icon: Completed },
     { name: "Register Product", path: "/admin/register", icon: Add },
     { name: "Price", path: "/admin/price", icon: Price },
     { name: "Add Product", path: "/admin/productName", icon: Product },
@@ -39,7 +39,6 @@ const SideBar = ({ children }) => {
         {options.map((option, index) => (
           <div key={index}>
             {user.role === "admin" &&
-            index !== 5 &&
             index !== 6 &&
             index !== 7 &&
             index !== 8 &&
@@ -66,11 +65,7 @@ const SideBar = ({ children }) => {
                 </p>
               </NavLink>
             ) : user.role == "warehouse" &&
-              (index == 5 ||
-                index == 6 ||
-                index == 7 ||
-                index == 8 ||
-                index == 9) ? (
+              (index == 6 || index == 7 || index == 8 || index == 9) ? (
               <NavLink
                 to={option.path}
                 key={index}
