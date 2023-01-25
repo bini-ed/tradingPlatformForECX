@@ -24,7 +24,7 @@ const ProductName = () => {
       const { data } = await getAllProductNameService();
       if (data) setProductName(data);
     } catch (error) {
-      CustomToast("error", error.response?.data ?? error.message);
+      // CustomToast("error", error.response?.data ?? error.message);
     }
     setLoading(false);
   };

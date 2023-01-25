@@ -1,27 +1,42 @@
 import React, { useEffect, useState } from "react";
+import Loader from "../../../components/Loader";
+import { getAuctionRoomUsingProductIdService } from "../../../service/auctionService";
+import DeactivatedTable from "../../components/DeactivatedTable";
 import TransactionTable from "../../components/TransactionTable";
 import { getDelayedTransactionService } from "../../service/transactionService";
 
 const Deactivated = () => {
   const [transaction, setTransaction] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getDelayedTransaction();
   }, []);
 
   const getDelayedTransaction = async () => {
+    setLoading(true);
     try {
       const { data } = await getDelayedTransactionService();
-      if (data) setTransaction(data);
+      if (data) {
+        let array = [];
+        data.map(async (items) => {
+          const { data } = await getAuctionRoomUsingProductIdService(items._id);
+          if (data) array.push(data);
+          setTransaction(array);
+        });
+      }
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   return (
     <div>
-      {transaction.length ? (
-        <TransactionTable
+      {loading ? (
+        <Loader />
+      ) : transaction.length ? (
+        <DeactivatedTable
           delayed={true}
           path={"/admin/deactivated/detail"}
           transaction={transaction}

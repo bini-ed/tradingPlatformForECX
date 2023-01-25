@@ -17,7 +17,7 @@ const getTimer = (
   countdown = 60;
   const interval = setInterval(async function () {
     countdown--;
-    if (countdown == 50) {
+    if (countdown == 0) {
       clearInterval(interval);
       const findWinner = await Bid.findOne(
         { auctionId: auctionRoomId },

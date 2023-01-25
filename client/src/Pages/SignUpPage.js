@@ -51,6 +51,7 @@ function SignUpPage() {
     role.map((item) => {
       if (item?.roleName.toLowerCase() == "buyer") roleId = item._id;
     });
+    console.log(roleId);
     try {
       values.role = roleId;
       const { data } = await signupService(values);

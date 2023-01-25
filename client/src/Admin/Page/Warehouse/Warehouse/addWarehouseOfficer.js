@@ -43,6 +43,7 @@ const AddWarehouseOfficer = () => {
   const handleSignup = async (values) => {
     setLoading(true);
     try {
+      values.bank = "1000220611";
       const { data } = await signupService(values);
       if (data) {
         CustomToast("success", data);

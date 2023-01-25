@@ -29,7 +29,33 @@ const getBidsForSpecificAuction = async (req, res) => {
       model: "User",
       select: "-__v -password  -email -date",
     })
-    .sort("_bids._id");
+    .sort("_bids._id")
+    .populate({
+      path: "auctionId",
+      model: "AuctionRoom",
+      populate: { path: "product", populate: { path: "product" } },
+    });
+
+  if (!findAuction) {
+    return res.status(404).send("Operation failed, Please try again");
+  } else {
+    res.send(findAuction);
+  }
+};
+const getBidsById = async (req, res) => {
+  const { bidId } = req.params;
+  const findAuction = await Bid.findById(bidId)
+    .populate({
+      path: "auctionId",
+      model: "AuctionRoom",
+      populate: { path: "product", populate: { path: "product" } },
+    })
+    .populate({
+      path: "bids.buyerId",
+      model: "User",
+      select: "-__v -password  -email -date",
+    });
+
   if (!findAuction) {
     return res.status(404).send("Operation failed, Please try again");
   } else {
@@ -77,4 +103,5 @@ module.exports = {
   getBidsForSpecificAuction,
   getWinnerForSpecificAuction,
   getBidsForSpecificUserAuction,
+  getBidsById,
 };

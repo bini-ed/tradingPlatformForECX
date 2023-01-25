@@ -62,6 +62,7 @@ const TrasnactionDetail = () => {
     }
     setLoading(false);
   };
+  console.log(transaction);
 
   return (
     <div className="flex flex-col ">

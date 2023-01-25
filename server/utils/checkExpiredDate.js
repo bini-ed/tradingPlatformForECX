@@ -16,7 +16,8 @@ const checkExpiredDate = async () => {
     checkWareHouse.map(async (wh) => {
       const remainingDate = moment(wh?.updated_at).add(30, "days");
 
-      if (moment("2023-02-25").isAfter(remainingDate, "day")) {
+      // if (moment("2023-02-25").isAfter(remainingDate, "day")) {
+      if (moment(moment()).isAfter(remainingDate, "day")) {
         let ownerId = wh.owner._id;
         await WareHouse.findByIdAndUpdate(wh._id, {
           owner: checkEcx?._id,

@@ -21,6 +21,7 @@ import AddWarehouse from "../Page/Warehouse/Warehouse/AddWarehouse";
 import EditWarehouse from "../Page/Warehouse/Warehouse/EditWarehouse";
 import ProductDetail from "../Page/Warehouse/Product/ProductDetail";
 import Auctions from "../Page/Auctions";
+import DeactivatedDetail from "../Page/AdminPages/DeactivatedDetail";
 
 const AdminRoute = () => {
   return (
@@ -76,8 +77,8 @@ const AdminRoute = () => {
         ></Route>
         <Route path="/deactivated" element={<Deactivated />}></Route>
         <Route
-          path="/deactivated/detail/:transactionId/:warehouseId"
-          element={<TrasnactionDetail />}
+          path="/deactivated/detail/:transactionId"
+          element={<DeactivatedDetail />}
         ></Route>
         <Route path="/completed" element={<Completed />}></Route>
       </Routes>

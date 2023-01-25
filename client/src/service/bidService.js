@@ -12,3 +12,6 @@ export const getBidsForSpecificAuctionService = (auctionId) => {
 export const getWinnerForSpecificAuction = (auctionId) => {
   return axios.get(`${URL}getWinner/${auctionId}`);
 };
+export const getBidById = (bidId) => {
+  return axios.get(`${URL}getBidById/${bidId}`);
+};

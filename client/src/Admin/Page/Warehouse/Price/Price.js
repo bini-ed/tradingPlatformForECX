@@ -23,7 +23,7 @@ const Price = () => {
       const { data } = await getAllPriceService();
       if (data) setPrice(data);
     } catch (error) {
-      CustomToast("error", error.response?.data ?? error.message);
+      // CustomToast("error", error.response?.data ?? error.message);
     }
     setLoading(false);
   };

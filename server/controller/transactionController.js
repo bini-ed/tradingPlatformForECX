@@ -117,29 +117,28 @@ const getApprovedTransaction = async (req, res) => {
 };
 const getDelayedTransaction = async (req, res) => {
   const now = moment();
-  const findBid = await Transaction.find({ approved: false })
-    .populate({
-      path: "bid",
-      populate: {
-        path: "auctionId",
-        populate: { path: "product", populate: { path: "product" } },
-      },
-    })
-    .populate({
-      path: "bid",
-      populate: { path: "bids", populate: { path: "buyerId" } },
-    });
+  const findBid = await WareHouse.find({ paymentDone: false }).populate({
+    path: "product",
+    // populate: {
+    //   path: "auctionId",
+    //   populate: { path: "product", populate: { path: "product" } },
+    // },
+  });
+  // .populate({
+  //   path: "bid",
+  //   populate: { path: "bids", populate: { path: "buyerId" } },
+  // });
 
+  const filterdAuction = findBid.filter((wh) => wh.owner != wh.product.seller);
   const transaction = [];
-  if (findBid.length) {
-    findBid.map((fb) => {
-      const diff = now.diff(moment(fb.created_at), "days") + 1;
+  if (filterdAuction.length) {
+    filterdAuction.map((fb) => {
+      const diff = now.diff(moment(fb.updated_at), "days") + 1;
       if (diff > 3) {
         transaction.push(fb);
       }
     });
     if (transaction.length) {
-      console.log(transaction);
       return res.send(transaction);
     } else return res.status(404).send("No transaction request found");
   } else return res.status(404).send("No transaction request found");
@@ -214,29 +213,26 @@ const approveTransaction = async (req, res) => {
 const penalizeUser = async (req, res) => {
   const { transactionId } = req.params;
 
-  const findBid = await Transaction.findById(transactionId)
+  const findBid = await Bid.findById(transactionId)
     .populate({
-      path: "bid",
+      path: "auctionId",
       populate: {
-        path: "auctionId",
-        populate: {
-          path: "product",
-          populate: { path: "product" },
-        },
+        path: "product",
+        populate: { path: "product" },
       },
     })
     .populate({
-      path: "bid",
+      path: "bids",
       populate: { path: "bids", populate: { path: "buyerId" } },
     });
 
   if (findBid) {
-    if (findBid?.bid?.auctionId?.product?.product != null) {
-      const currentOwner = findBid?.bid.auctionId.product.owner;
-      const currentSeller = findBid?.bid.auctionId.seller;
-      const currentWarehouse = findBid?.bid.auctionId.product._id;
-      const currentProduct = findBid?.bid.auctionId.product.product._id;
-      const currentQuantity = findBid?.bid.auctionId.productQuantity;
+    if (findBid?.auctionId?.product?.product != null) {
+      const currentOwner = findBid?.auctionId.product.owner;
+      const currentSeller = findBid?.auctionId.seller;
+      const currentWarehouse = findBid?.auctionId.product._id;
+      const currentProduct = findBid?.auctionId.product.product._id;
+      const currentQuantity = findBid?.auctionId.productQuantity;
 
       const penalizeUser = await User.findByIdAndUpdate(
         currentOwner,

@@ -45,17 +45,17 @@ const auctionStarter = async () => {
           if (updateAuctionROom) console.log("Updated");
         }
 
-        if (
-          auctionMonth == month ||
-          auctionDay == day ||
-          (auctionHour + 1 < hour && ar?.auctionId?.isStarted == true)
-        ) {
-          const updateAuctionROom = await AuctionRoom.findByIdAndUpdate(
-            ar?.auctionId?._id,
-            { isStarted: false }
-          );
-          // if (updateAuctionROom) console.log("Updated");
-        }
+        // if (
+        //   auctionMonth == month ||
+        //   auctionDay == day ||
+        //   (auctionHour + 1 < hour && ar?.auctionId?.isStarted == true)
+        // ) {
+        //   const updateAuctionROom = await AuctionRoom.findByIdAndUpdate(
+        //     ar?.auctionId?._id,
+        //     { isStarted: false }
+        //   );
+        //   // if (updateAuctionROom) console.log("Updated");
+        // }
       })
     );
   }

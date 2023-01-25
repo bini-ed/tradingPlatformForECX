@@ -43,7 +43,7 @@ const RegisterProduct = () => {
       const { data } = await getAllProductNameService();
       if (data) setProductName(data);
     } catch (error) {
-      CustomToast("error", error.response.data ?? error.message);
+      // CustomToast("error", error.response.data ?? error.message);
     }
     setLoading(false);
   };
@@ -53,7 +53,7 @@ const RegisterProduct = () => {
       const { data } = await getStorageService();
       if (data) setWarehouse(data);
     } catch (error) {
-      CustomToast("error", error.response.data ?? error.message);
+      // CustomToast("error", error.response.data ?? error.message);
     }
     setWareLoading(false);
   };

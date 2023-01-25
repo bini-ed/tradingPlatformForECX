@@ -182,7 +182,11 @@ const JoinAuction = ({ socket }) => {
   };
 
   const handleMsg = async () => {
-    if (chat < price.priceMin || chat > price.priceMax) {
+    if (
+      chat < price?.priceMin ||
+      chat > price?.priceMax ||
+      chat < +product?.minPrice
+    ) {
       return CustomToast("error", "Price should be in the daily range");
     } else {
       await socket.emit("sendBid", {

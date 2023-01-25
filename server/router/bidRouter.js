@@ -7,6 +7,7 @@ const router = experess.Router();
 
 router.post("/placeBid", protectUrl, bidController.placeBid);
 router.get("/getAllBid/:auctionId", bidController.getBidsForSpecificAuction);
+router.get("/getBidById/:bidId", bidController.getBidsById);
 router.get(
   "/getBidForAuction/:auctionId/:buyerId",
   bidController.getBidsForSpecificUserAuction

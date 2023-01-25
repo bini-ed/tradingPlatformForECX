@@ -3,6 +3,7 @@ const ProductName = require("../model/productNameModel");
 const addProductName = async (req, res) => {
   const { productName, grade } = req.body;
   let grades = [];
+  if (!grade.length) return res.status(401).send("Grade is a required field");
   grade?.map((grade) => {
     grades.push(grade.grade);
   });
