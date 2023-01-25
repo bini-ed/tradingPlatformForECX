@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 
 const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password, role, phoneNumber } = req.body;
+  const { firstName, lastName, email, password, role, phoneNumber, bank } =
+    req.body;
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -21,6 +22,7 @@ const registerUser = async (req, res) => {
       role,
       email,
       password,
+      bank,
     });
     const salt = await bcrypt.genSalt(15);
     user.password = await bcrypt.hash(user.password, salt);
@@ -76,7 +78,7 @@ const getUserInformation = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber } = req.body;
+  const { firstName, lastName, email, phoneNumber, bank } = req.body;
   const { id } = req.user;
 
   const user = await User.findById(id).populate("role");
@@ -90,6 +92,7 @@ const updateUser = async (req, res) => {
       lastName: lastName ? lastName : user.lastName,
       phoneNumber: phoneNumber ? phoneNumber : user.phoneNumber,
       email: email ? email : user.email,
+      bank: bank ? bank : user.bank,
     };
 
     const updateUser = await User.findByIdAndUpdate(id, updateUsers, {

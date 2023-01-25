@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  bank: {
+    type: Number,
+    required: true,
+  },
 });
 
 userSchema.methods.generateToken = function (role) {
@@ -59,6 +63,7 @@ const validateUser = (User) => {
     role: Joi.string().required().label("Role"),
     phoneNumber: Joi.number().required().label("Phone Number"),
     password: Joi.string().required().min(5).label("Password"),
+    bank: Joi.number().required().label("Bank Account"),
   });
   return validationSchema.validate(User);
 };

@@ -5,8 +5,8 @@ import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 
 import Background from "../asset/bg.png";
-import FormField from "../components/FormField";
 import CustomToast from "../components/CustomToast";
+import FormField from "../components/FormField";
 import Loader from "../components/Loader";
 import { getRoleService } from "../service/roleService";
 import { signupService } from "../service/userService";
@@ -23,6 +23,7 @@ function SignUpPage() {
     email: Yup.string().email().required().label("Email"),
     // role: Yup.string().required().label("Role"),
     password: Yup.string().required().label("Password"),
+    bank: Yup.number().required().label("Bank Account"),
   });
 
   const getRole = async () => {
@@ -109,6 +110,11 @@ function SignUpPage() {
                           label="Phone Number"
                           name="phoneNumber"
                           type="text"
+                        />
+                        <FormField
+                          label="Bank Account"
+                          name="bank"
+                          type="number"
                         />
                         <FormField
                           label="Password"

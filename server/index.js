@@ -24,7 +24,7 @@ const auctionStarter = require("./utils/auctionStarter");
 const checkExpiredDate = require("./utils/checkExpiredDate");
 dotenv.config();
 mongoose
-  .connect("mongodb://localhost/ecx", {
+  .connect("mongodb://127.0.0.1/ecx", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: "ecx",
