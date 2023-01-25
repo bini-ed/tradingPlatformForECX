@@ -137,7 +137,7 @@ const JoinAuction = ({ socket }) => {
     }
     setLoading(false);
   };
-  console.log(product);
+
   const getPriceInformation = async () => {
     setPriceLoading(true);
 

@@ -30,7 +30,7 @@ const getAuction = async (req, res) => {
   });
   const filterAuction = findAuction.filter((fp) =>
     fp?.auctionRoom.filter(
-      (fa) => fa.auctionId || (null && fa.auctionId?.product?.product != null)
+      (fa) => fa.auctionId != null || fa.auctionId?.product?.product != null
     )
   );
 

@@ -68,6 +68,7 @@ const ProductDetail = () => {
               label={"Product Quantity"}
               value={product?.productQuantity}
             />
+
             {product.bought ? (
               <LabelWithField
                 label={"Payment Status"}

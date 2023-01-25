@@ -60,7 +60,9 @@ const getProductFromSpecificStorage = async (req, res) => {
   const { warehouseId } = req.params;
   const findStorage = await Storage.findById(warehouseId);
   if (!findStorage) return res.status(404).send("Warehouse not found");
-  const findProduct = await WareHouse.find()
+  const findProduct = await WareHouse.find({
+    productQuantity: { $gt: 0 },
+  })
     .populate({
       path: "product",
       match: { warehouse: warehouseId },

@@ -177,34 +177,53 @@ const Carousel = ({
                       (users) => users == user.id
                     );
 
-                    if (checkuser)
+                    if (resource?.auctionId?.seller == user.id) {
                       return (
                         <p
                           onClick={() =>
                             CustomToast(
                               "err",
-                              "You have already registered for this auction"
+                              "You can't register for your own auction"
                             )
                           }
                           className="font-semibold bg-[#509666] cursor-pointer text-[#ffffff] my-5 self-end rounded-md py-2 w-[70%]"
                         >
-                          Registerd
+                          Your product
                         </p>
                       );
-                    else
-                      return (
-                        <p
-                          onClick={() =>
-                            handleAddUser(
-                              resource?.auctionId?._id,
-                              resource?.auctionId?.product?._id
-                            )
-                          }
-                          className="font-semibold bg-[#ffffff] cursor-pointer text-[#074E40] my-5 self-end rounded-md py-2 w-[70%]"
-                        >
-                          Register for Auction
-                        </p>
-                      );
+                    } else {
+                      if (checkuser)
+                        return (
+                          <p
+                            onClick={() =>
+                              CustomToast(
+                                "err",
+                                "You have already registered for this auction"
+                              )
+                            }
+                            className="font-semibold bg-[#509666] cursor-pointer text-[#ffffff] my-5 self-end rounded-md py-2 w-[70%]"
+                          >
+                            Registered
+                          </p>
+                        );
+                      else
+                        return (
+                          <p
+                            onClick={() =>
+                              handleAddUser(
+                                resource?.auctionId?._id,
+                                resource?.auctionId?.product?._id,
+                                moment(resource?.date).format(
+                                  "D-MMM-YYYY hh:mm A"
+                                )
+                              )
+                            }
+                            className="font-semibold bg-[#ffffff] cursor-pointer text-[#074E40] my-5 self-end rounded-md py-2 w-[70%]"
+                          >
+                            Register for Auction
+                          </p>
+                        );
+                    }
                   })()}
                 </div>
               </div>

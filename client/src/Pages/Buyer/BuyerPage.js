@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
 import CustomAppTable from "../../components/CustomAppTable";
@@ -10,6 +10,7 @@ import {
   getAllProductInAuctionRoomService,
 } from "../../service/auctionService";
 import moment from "moment";
+import AuthContext from "../../context/AuthContext";
 
 const BuyerPage = () => {
   const [auction, setAuction] = useState([]);
@@ -17,8 +18,9 @@ const BuyerPage = () => {
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
-
+  console.log("user", user);
   const getAllProduct = async () => {
     try {
       const { data } = await getAllProductInAuctionRoomService();
@@ -33,15 +35,17 @@ const BuyerPage = () => {
     }
   };
 
-  const handleAddUser = async (auctionId, productId) => {
+  const handleAddUser = async (auctionRoomId, productId, date) => {
     setMessage("");
     setLoading(true);
     const token = localStorage.getItem("userInfo");
+
     try {
       const { data } = await addUserToAuctionService(
-        auctionId,
-        productId,
-        token
+        token,
+        date,
+        auctionRoomId,
+        productId
       );
 
       if (data) {
@@ -59,12 +63,8 @@ const BuyerPage = () => {
     getAllProduct();
   }, []);
 
-  let filteredAuction = auction?.filter((role) =>
-    role?.productName?.match(new RegExp(filter, "i"))
-  );
-
   return (
-    <div>
+    <div className="mb-10">
       <Link
         style={{ pointerEvents: auction.length ? "" : "none" }}
         to={"/auction"}
@@ -102,7 +102,7 @@ const BuyerPage = () => {
             )}
           </div>
         ))}
-        <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
+        {/* <h2 className="text-xl font-semibold my-10 text-left text-[#996D6D]">
           My Products
         </h2>
 
@@ -118,7 +118,7 @@ const BuyerPage = () => {
           count={filteredAuction.length}
           filter={filter}
           setFilter={setFilter}
-        />
+        /> */}
       </div>
     </div>
   );

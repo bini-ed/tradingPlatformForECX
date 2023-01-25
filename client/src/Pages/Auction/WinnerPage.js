@@ -45,8 +45,7 @@ const WinnerPage = () => {
           </p>
           <div className="border-t-[#367836] border-t-2">
             <p>
-              Seller {product?.product?.product?.seller.firstName}{" "}
-              {product?.product?.product?.seller.lastName}
+              Seller {product?.seller?.firstName} {product?.seller?.lastName}
             </p>
           </div>
         </div>

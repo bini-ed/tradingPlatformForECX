@@ -25,7 +25,6 @@ const auctionStarter = async () => {
     const month = now.getMonth() + 1;
     const day = now.getDate();
     const hour = now.getHours();
-    // console.log(day, month, hour);
 
     findAuction.map((fa) =>
       fa.auctionRoom.map(async (ar) => {
@@ -44,6 +43,18 @@ const auctionStarter = async () => {
             { isStarted: true }
           );
           if (updateAuctionROom) console.log("Updated");
+        }
+
+        if (
+          auctionMonth == month ||
+          auctionDay == day ||
+          (auctionHour + 1 < hour && ar?.auctionId?.isStarted == true)
+        ) {
+          const updateAuctionROom = await AuctionRoom.findByIdAndUpdate(
+            ar?.auctionId?._id,
+            { isStarted: false }
+          );
+          // if (updateAuctionROom) console.log("Updated");
         }
       })
     );

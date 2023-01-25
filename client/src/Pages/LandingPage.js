@@ -90,7 +90,7 @@ function LandingPage() {
               The simplest eTrading platform for agricultural products
             </p>
             <p className="bg-[#074E40] my-5 text-[18px] w-[60%] sm:w-[40%] md:w-[40%] max-w-[200px] text-white rounded-[20px] p-2">
-              see autctions
+              see auctions
             </p>
           </div>
           <img
@@ -104,7 +104,7 @@ function LandingPage() {
           <div className="flex animate-marquee whitespace-nowrap items-center flex-row justify-center ">
             {products.map((product, index) => (
               <div
-                className={`flex flex-col justify-center items-center rounded-lg w-[90%] my-2 md:w-[15%]                 // index % 2 == 0 ? "bg-[#EBFED3]" : "bg-[#E5FEEF]"
+                className={`flex flex-col justify-center items-center rounded-lg w-[90%] my-2 md:w-[15%] // index % 2 == 0 ? "bg-[#EBFED3]" : "bg-[#E5FEEF]"
             `}
               >
                 <img

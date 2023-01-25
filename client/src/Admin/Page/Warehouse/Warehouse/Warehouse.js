@@ -18,6 +18,7 @@ const Warehouse = () => {
     setLoading(true);
     try {
       const { data } = await getStorageService();
+      console.log(data);
       if (data) setWarehouse(data);
     } catch (error) {
       CustomToast("error", error.response?.data ?? error.message);

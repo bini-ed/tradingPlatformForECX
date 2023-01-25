@@ -50,6 +50,9 @@ const authUser = async (req, res) => {
     .select(" -createdAt -updatedAt -phoneNumber -__v");
   if (!user) return res.status(400).send("Invalid email or Password");
 
+  if (user.count >= 3) {
+    return res.status(400).send("This account is banned");
+  }
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) return res.status(400).send("Incorrect Password");

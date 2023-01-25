@@ -154,7 +154,7 @@ const AuctionTime = async (
       if (!findWinner) {
         return io.sockets
           .to(auctionRoomId)
-          .emit("messageError", "Operation failed, Please try again");
+          .emit("messageError", "Operations failed, Please try again");
       } else {
         const warehouse = await WareHouse.findOneAndUpdate(
           {
@@ -191,6 +191,7 @@ const AuctionTime = async (
               userId: findWinner?.bids[0]?.buyerId?._id,
             });
             const saveNotification = await notification.save();
+
             if (saveNotification)
               io.sockets
                 .to(auctionRoomId)
@@ -312,32 +313,3 @@ const socketRouter = (io) => {
 };
 
 module.exports = socketRouter;
-
-// const countdown = (io) => {
-//   // Set the end time for the countdown
-//   const endTime = new Date().getTime() + 60 * 60 * 1000; // 1 hour in milliseconds
-
-//   // Update the count down every 1 second
-//   const timer = setInterval(() => {
-//     // Get the current time
-//     const now = new Date().getTime();
-
-//     // Find the distance between now and the end time
-//     const distance = endTime - now;
-
-//     // Time calculations for minutes and seconds
-//     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-//     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-//     // Emit the countdown event to all connected clients
-//     io.emit("countdown", { minutes, seconds });
-
-//     // If the count down is finished, clear the timer and emit a "timesup" event
-//     if (distance < 0) {
-//       clearInterval(timer);
-//       io.emit("timesup");
-//     }
-//   }, 1000); // update every 1 second (1000 milliseconds)
-// };
-
-// module.exports = countdown;

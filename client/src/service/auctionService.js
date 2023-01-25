@@ -9,25 +9,34 @@ export const getAllProductInAuctionRoomService = () => {
 export const addProductToAuctionService = (
   productId,
   productQuantity,
+  minPrice,
   owner,
   token
 ) => {
   return axios.get(
-    `${URL}addProductToAuction/${productId}/${productQuantity}/${owner}`,
+    `${URL}addProductToAuction/${productId}/${productQuantity}/${owner}/${minPrice}`,
     {
       headers: { "x-auth-token": token },
     }
   );
 };
 
-export const addUserToAuctionService = (auctionId, productId, token) => {
+export const addUserToAuctionService = (
+  token,
+  date,
+  auctionRoomId,
+  productId
+) => {
   const config = {
     headers: {
-      "content-type": "multipart/form-data",
       "x-auth-token": token,
     },
   };
-  return axios.get(`${URL}addUserToAuction/${auctionId}/${productId}`, config);
+  return axios.post(
+    `${URL}addUserToAuction`,
+    { date, auctionRoomId, productId },
+    config
+  );
 };
 
 export const getMyProductInAuctionService = (token) => {

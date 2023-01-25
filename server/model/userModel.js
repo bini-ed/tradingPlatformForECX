@@ -58,7 +58,7 @@ const validateUser = (User) => {
     email: Joi.string().email().required().label("Email"),
     role: Joi.string().required().label("Role"),
     phoneNumber: Joi.number().required().label("Phone Number"),
-    password: Joi.string().required().min(3).label("Password"),
+    password: Joi.string().required().min(5).label("Password"),
   });
   return validationSchema.validate(User);
 };

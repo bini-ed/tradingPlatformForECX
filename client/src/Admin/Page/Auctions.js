@@ -20,6 +20,7 @@ const Auctions = () => {
     setLoading(true);
     try {
       const { data } = await getAuctionService();
+      console.log(data);
       setAuction(data);
     } catch (error) {
       console.log(error.response.data);

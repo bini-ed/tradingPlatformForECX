@@ -58,23 +58,23 @@ const AuctionTable = ({ field, filter, setFilter, count, handler }) => {
                         className={`bg-slate-500 hover:bg-slate-400 cursor-pointer  ${
                           index % 2 == 0 ? "bg-slate-400 " : "bg-slate-300 "
                         } `}
-                        key={field._id}
+                        key={index}
                       >
                         <td
-                          key={index}
+                          // key={index}
                           className={`border border-slate-100 text-white text-sm md:text-md lg:text-lg p-2`}
                         >
                           {field?.product?.product?.productName}
                         </td>
                         <td
-                          key={index}
+                          // key={index}
                           className={`border border-slate-100 text-white text-sm md:text-md lg:text-lg p-2`}
                         >
                           {field?.product?.productQuantity}
                         </td>
                         <td
                           onClick={() => handler(field._id)}
-                          key={index}
+                          // key={index}
                           className={`border border-slate-100 text-white text-sm md:text-md lg:text-lg p-2`}
                         >
                           {field?.isStarted ? (

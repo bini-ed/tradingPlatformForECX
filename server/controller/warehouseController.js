@@ -69,6 +69,7 @@ const getSellerProductFromWareHouse = async (req, res) => {
   const findAuction = await WareHouse.find({
     owner: id,
     productQuantity: { $gt: 0 },
+    inWarehouse: true,
   }).populate({
     path: "product",
     select: "-__v",

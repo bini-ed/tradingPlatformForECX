@@ -40,6 +40,10 @@ const auctionRoomSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  minPrice: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
 });
 
 const AuctionRoom = mongoose.model("AuctionRoom", auctionRoomSchema);

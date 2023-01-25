@@ -2,7 +2,7 @@ const moment = require("moment");
 
 const scheduler = (currentAuctionDate, findAuctionDate) => {
   const modified = moment(currentAuctionDate);
-  console.log(moment().day());
+  // console.log(moment().day());
 
   console.log("modifie", modified.format("YYYY-MM-DD hh:mm:ss a"));
 
@@ -90,7 +90,6 @@ const scheduler = (currentAuctionDate, findAuctionDate) => {
         modified.set({ date: 30, hour: 09, minute: 00, second: 00 });
       }
     } else {
-      console.log(day);
       if (day == 5) {
         console.log("New date is current month, day = current day + 3 day");
         modified.set({ date: dayNumber + 3, hour: 09, minute: 00, second: 00 });

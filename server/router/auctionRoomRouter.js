@@ -9,12 +9,12 @@ router.get(
   auctionRoomController.getAllProductInAuctionRoom
 );
 router.get(
-  "/addProductToAuction/:productId/:productQuantity/:owner",
+  "/addProductToAuction/:productId/:productQuantity/:owner/:minPrice",
   protectUrl,
   auctionRoomController.addProductToAuctionRoom
 );
-router.get(
-  "/addUserToAuction/:auctionRoomId/:productId",
+router.post(
+  "/addUserToAuction",
   protectUrl,
   auctionRoomController.addUserToAuctionRoom
 );

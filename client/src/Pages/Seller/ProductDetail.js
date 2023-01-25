@@ -12,6 +12,7 @@ import Loader from "../../components/Loader";
 import { addProductToAuctionService } from "../../service/auctionService";
 import { getSpecificProductOfSellerService } from "../../service/wareHouseService";
 import AuthContext from "../../context/AuthContext";
+import { getPriceForTypeService } from "../../Admin/service/priceService";
 
 const ProductDetail = () => {
   const validationSchema = Yup.object().shape({
@@ -20,11 +21,14 @@ const ProductDetail = () => {
     warehouse: Yup.string().required().label("Warehouse"),
     productType: Yup.string().required().label("Product Type"),
     productDate: Yup.string().required().label("Product Date"),
+    minPrice: Yup.string().required().label("Starting Price"),
   });
 
   const [product, setProduct] = useState({});
+  const [price, setPrice] = useState({});
   const { productId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [priceLoading, setPriceLoading] = useState(false);
   const { user } = useContext(AuthContext);
 
   const getProductDetail = async () => {
@@ -35,7 +39,24 @@ const ProductDetail = () => {
         productId,
         token
       );
-      if (data) setProduct(data);
+      if (data) {
+        setProduct(data);
+        let type = data?.product?.productType.toLowerCase();
+
+        try {
+          const response = await getPriceForTypeService(
+            type,
+            data?.product?.grade
+          );
+
+          if (response.data) {
+            setPrice(response.data);
+          }
+        } catch (error) {
+          console.log("price", error, error?.response?.data);
+        }
+        setPriceLoading(false);
+      }
     } catch (error) {
       console.log(error.response.data);
     }
@@ -52,11 +73,12 @@ const ProductDetail = () => {
   const handleAddProductToAuction = async (values) => {
     const token = localStorage.getItem("userInfo");
     setLoading(true);
-    console.log(values, productId);
+
     try {
       const { data } = await addProductToAuctionService(
         productId,
-        values,
+        values.productQuantity,
+        values.minPrice,
         user.id,
         token
       );
@@ -70,10 +92,13 @@ const ProductDetail = () => {
 
   return (
     <div className="w-full flex flex-col justify-center min-h-[calc(100vh-66px)]">
-      {loading ? (
+      {loading || priceLoading ? (
         <Loader />
       ) : (
         <div className="p-15 md:mx-6">
+          <h4 className="text-xl font-semibold block text-gray-500 my-1 ">
+            Todays Price is from {price?.priceMin} ETB to {price?.priceMax} ETB
+          </h4>
           <div className="text-center">
             <h4 className="text-xl font-semibold block text-gray-500 my-1 ">
               ECX eTrading Admin Panel
@@ -86,9 +111,10 @@ const ProductDetail = () => {
               warehouse: product?.product?.warehouse.warehouseName,
               productType: product?.product?.productType,
               productDate: moment(product?.product?.date).format("DD-MMM-yyyy"),
+              minPrice: "",
             }}
             onSubmit={(values) => {
-              handleAddProductToAuction(values.productQuantity);
+              handleAddProductToAuction(values);
             }}
             validationSchema={validationSchema}
           >
@@ -125,6 +151,11 @@ const ProductDetail = () => {
                     name="productDate"
                     type="text"
                     disabled={true}
+                  />
+                  <FormField
+                    label="Starting Price"
+                    name="minPrice"
+                    type="text"
                   />
 
                   <div className="flex flex-col justify-center my-5 items-center w-full">
