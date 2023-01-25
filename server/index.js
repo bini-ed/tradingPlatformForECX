@@ -16,10 +16,12 @@ const auctionRouter = require("./router/auctionRouter");
 const productNameRouter = require("./router/productNameRouter");
 const storageRouter = require("./router/storageRouter");
 const notificationRouter = require("./router/notificationRouter");
+
 const path = require("path");
 
 const socketServer = require("./socket");
 const auctionStarter = require("./utils/auctionStarter");
+const checkExpiredDate = require("./utils/checkExpiredDate");
 dotenv.config();
 mongoose
   .connect("mongodb://localhost/ecx", {
@@ -57,4 +59,5 @@ app.use("/", storageRouter);
 app.use("/", notificationRouter);
 
 setInterval(() => auctionStarter(), 2000);
+setInterval(() => checkExpiredDate(), 2000);
 httpServer.listen(port, () => console.log("Listening"));

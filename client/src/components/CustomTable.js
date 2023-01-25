@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useContext } from "react";
+import moment from "moment";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { paginate } from "./paginate";
@@ -58,17 +59,20 @@ const CustomTable = ({ auction: product, count, handler }) => {
                       <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
                         Product Name
                       </th>
-                      <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
+                      <th className="border text-sm md:text-md lg:text-lg w-[15%] text-white p-5 border-slate-100">
                         Quantitiy
                       </th>
-                      <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
-                        Payment
+                      <th className="border text-sm md:text-md lg:text-lg w-[15%] text-white p-5 border-slate-100">
+                        Type
                       </th>
                       <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
                         Add to auction
                       </th>
-                      <th className="border text-sm md:text-md lg:text-lg w-[20%] text-white p-5 border-slate-100">
+                      <th className="border text-sm md:text-md lg:text-lg w-[15%] text-white p-5 border-slate-100">
                         Status
+                      </th>
+                      <th className="border text-sm md:text-md lg:text-lg w-[25%] text-white p-5 border-slate-100">
+                        Expired date
                       </th>
                     </tr>
                   </thead>
@@ -128,6 +132,11 @@ const CustomTable = ({ auction: product, count, handler }) => {
                         )}
                         <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
                           {!auction.bought ? "My product" : "Bought product"}
+                        </td>
+                        <td className="border border-slate-100 text-slate-800 p-2 text-sm md:text-md lg:text-lg text-left ">
+                          {moment(
+                            moment(auction?.updated_at).add(30, "days")
+                          ).format("dd-DD-MM-YYYY")}
                         </td>
                       </tr>
                     ))}

@@ -14,13 +14,14 @@ import { signupService } from "../service/userService";
 function SignUpPage() {
   const [role, setRole] = useState([]);
   const [loading, setLoading] = useState(false);
+  let roleId;
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required().label("First Name"),
     lastName: Yup.string().required().label("Last Name"),
     phoneNumber: Yup.string().required().label("Phone Number"),
     email: Yup.string().email().required().label("Email"),
-    role: Yup.string().required().label("Role"),
+    // role: Yup.string().required().label("Role"),
     password: Yup.string().required().label("Password"),
   });
 
@@ -46,8 +47,13 @@ function SignUpPage() {
 
   const handleSignup = async (values) => {
     setLoading(true);
+    role.map((item) => {
+      if (item?.roleName.toLowerCase() == "buyer") roleId = item._id;
+    });
     try {
+      values.role = roleId;
       const { data } = await signupService(values);
+
       if (data) {
         CustomToast("success", data);
         window.location = "/login";
@@ -78,7 +84,7 @@ function SignUpPage() {
                       phoneNumber: "",
                       email: "",
                       password: "",
-                      role: "",
+                      // role: "",
                     }}
                     onSubmit={(values) => {
                       handleSignup(values);
@@ -110,7 +116,7 @@ function SignUpPage() {
                           type="password"
                         />
 
-                        <div className="w-[90%] px-5 my-2">
+                        {/* <div className="w-[90%] px-5 my-2">
                           <label
                             htmlFor="field"
                             className="block mb-2 text-left text-[#4D5959]"
@@ -137,7 +143,7 @@ function SignUpPage() {
                             name="role"
                             component="p"
                           />
-                        </div>
+                        </div> */}
 
                         <div className="flex flex-col justify-center my-5 items-center w-full">
                           <button

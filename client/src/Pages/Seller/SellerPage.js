@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import moment from "moment";
 
 import ProductTable from "../../Admin/components/ProductTable";
 import CustomAppTable from "../../components/CustomAppTable";
@@ -51,6 +52,7 @@ const SellerPage = () => {
     try {
       const { data } = await getSellerProductService(token);
       if (data) setProductInWare(data);
+      console.log("data", data);
     } catch (error) {
       console.log(error.response.data || error.message);
       // CustomToast("error", error.response.data);
@@ -141,6 +143,7 @@ const SellerPage = () => {
             handler={handleAddProduct}
             count={productInWare.length}
             auction={productInWare}
+            // remainingDate={remainingDate}
           />
         ) : (
           <p className="text-[#c45d5d] font-mono text-[17px]">

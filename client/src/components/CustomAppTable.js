@@ -92,7 +92,6 @@ function CustomAppTable({
                         } `}
                         key={index}
                       >
-                        {console.log(field)}
                         {Object.keys(field).map((key, index) =>
                           column?.map((columns) =>
                             Object.keys(columns)
