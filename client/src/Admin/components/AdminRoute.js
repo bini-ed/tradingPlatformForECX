@@ -22,6 +22,8 @@ import EditWarehouse from "../Page/Warehouse/Warehouse/EditWarehouse";
 import ProductDetail from "../Page/Warehouse/Product/ProductDetail";
 import Auctions from "../Page/Auctions";
 import DeactivatedDetail from "../Page/AdminPages/DeactivatedDetail";
+import PendingUser from "../Page/AdminPages/PendingUser";
+import UserDetail from "../Page/AdminPages/userDetail";
 
 const AdminRoute = () => {
   return (
@@ -41,6 +43,8 @@ const AdminRoute = () => {
         <Route path="/price/editPrice/:priceId" element={<EditPrice />}></Route>
         <Route path="/productName" element={<ProductName />}></Route>
         <Route path="/register" element={<RegisterProduct />}></Route>
+        <Route path="/pending" element={<PendingUser />}></Route>
+        <Route path="/pending/detail/:userId" element={<UserDetail />}></Route>
         <Route
           path="/productName/addProductName"
           element={<AddProductName />}

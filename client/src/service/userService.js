@@ -12,11 +12,19 @@ export const getUserInformationService = (token) => {
     },
   });
 };
+export const getPendingUser = () => {
+  return axios.get(`${URL}getPendingUser`);
+};
+export const getUserById = (userId) => {
+  return axios.get(`${URL}getUserById/${userId}`);
+};
 
 export const loginService = (value) => {
   return axios.post(`${URL}login`, value);
 };
-
+export const approveUserService = (userId) => {
+  return axios.post(`${URL}approveUser/${userId}`);
+};
 export const updateInfoService = (value, token) => {
   return axios.post(`${URL}updateUser`, value, {
     headers: {

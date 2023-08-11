@@ -105,7 +105,7 @@ function LandingPage() {
       ></LandingPageHeader>
       <div className="flex flex-col  bg-[#ffffff] pb-[600px] sm:pb-[500px] md:pb-[400px] ">
         <div className="flex flex-col">
-          <div className="flex flex-col sm:flex-col  lg:flex-row justify-start items-center bg-[#DEF2E6] min-h-[30vh] md:min-h-[80vh]">
+          <div className="flex flex-col sm:flex-col  lg:flex-row justify-start items-center bg-[#DEF2E6] min-h-[30vh] md:min-h-[60vh]">
             <h3
               className="text-[#0000004d] lg:text-left text-[14px]  sm:text-[14px] md:text-[16px] lg:text-[18px] font-semilight font-Nunito-sans ml-7 lg:flex hidden"
               style={{
@@ -149,7 +149,7 @@ function LandingPage() {
               // src={Coffee}
               /*  style={{ width: "50%", height: "100vh" }} */
 
-              className="md:flex hidden"
+              // className="lg:flex hidden"
               src={Coffee}
               style={{ width: "50%" }}
               alt="coffee"
@@ -177,7 +177,7 @@ function LandingPage() {
 
         <div
           ref={aboutRef}
-          className="flex flex-col justify-center items-start min-h-[40vh] px-5 md:px-24 max-lg:hidden"
+          className="flex flex-col justify-center items-start min-h-[40vh] px-5 md:px-24 max-lg:hiddens"
         >
           <div className="text-[16px] mt-20 md:text-[20px] lg:text-[25px]  flex flex-row ">
             <div className="bg-[#158343] p-3 flex flex-col justify-start items-start text-[rgb(255,255,255,0.8)] pr-[4rem] min-w-[20rem] min-h-[40rem] z-10">

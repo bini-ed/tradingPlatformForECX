@@ -129,10 +129,12 @@ const getDelayedTransaction = async (req, res) => {
   //   populate: { path: "bids", populate: { path: "buyerId" } },
   // });
 
-  const filterdAuction = findBid.filter((wh) => wh.owner != wh.product.seller);
+  const filteredAuction = findBid.filter(
+    (wh) => wh?.owner != wh?.product?.seller
+  );
   const transaction = [];
-  if (filterdAuction.length) {
-    filterdAuction.map((fb) => {
+  if (filteredAuction.length) {
+    filteredAuction.map((fb) => {
       const diff = now.diff(moment(fb.updated_at), "days") + 1;
       if (diff > 3) {
         transaction.push(fb);

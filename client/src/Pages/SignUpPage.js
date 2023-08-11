@@ -24,6 +24,16 @@ function SignUpPage() {
     // role: Yup.string().required().label("Role"),
     password: Yup.string().required().label("Password"),
     bank: Yup.number().required().label("Bank Account"),
+    // payment: Yup.mixed()
+    //   .required()
+    //   .test(
+    //     "FILE_TYPE",
+    //     "Invalid file type, Only images and pdf is allowed",
+    //     (value) =>
+    //       value &&
+    //       ["image/png", "image/jpg", "image/jpeg", "pdf"].includes(value.type)
+    //   )
+    //   .label("payment "),
   });
 
   const getRole = async () => {
@@ -51,10 +61,13 @@ function SignUpPage() {
     role.map((item) => {
       if (item?.roleName.toLowerCase() == "buyer") roleId = item._id;
     });
-    console.log(roleId);
+    const formData = new FormData();
+    values.role = roleId;
+    Object.keys(values).forEach((items) =>
+      formData.append(items, values[items])
+    );
     try {
-      values.role = roleId;
-      const { data } = await signupService(values);
+      const { data } = await signupService(formData);
 
       if (data) {
         CustomToast("success", data);
@@ -86,7 +99,6 @@ function SignUpPage() {
                       phoneNumber: "",
                       email: "",
                       password: "",
-                      // role: "",
                     }}
                     onSubmit={(values) => {
                       handleSignup(values);
@@ -123,6 +135,45 @@ function SignUpPage() {
                           type="password"
                         />
 
+                        {/* <div className={`w-[90%] px-5 my-2 `}>
+                          <p className="block text-gray-500 font-semibold text-left my-1 pr-4">
+                            Pay 200 ETB at CBE account number 120611837
+                          </p>
+
+                          <p className="block text-gray-500 font-semibold text-left my-1 pr-4">
+                            Picture
+                          </p>
+                          <input
+                            className="w-full outline-[#99d5e9] rounded-md p-2 my-2 bg-[#EFF0F2]"
+                            name="picture"
+                            type="file"
+                            onChange={(e) =>
+                              setFieldValue("payment", e.target.files[0])
+                            }
+                          ></input>
+                          <ErrorMessage
+                            className="text-[red]"
+                            name={"payment"}
+                            component="p"
+                          />
+                        </div> */}
+
+                        {/* <p className="block text-gray-500 font-semibold text-left my-1 pr-4">
+                          payment
+                        </p>
+                        <input
+                          className="w-full outline-[#99d5e9] rounded-md p-2 my-2 bg-[#EFF0F2]"
+                          name="payment"
+                          type="file"
+                          onChange={(e) =>
+                            setFieldValue("payment", e.target.files[0])
+                          }
+                        ></input>
+                        <ErrorMessage
+                          className="text-[red]"
+                          name={"payment"}
+                          component="p"
+                        /> */}
                         {/* <div className="w-[90%] px-5 my-2">
                           <label
                             htmlFor="field"

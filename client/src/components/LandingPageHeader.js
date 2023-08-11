@@ -10,7 +10,7 @@ const LandingPageHeader = forwardRef(({ onBackClick }, ref) => {
     { name: "Home", ref: ref[0] ?? "" },
     { name: "About", ref: ref[1] ?? "" },
     { name: "Procedures", ref: ref[2] ?? "" },
-    { name: "Contact Us", ref: ref[0] ?? "" },
+    // { name: "Contact Us", ref: ref[0] ?? "" },
   ];
 
   const [height, setHeight] = useState(window.scrollY);

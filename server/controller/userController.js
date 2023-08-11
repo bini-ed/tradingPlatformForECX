@@ -55,6 +55,7 @@ const authUser = async (req, res) => {
   if (user.count >= 3) {
     return res.status(400).send("This account is banned");
   }
+
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword) return res.status(400).send("Incorrect Password");
@@ -75,6 +76,32 @@ const getUserInformation = async (req, res) => {
     .select(" -createdAt -updatedAt  -password -__v");
   if (!user) return res.status(400).send("No user found");
   return res.send(user);
+};
+const getPendingUserInformation = async (req, res) => {
+  let user = await User.find({ approved: false })
+    .populate("role", "roleName -_id")
+    .select(" -createdAt -updatedAt  -password -__v");
+  if (!user) return res.status(400).send("No user found");
+  return res.send(user);
+};
+const getUserById = async (req, res) => {
+  const { userId } = req.params;
+  let user = await User.findById(userId)
+    .populate("role", "roleName -_id")
+    .select(" -createdAt -updatedAt  -password -__v");
+
+  if (user) return res.send(user);
+  else return res.status(404).send("No User found");
+};
+
+const approveUser = async (req, res) => {
+  const { userId } = req.params;
+  let user = await User.findByIdAndUpdate(userId, { approved: true });
+  if (!user) {
+    return res.status(404).send("User can't be found");
+  } else {
+    return res.status(202).send("Successfully Approved");
+  }
 };
 
 const updateUser = async (req, res) => {
@@ -112,4 +139,12 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, authUser, getUserInformation, updateUser };
+module.exports = {
+  registerUser,
+  authUser,
+  getUserInformation,
+  updateUser,
+  getPendingUserInformation,
+  getUserById,
+  approveUser,
+};

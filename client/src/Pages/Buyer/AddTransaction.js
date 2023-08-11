@@ -11,6 +11,7 @@ import Loader from "../../components/Loader";
 const AddTransaction = () => {
   const [loading, setLoading] = useState(false);
   const [bid, setBid] = useState({});
+  const [bank, setBank] = useState("");
   const { warehouseId } = useParams();
   const validationSchema = Yup.object().shape({
     picture: Yup.mixed()
@@ -56,6 +57,7 @@ const AddTransaction = () => {
     try {
       await getAuctionRoomUsingProductIdService(warehouseId).then(
         async ({ data }) => {
+          setBank(data?.seller?.bank);
           const res = await getBidsForSpecificAuctionService(data._id);
           if (res.data) setBid(res.data);
         }
@@ -87,6 +89,10 @@ const AddTransaction = () => {
             {({ isSubmitting, values, setFieldValue }) => (
               <Form className="flex flex-col shadow-2xl w-[70%] p-5 items-center rounded-lg">
                 <div className={`w-[90%] md:w-[70%] px-5 my-2`}>
+                  {/* {console.log(bank)} */}
+                  <p className="block text-gray-500 font-semibold text-left my-1 pr-4">
+                    Bank Account: {bank}
+                  </p>
                   <p className="block text-gray-500 font-semibold text-left my-1 pr-4">
                     Picture
                   </p>

@@ -26,6 +26,7 @@ const SideBar = ({ children }) => {
     { name: "Deactivated", path: "/admin/deactivated", icon: Disable },
     { name: "Completed", path: "/admin/completed", icon: Completed },
     { name: "Add Role", path: "/admin/addRole", icon: Role },
+    { name: "Pending Users", path: "/admin/pending", icon: Ongoing },
 
     { name: "Register Product", path: "/admin/register", icon: Add },
     { name: "Price", path: "/admin/price", icon: Price },
@@ -39,7 +40,6 @@ const SideBar = ({ children }) => {
         {options.map((option, index) => (
           <div key={index}>
             {user.role === "admin" &&
-            index !== 6 &&
             index !== 7 &&
             index !== 8 &&
             index !== 9 ? (
@@ -65,7 +65,11 @@ const SideBar = ({ children }) => {
                 </p>
               </NavLink>
             ) : user.role == "warehouse" &&
-              (index == 6 || index == 7 || index == 8 || index == 9) ? (
+              (index == 5 ||
+                index == 6 ||
+                index == 7 ||
+                index == 8 ||
+                index == 9) ? (
               <NavLink
                 to={option.path}
                 key={index}

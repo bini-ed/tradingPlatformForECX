@@ -27,6 +27,10 @@ const getAuction = async (req, res) => {
         populate: { path: "warehouse", model: "Storage", select: "-__v" },
       },
     },
+    // populate: {
+    //   path: "seller",
+    //   model: "Users",
+    // },
   });
   const filterAuction = findAuction.filter((fp) =>
     fp?.auctionRoom.filter(

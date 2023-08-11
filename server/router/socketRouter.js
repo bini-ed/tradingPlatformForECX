@@ -108,7 +108,7 @@ const AuctionTime = async (
   productQuantity,
   seller
 ) => {
-  const findAuction = await Auction.findOne({}).populate({
+  const findAuction = await Auction.findOne().populate({
     path: "auctionRoom",
     populate: {
       path: "auctionId",
@@ -119,7 +119,10 @@ const AuctionTime = async (
   const getAuctionId = findAuction.auctionRoom.filter(
     (auctions) => auctions?.auctionId?._id != null
   );
-  const endTime = getAuctionId[0].date.getTime() + 60 * 60 * 1000;
+  const endTime = getAuctionId[0]?.date?.getTime()
+    ? getAuctionId[0]?.date?.getTime() + 60 * 60 * 1000
+    : 1674717650262 + 60 * 60 * 1000;
+
   const timer = setInterval(async function () {
     const now = new Date().getTime();
     const timerEnd = endTime - now;

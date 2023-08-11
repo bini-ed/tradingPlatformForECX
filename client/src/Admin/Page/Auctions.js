@@ -20,7 +20,7 @@ const Auctions = () => {
     setLoading(true);
     try {
       const { data } = await getAuctionService();
-      console.log(data);
+
       setAuction(data);
     } catch (error) {
       console.log(error.response.data);
@@ -40,6 +40,12 @@ const Auctions = () => {
     }
     setLoading(false);
   };
+
+  // let filteredProduct = auctions?.filter(
+  //   (field) =>
+  //     field?.product?.product?.productName?.match(new RegExp(filter, "i")) ||
+  //     field?.product?.productQuantity?.match(new RegExp(filter, "i"))
+  // );
   return (
     <div>
       {loading ? (

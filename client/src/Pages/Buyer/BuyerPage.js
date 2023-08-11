@@ -20,7 +20,7 @@ const BuyerPage = () => {
   const [open, setOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
-  console.log("user", user);
+
   const getAllProduct = async () => {
     try {
       const { data } = await getAllProductInAuctionRoomService();

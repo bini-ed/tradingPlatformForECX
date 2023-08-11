@@ -379,11 +379,14 @@ const getAuctionUsingProductId = async (req, res) => {
   const { productId } = req.params;
   const findUser = await AuctionRoom.findOne({
     product: productId,
-  }).populate({ path: "product", populate: { path: "product" } });
+  })
+    .populate({ path: "product", populate: { path: "product" } })
+    .populate({ path: "seller", model: "User" });
 
   if (!findUser) return res.status(404).send("No Auction found");
   return res.send(findUser);
 };
+
 const getAuction = async (req, res) => {
   const findAuction = await AuctionRoom.find({ isActive: true })
     .populate({

@@ -44,6 +44,15 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  // payment: {
+  //   type: mongoose.Schema.Types.String,
+  //   require: true,
+  // },
+  // approved: {
+  //   type: mongoose.Schema.Types.Boolean,
+  //   required: true,
+  //   default: false,
+  // },
 });
 
 userSchema.methods.generateToken = function (role) {
@@ -64,6 +73,7 @@ const validateUser = (User) => {
     phoneNumber: Joi.number().required().label("Phone Number"),
     password: Joi.string().required().min(5).label("Password"),
     bank: Joi.number().required().label("Bank Account"),
+    // payment: Joi.string().required().label("Payment"),
   });
   return validationSchema.validate(User);
 };
